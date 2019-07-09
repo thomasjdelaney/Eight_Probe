@@ -17,7 +17,7 @@ image_dir = os.path.join(proj_dir, 'images')
 mat_dir = os.path.join(proj_dir, 'mat')
 
 sys.path.append(os.environ['PROJ'])
-import Eight_Probe as ep
+import Eight_Probe.py as ep
 
 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
 cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
