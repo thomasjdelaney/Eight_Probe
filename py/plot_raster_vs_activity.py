@@ -29,7 +29,7 @@ cell_ids = np.random.choice(cell_info[cell_info.mouse_name == mouse_name].index.
 spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
 video_inds = (start_time <= mouse_video['times'][0]) & (mouse_video['times'][0] < stop_time)
 video_times = mouse_video['times'][0][video_inds]
-max_mean_comp_ind = mouse_video['motionSVD'].mean(axis=0).argmax()
+max_mean_comp_ind = np.abs(mouse_video['motionSVD']).mean(axis=0).argmax()
 max_mean_comp = mouse_video['motionSVD'][video_inds, max_mean_comp_ind]
 ep.plotRasterWithComponent(spike_time_dict, cell_info, start_time, stop_time, max_mean_comp, video_times)
 plt.show(block=False)
