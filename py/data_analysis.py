@@ -3,6 +3,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr
+from itertools import combinations
 if float(sys.version[:3])<3.0:
     from pyentropy import DiscreteSystem
 
@@ -78,3 +79,25 @@ def getMutualInfoForPair(pair, spike_count_frame):
     qe_shuff_mi = np.max([discrete_system.Ish()])
     return plugin_mi, plugin_shuff_mi, qe_mi, qe_shuff_mi
 
+def getAnalysisFrameForCells(cell_ids, spike_count_frame):
+    """
+    For measuring the correlation coefficients and mutual information between the cells, using the counts in the spike_count_frame.
+    Arguments:  cell_ids, numpy.array (int), the cell ids
+                spike_count_frame, DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time
+    Returns:    analysis_frame, DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, qe_mi, qe_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv
+    """
+    pairs = np.array(list(combinations(cell_ids, 2)))
+    num_pairs = pairs.shape[0]
+    corr_coef = np.zeros(num_pairs)
+    corr_pv = np.zeros(num_pairs)
+    shuff_corr = np.zeros(num_pairs)
+    shuff_corr_pv = np.zeros(num_pairs)
+    plugin_mi = np.zeros(num_pairs)
+    plugin_shuff_mi = np.zeros(num_pairs)
+    qe_mi = np.zeros(num_pairs)
+    qe_shuff_mi = np.zeros(num_pairs)
+    for i,pair in enumerate(pairs):
+        corr_coef[i], corr_pv[i], shuff_corr[i], shuff_corr_pv[i] = getSpikeCountCorrelationsForPair(pair, spike_count_frame)
+        plugin_mi[i], plugin_shuff_mi[i], qe_mi[i], qe_shuff_mi[i] = getMutualInfoForPair(pair, spike_count_frame)
+    analysis_frame = pd.DataFrame({'first_cell_id':pairs[:,0], 'second_cell_id':pairs[:,1], 'corr_coef':corr_coef, 'corr_pv':corr_pv, 'shuff_corr':shuff_corr, 'shuff_corr_pv':shuff_corr_pv, 'plugin_mi':plugin_mi, 'plugin_shuff_mi':plugin_shuff_mi, 'qe_mi':qe_mi, 'qe_shuff_mi':qe_shuff_mi})
+    return analysis_frame
