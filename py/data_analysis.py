@@ -2,10 +2,13 @@ import os, sys, warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import numpy as np
 import pandas as pd
+import datetime as dt
 from scipy.stats import pearsonr
 from itertools import combinations
 if float(sys.version[:3])<3.0:
     from pyentropy import DiscreteSystem
+
+bin_widths = np.array([0.005, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0]) # various bin widths for testing measurement values.
 
 def getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time):
     """
@@ -101,3 +104,21 @@ def getAnalysisFrameForCells(cell_ids, spike_count_frame):
         plugin_mi[i], plugin_shuff_mi[i], qe_mi[i], qe_shuff_mi[i] = getMutualInfoForPair(pair, spike_count_frame)
     analysis_frame = pd.DataFrame({'first_cell_id':pairs[:,0], 'second_cell_id':pairs[:,1], 'corr_coef':corr_coef, 'corr_pv':corr_pv, 'shuff_corr':shuff_corr, 'shuff_corr_pv':shuff_corr_pv, 'plugin_mi':plugin_mi, 'plugin_shuff_mi':plugin_shuff_mi, 'qe_mi':qe_mi, 'qe_shuff_mi':qe_shuff_mi})
     return analysis_frame
+
+def getAllBinsFrameForCells(cell_ids, spike_time_dict, spon_start_time):
+    """
+    For getting a big analysis frame for all bin widths, with a bin width column.
+    Arguments:  cell_ids, numpy.array (int), the cell ids
+                spike_time_dict, dict, cell_id => spike_times
+                spon_start_time, the time at which spontaneous behaviour begins
+    Returns:    DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, qe_mi, qe_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv, bin_width
+    """
+    analysis_frames = []
+    for i,bin_width, in enumerate(bin_widths):
+        print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
+        spike_count_bins = getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time)
+        spike_count_frame = getSpikeCountBinFrame(cell_ids, spike_time_dict, spike_count_bins)
+        analysis_frame = getAnalysisFrameForCells(cell_ids, spike_count_frame)
+        analysis_frame['bin_width'] = bin_width
+        analysis_frames += [analysis_frame]
+    return pd.concat(analysis_frames, ignore_index=True)
