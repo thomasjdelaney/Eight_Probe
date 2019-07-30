@@ -71,7 +71,7 @@ def loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir):
     required_probes = relevant_cell_info.probe_id.unique()
     num_workers = cpu_count()
     chunk_size = int(cell_ids.size/num_workers)
-    pool = Pool(processes = num_workers)
+    pool = Pool(processes = num_workers) # update this code here.
     spike_times_for_cells_futures = pool.starmap_async(getSpikesForCell, zip(cell_ids, [cell_info] * cell_ids.size, [mouse_spikes] * cell_ids.size, [spon_start_time] * cell_ids.size), chunksize=chunk_size)
     spike_times_for_cells_futures.wait()
     pool.close(); pool.join();

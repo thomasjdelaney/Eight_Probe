@@ -40,23 +40,6 @@ def getSpikeCountBinFrame(cell_ids, spike_time_dict, spike_count_bins):
                 spike_time_dict, dict, cell_id => spike_times
                 spike_count_bins, numpy.array (float), the bin boundaries
     Returns:    DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time
-    """
-    cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
-    num_workers = cpu_count()
-    chunk_size = int(cell_ids.size/num_workers)
-    pool = Pool(processes = num_workers)
-    cell_spike_count_bin_frame_futures = pool.starmap_async(getCellSpikeCountBinFrame, zip(cell_ids, [spike_time_dict] * cell_ids.size, [spike_count_bins] * cell_ids.size))
-    cell_spike_count_bin_frame_futures.wait()
-    pool.close(); pool.join();
-    return pd.concat(cell_spike_count_bin_frame_futures.get(), ignore_index=True)
-
-def getSpikeCountBinFrameOld(cell_ids, spike_time_dict, spike_count_bins):
-    """
-    For getting a frame showing the spike counts with bin times.
-    Arguments:  cell_ids, numpy.array (int), the cell ids
-                spike_time_dict, dict, cell_id => spike_times
-                spike_count_bins, numpy.array (float), the bin boundaries
-    Returns:    DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time
 
     DEPRECATED
     """
@@ -111,7 +94,7 @@ def getAnalysisFrameForCells(cell_ids, spike_count_frame):
     shuff_corr = np.zeros(num_pairs)
     shuff_corr_pv = np.zeros(num_pairs)
     plugin_mi = np.zeros(num_pairs)
-    plugin_shuff_mi = np.zeros(num_pairs)
+    plugin_shuff_mi = np.zeros(num_pairs) # parallelise this.
     for i,pair in enumerate(pairs):
         corr_coef[i], corr_pv[i], shuff_corr[i], shuff_corr_pv[i] = getSpikeCountCorrelationsForPair(pair, spike_count_frame)
         plugin_mi[i], plugin_shuff_mi[i], qe_mi[i], qe_shuff_mi[i] = getMutualInfoForPair(pair, spike_count_frame)
@@ -127,7 +110,7 @@ def getAllBinsFrameForCells(cell_ids, spike_time_dict, spon_start_time):
     Returns:    DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv, bin_width
     """
     analysis_frames = []
-    for i,bin_width in enumerate(bin_widths):
+    for bin_width in enumerate(bin_widths):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
         spike_count_bins = getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time)
         spike_count_frame = getSpikeCountBinFrame(cell_ids, spike_time_dict, spike_count_bins)
