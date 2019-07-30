@@ -30,6 +30,31 @@ def loadVideoDataForMouse(mouse_name, mat_dir):
     face_file_name = mouse_name + '_face_proc.mat'
     return loadmat(os.path.join(mat_dir, face_file_name))
 
+def getSpikesForCell(cell_id, cell_info, mouse_spikes, spon_start_time):
+    specific_cell_info = cell_info.loc[cell_id]
+    probe_spikes = mouse_spikes[specific_cell_info['probe_id']]
+    cell_spike_times = probe_spikes['st'].flatten()[probe_spikes['clu'].flatten() == specific_cell_info['mouse_probe_cell_id']]
+    return cell_spike_times[cell_spike_times >= spon_start_time]
+
+def loadSpikeTimeDictOld(mouse_name, cell_ids, cell_info, mat_dir):
+    """
+    For loading a dictionary of cell_id => spike times.
+    Arguments:  mouse_name, string, the name of the mouse
+                cell_ids, the cell ids for which we want the spike times
+                cell_info, pandas.DataFrame, a table of information on the cells, gives the probe id, and the mouse_probe_cell_id
+                mat_dir, the directory where the spikes file can be found
+    Returns:    spike_dict, dictionary, cell_id => spike times
+
+    DEPRECATED: New loadSpikeTimeDict is parallelised and is therefore slightly faster, or perhaps much faster.
+    """
+    cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
+    spon_start_time = spon_start_times[np.flatnonzero(mouse_names == mouse_name)[0]]
+    mouse_spikes = loadSpikesForMouse(mouse_name, mat_dir)
+    relevant_cell_info = cell_info.loc[cell_ids]
+    required_probes = relevant_cell_info.probe_id.unique()
+    spike_times_for_cells = [getSpikesForCell(cell_id, cell_info, mouse_spikes, spon_start_time) for cell_id in cell_ids]
+    return {cell_id:spike_times for (cell_id, spike_times) in zip(cell_ids, spike_times_for_cells)}
+
 def loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir):
     """
     For loading a dictionary of cell_id => spike times.
@@ -40,35 +65,6 @@ def loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir):
     Returns:    spike_dict, dictionary, cell_id => spike times
     """
     cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
-    spike_dict = {}
-    spon_start_time = spon_start_times[np.flatnonzero(mouse_names == mouse_name)[0]]
-    mouse_spikes = loadSpikesForMouse(mouse_name, mat_dir)
-    relevant_cell_info = cell_info.loc[cell_ids]
-    required_probes = relevant_cell_info.probe_id.unique()
-    for cell_id in cell_ids:
-        specific_cell_info = cell_info.loc[cell_id]
-        probe_spikes = mouse_spikes[specific_cell_info['probe_id']]
-        cell_spike_times = probe_spikes['st'].flatten()[probe_spikes['clu'].flatten() == specific_cell_info['mouse_probe_cell_id']]
-        spike_dict[cell_id] = cell_spike_times[cell_spike_times >= spon_start_time]
-    return spike_dict
-
-def getSpikesForCell(cell_id, cell_info, mouse_spikes, spon_start_time):
-    specific_cell_info = cell_info.loc[cell_id]
-    probe_spikes = mouse_spikes[specific_cell_info['probe_id']]
-    cell_spike_times = probe_spikes['st'].flatten()[probe_spikes['clu'].flatten() == specific_cell_info['mouse_probe_cell_id']]
-    return cell_spike_times[cell_spike_times >= spon_start_time]
-
-def loadSpikeTimeDictParallel(mouse_name, cell_ids, cell_info, mat_dir):
-    """
-    For loading a dictionary of cell_id => spike times.
-    Arguments:  mouse_name, string, the name of the mouse
-                cell_ids, the cell ids for which we want the spike times
-                cell_info, pandas.DataFrame, a table of information on the cells, gives the probe id, and the mouse_probe_cell_id
-                mat_dir, the directory where the spikes file can be found
-    Returns:    spike_dict, dictionary, cell_id => spike times
-    """
-    cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
-    spike_dict = {}  
     spon_start_time = spon_start_times[np.flatnonzero(mouse_names == mouse_name)[0]]
     mouse_spikes = loadSpikesForMouse(mouse_name, mat_dir)
     relevant_cell_info = cell_info.loc[cell_ids]
@@ -76,6 +72,7 @@ def loadSpikeTimeDictParallel(mouse_name, cell_ids, cell_info, mat_dir):
     num_workers = cpu_count()
     chunk_size = int(cell_ids.size/num_workers)
     pool = Pool(processes = num_workers)
-    spike_times_for_cells_futures = pool.starmap_async(getSpikesForCell, zip(cell_ids, [cell_info] * cell_ids.size, [mouse_spikes] * cell_ids.size, [spon_start_time] * cell_ids.size))
+    spike_times_for_cells_futures = pool.starmap_async(getSpikesForCell, zip(cell_ids, [cell_info] * cell_ids.size, [mouse_spikes] * cell_ids.size, [spon_start_time] * cell_ids.size), chunksize=chunk_size)
     spike_times_for_cells_futures.wait()
+    pool.close(); pool.join();
     return {cell_id:spike_times for (cell_id, spike_times) in zip(cell_ids, spike_times_for_cells_futures.get())}
