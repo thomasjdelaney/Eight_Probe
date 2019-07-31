@@ -71,8 +71,8 @@ def getMutualInfoForPair(pair, spike_count_frame):
     Returns:    plugin_mi, float, plugin mutual information
                 plugin_shuff_mi, float, plugin shuffled mutual information
     """
-    first_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[0], 'spike_count']
-    second_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[1], 'spike_count']
+    first_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[0], 'spike_count'].values
+    second_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[1], 'spike_count'].values
     first_response_alphabet = np.arange(first_spike_counts.max()+1)
     second_response_alphabet = np.arange(second_spike_counts.max()+1)
     plugin_mi = np.max([0, drv.information_mutual(X=first_spike_counts, Y=second_spike_counts, Alphabet_X=first_response_alphabet, Alphabet_Y=second_response_alphabet)])
@@ -100,6 +100,24 @@ def getAnalysisFrameForCells(cell_ids, spike_count_frame):
         plugin_mi[i], plugin_shuff_mi[i], qe_mi[i], qe_shuff_mi[i] = getMutualInfoForPair(pair, spike_count_frame)
     analysis_frame = pd.DataFrame({'first_cell_id':pairs[:,0], 'second_cell_id':pairs[:,1], 'corr_coef':corr_coef, 'corr_pv':corr_pv, 'shuff_corr':shuff_corr, 'shuff_corr_pv':shuff_corr_pv, 'plugin_mi':plugin_mi, 'plugin_shuff_mi':plugin_shuff_mi})
     return analysis_frame
+
+def getAnalysisFrameForCellsParallel(cell_ids, spike_count_frame):
+    """
+    For measuring the correlation coefficients and mutual information between the cells, using the counts in the spike_count_frame.
+    Arguments:  cell_ids, numpy.array (int), the cell ids
+                spike_count_frame, DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time
+    Returns:    analysis_frame, DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv
+    """
+    pairs = np.array(list(combinations(cell_ids, 2)))
+    num_pairs = pairs.shape[0]
+    num_workers = cpu_count()
+    chunk_size = np.ceil(num_pairs/num_workers).astype(int)
+    with Pool(num_workers) as pool:
+        corr_future = pool.starmap_async(getSpikeCountCorrelationsForPair, zip(pairs, [spike_count_frame] * num_pairs))
+        info_future = pool.starmap_async(getMutualInfoForPair, zip(pairs, [spike_count_frame] * num_pairs))
+        corr_future.wait()
+        info_future.wait()
+
 
 def getAllBinsFrameForCells(cell_ids, spike_time_dict, spon_start_time):
     """
