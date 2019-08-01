@@ -117,7 +117,7 @@ def getAnalysisFrameForCells(cell_ids, spike_count_frame):
     with Pool(num_workers) as pool:
         corr_future = pool.starmap_async(getSpikeCountCorrelationsForPair, zip(pairs, [spike_count_frame] * num_pairs))
         info_future = pool.starmap_async(getMutualInfoForPair, zip(pairs, [spike_count_frame] * num_pairs))
-        corr_future.wait()
+        corr_future.wait() # map reduce with hstack? Try it.
         info_future.wait()
     corr = np.array(corr_future.get())
     info = np.array(info_future.get())
