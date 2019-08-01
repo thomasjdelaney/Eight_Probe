@@ -32,7 +32,7 @@ def main():
     for m,mouse_name in enumerate(ep.mouse_names):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
         spon_start_time = ep.spon_start_times[m]
-        cell_ids = cell_info[cell_info.mouse_name == mouse_name].index.values[:10] # using 10 cells for testing
+        cell_ids = cell_info[cell_info.mouse_name == mouse_name].index.values[:30] # using 10 cells for testing
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
         all_bins = ep.getAllBinsFrameForCells(cell_ids, spike_time_dict, spon_start_time)
         save_file = os.path.join(npy_dir, mouse_name + args.save_file_suffix)
