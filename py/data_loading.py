@@ -70,9 +70,25 @@ def loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir):
     relevant_cell_info = cell_info.loc[cell_ids]
     required_probes = relevant_cell_info.probe_id.unique()
     num_workers = cpu_count()
-    chunk_size = int(cell_ids.size/num_workers)
-    pool = Pool(processes = num_workers) # update this code here.
+    chunk_size = np.floor(cell_ids.size/num_workers).astype(int)
     with Pool(num_workers) as pool:
         spike_times_for_cells_futures = pool.starmap_async(getSpikesForCell, zip(cell_ids, [cell_info] * cell_ids.size, [mouse_spikes] * cell_ids.size, [spon_start_time] * cell_ids.size), chunksize=chunk_size)
         spike_times_for_cells_futures.wait()
     return {cell_id:spike_times for (cell_id, spike_times) in zip(cell_ids, spike_times_for_cells_futures.get())}
+
+def loadSpikeTimeDictScoop(mouse_name, cell_ids, cell_info, mat_dir): # good idea, but requires a rewrite
+    """
+    For loading a dictionary of cell_id => spike times.
+    Arguments:  mouse_name, string, the name of the mouse
+                cell_ids, the cell ids for which we want the spike times
+                cell_info, pandas.DataFrame, a table of information on the cells, gives the probe id, and the mouse_probe_cell_id
+                mat_dir, the directory where the spikes file can be found
+    Returns:    spike_dict, dictionary, cell_id => spike times
+    """
+    cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
+    spon_start_time = spon_start_times[np.flatnonzero(mouse_names == mouse_name)[0]]
+    mouse_spikes = loadSpikesForMouse(mouse_name, mat_dir)
+    relevant_cell_info = cell_info.loc[cell_ids]
+    required_probes = relevant_cell_info.probe_id.unique()
+    spike_times_for_cells = futures.mapReduce(getSpikesForCell, np.hstack, zip(cell_ids, [cell_info] * cell_ids.size, [mouse_spikes] * cell_ids.size, [spon_start_time] * cell_ids.size))
+    return {cell_id:spike_times for (cell_id, spike_times) in zip(cell_ids, spike_times_for_cells)}

@@ -131,6 +131,8 @@ def getAllBinsFrameForCells(cell_ids, spike_time_dict, spon_start_time):
                 spike_time_dict, dict, cell_id => spike_times
                 spon_start_time, the time at which spontaneous behaviour begins
     Returns:    DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv, bin_width
+
+    NB A subset of the cells must be used here, otherwise memory issues will occur.
     """
     analysis_frames = []
     for bin_width in bin_widths:
