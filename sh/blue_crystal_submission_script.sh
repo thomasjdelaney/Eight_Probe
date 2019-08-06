@@ -4,10 +4,7 @@
 #PBS -l nodes=4:ppn=16,walltime=01:00:00
 
 # on compute node, change directory to 'submission directory':
-export WORK_DIR=Eight_Probe
 
-cd $PBS_O_WORKDIR
-cat $PBS_NODEFILE
 export nodes=`cat $PBS_NODEFILE`
 export nnodes=`cat $PBS_NODEFILE | wc -l`
 export confile=inf.$PBS_JOBID.conf
