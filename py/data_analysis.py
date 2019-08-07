@@ -46,33 +46,29 @@ def getSpikeCountBinFrame(cell_ids, spike_time_dict, spike_count_bins):
     cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
     return pd.concat([getCellSpikeCountBinFrame(cell_id, spike_time_dict, spike_count_bins) for cell_id in cell_ids], ignore_index=True)
 
-def getSpikeCountCorrelationsForPair(pair, spike_count_frame):
+def getSpikeCountCorrelationsForPair(pair_count_dict):
     """
     For calculating the Pearson correlation coefficient and the shuffled correlation between the spike counts of the cells in 'pair'.
-    Arguments:  pair, numpy.array (int, 2), cell ids of the pair
-                spike_count_frame, DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time
+    Arguments:  pair_count_dict, int => numpy array int, the two keys is the pair, the values are the spike counts
     Returns:    corr, float, Pearson correlation coefficient of the spike counts
                 corr_pv, float, p-value of 'corr', the probability that two random samples would have a correlation equal to 'corr'
                 shuff_corr, float, Pearson correlation coefficient between the shuffled spike counts of the first cell, and the spike counts of the second cell
                 shuff_corr_pv, float, the p-value of shuff_corr
     """
-    first_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[0], 'spike_count'].values
-    second_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[1], 'spike_count'].values
+    first_spike_counts, second_spike_counts = np.array(list(pair_count_dict.values()))
     corr, corr_pv = pearsonr(first_spike_counts, second_spike_counts)
     np.random.shuffle(first_spike_counts)
     shuff_corr, shuff_corr_pv = pearsonr(first_spike_counts, second_spike_counts)
     return corr, corr_pv, shuff_corr, shuff_corr_pv
 
-def getMutualInfoForPair(pair, spike_count_frame):
+def getMutualInfoForPair(pair_count_dict):
     """
     For calculating the mutual information and suffled mutual information between two spike counts.
-    Arguments:  pair, numpy.array (int, 2), cell ids of the pair
-                spike_count_frame, DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time
+    Arguments:  pair_count_dict, int => numpy array int, the two keys is the pair, the values are the spike counts
     Returns:    plugin_mi, float, plugin mutual information
                 plugin_shuff_mi, float, plugin shuffled mutual information
     """
-    first_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[0], 'spike_count'].values
-    second_spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == pair[1], 'spike_count'].values
+    first_spike_counts, second_spike_counts = np.array(list(pair_count_dict.values()))
     first_response_alphabet = np.arange(first_spike_counts.max()+1)
     second_response_alphabet = np.arange(second_spike_counts.max()+1)
     plugin_mi = np.max([0, drv.information_mutual(X=first_spike_counts, Y=second_spike_counts, Alphabet_X=first_response_alphabet, Alphabet_Y=second_response_alphabet)])
