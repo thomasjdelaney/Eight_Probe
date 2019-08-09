@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import pandas as pd
 from scipy.io import loadmat
 from multiprocessing import Pool, cpu_count 
 
@@ -31,6 +32,9 @@ def loadVideoDataForMouse(mouse_name, mat_dir):
     return loadmat(os.path.join(mat_dir, face_file_name))
 
 def getSpikesForCell(cell_id, cell_info, mouse_spikes, spon_start_time):
+    """
+    Helper function for all of the SpikeTimeDict function.
+    """
     specific_cell_info = cell_info.loc[cell_id]
     probe_spikes = mouse_spikes[specific_cell_info['probe_id']]
     cell_spike_times = probe_spikes['st'].flatten()[probe_spikes['clu'].flatten() == specific_cell_info['mouse_probe_cell_id']]
@@ -92,3 +96,23 @@ def loadSpikeTimeDictScoop(mouse_name, cell_ids, cell_info, mat_dir): # good ide
     required_probes = relevant_cell_info.probe_id.unique()
     spike_times_for_cells = futures.mapReduce(getSpikesForCell, np.hstack, zip(cell_ids, [cell_info] * cell_ids.size, [mouse_spikes] * cell_ids.size, [spon_start_time] * cell_ids.size))
     return {cell_id:spike_times for (cell_id, spike_times) in zip(cell_ids, spike_times_for_cells)}
+
+def loadSpikeCountFrame(mouse_name, bin_width, npy_dir):
+    """
+    For loading one of the spike count frames from file.
+    Arguments:  mouse_name, string, the name of the mouse
+                bin_width, float, the bin width
+    Returns:    DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time, bin_width
+    """
+    file_name = os.path.join(npy_dir, 'spike_count_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'spike_counts.npy')
+    return pd.read_pickle(file_name)
+
+def loadAnalysisFrame(mouse_name, bin_width, npy_dir):
+    """
+    For loading one of the analysis frames from file.
+    Arguments:  mouse_name, string, the name of the mouse.
+                bin_width, float, the bin width
+    Returns:    analysis_frame, DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv
+    """
+    file_name = os.path.join(npy_dir, 'analysis_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'analysis.npy')
+    return pd.read_pickle(file_name)
