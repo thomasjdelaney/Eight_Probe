@@ -1,0 +1,105 @@
+"""
+For comparing spike count distributions to Poisson and Gaussian Distributions.
+"""
+import os, argparse, sys
+if float(sys.version[:3]) < 3.0:
+    execfile(os.path.join(os.environ['HOME'], '.pystartup'))
+import numpy as np
+import pandas as pd
+import datetime as dt
+import matplotlib.pyplot as plt
+from itertools import product, combinations
+from scipy.stats import poisson, norm, chisquare
+
+parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
+parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
+args = parser.parse_args()
+
+pd.set_option('max_rows',30) # setting display options for terminal display
+
+proj_dir = os.path.join(os.environ['PROJ'], 'Eight_Probe')
+py_dir = os.path.join(proj_dir, 'py')
+npy_dir = os.path.join(proj_dir, 'npy')
+csv_dir = os.path.join(proj_dir, 'csv')
+image_dir = os.path.join(proj_dir, 'images')
+mat_dir = os.path.join(proj_dir, 'mat')
+
+sys.path.append(os.environ['PROJ'])
+import Eight_Probe.py as ep
+
+def getRandomSelection(spike_count_frame, num_cells=10):
+    return np.random.choice(spike_count_frame.cell_id.unique(), size=num_cells, replace=False)
+
+def plotHistDists(spike_counts, firing_rate, firing_std):
+    bins=np.arange(spike_counts.max()+1)
+    plt.hist(spike_counts, bins=bins, density=True, label='Spike count dist')
+    poiss_dist = poisson(firing_rate)
+    plt.plot(bins, poiss_dist.pmf(bins), label='Poisson dist')
+    gauss_dist = norm(firing_rate, firing_std)
+    plt.plot(bins, gauss_dist.pdf(bins), label='Gaussian dist')
+    plt.xlim([bins[0],bins[-1]])
+    plt.legend(); plt.tight_layout()
+
+def plotSpikeCountAnalysis(bin_width_agg_frame):
+    rate_frame = bin_width_agg_frame[['bin_width', 'firing_rate']].groupby('bin_width').agg(['mean', 'std'])
+    rate_frame.reset_index(inplace=True)
+    rate_frame.columns = ['bin_width', 'mean_firing_rate', 'std_firing_rate']
+    std_frame = bin_width_agg_frame[['bin_width', 'firing_std']].groupby('bin_width').agg(['mean', 'std'])
+    std_frame.reset_index(inplace=True)
+    std_frame.columns = ['bin_width', 'mean_firing_std', 'std_firing_std']
+    plt.figure()
+    plt.plot(rate_frame.bin_width, rate_frame.mean_firing_rate, label='Mean firing rate', color='blue')
+    plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.mean_firing_rate + std_frame.mean_firing_std, y2=rate_frame.mean_firing_rate - std_frame.mean_firing_std, alpha=0.25, color='blue', label='st. dev.')
+    plt.xlabel('Bin width (s)'); plt.ylabel('Firing rate (Hz)')
+    plt.ylim([0,rate_frame.mean_firing_rate.max() + std_frame.mean_firing_std.max()])
+    plt.xlim([0, 4.0])
+    plt.legend()
+    plt.tight_layout()
+
+def plotActiveCells(npy_dir):
+    for i, mouse_name in enumerate(ep.mouse_names):
+        plt.subplot(ep.mouse_names.shape[0], 1, i+1)
+        spike_count_frame = ep.loadSpikeCountFrame(mouse_name, 0.01, npy_dir)
+        spike_count_array = np.array([spike_count_frame.loc[spike_count_frame.cell_id == cell_id, 'spike_count'] for cell_id in spike_count_frame.cell_id.unique()])
+        active_cells = spike_count_array.astype(bool).sum(axis=0)
+        plt.plot(spike_count_frame.bin_start_time.unique(), active_cells)
+        plt.xlabel('Time (s)'); plt.ylabel('Number of active cells')
+    plt.tight_layout()
+
+def plotMovingAverages(spike_count_frame, num_cells=10, window_size=10):
+    cell_ids = getRandomSelection(spike_count_frame, num_cells)
+    spike_count_frame['spike_count_moving_average'] = spike_count_frame[['cell_id', 'spike_count']].groupby('cell_id')['spike_count'].transform(lambda x: x.rolling(10,1).mean())
+    spike_count_frame['firing_rate_moving_average'] = spike_count_frame['spike_count_moving_average']/spike_count_frame.bin_width.unique()[0]
+    bin_times = spike_count_frame.bin_start_time.unique()
+    for cell_id in cell_ids:
+        plt.plot(bin_times, spike_count_frame.loc[spike_count_frame.cell_id == cell_id, 'firing_rate_moving_average'], alpha=0.3)
+    plt.xlabel('Time (s)'); plt.ylabel('Firing Rate (Hz)');
+    plt.tight_layout()
+
+def loadBinWidthAggregate(npy_dir):
+    column_names = ['bin_width', 'cell_id', 'spike_count_mean', 'spike_count_std', 'mouse_name', 'firing_rate', 'firing_std']
+    bin_width_agg_frame = pd.DataFrame(columns=column_names)
+    for mouse_name in ep.mouse_names:
+        for bin_width in ep.bin_widths:
+            spike_count_frame = ep.loadSpikeCountFrame(mouse_name, bin_width, npy_dir)
+            agg_frame = spike_count_frame[['cell_id', 'spike_count', 'bin_width']].groupby(['bin_width', 'cell_id']).agg(['mean', 'std'])
+            agg_frame = agg_frame.reset_index()
+            agg_frame.columns = column_names[:-3]
+            agg_frame['mouse_name'] = mouse_name
+            agg_frame['firing_rate'] = agg_frame['spike_count_mean']/bin_width
+            agg_frame['firing_std'] = agg_frame['spike_count_std']/bin_width
+            bin_width_agg_frame = bin_width_agg_frame.append(agg_frame, ignore_index=True)
+    return bin_width_agg_frame
+
+cell_id = 0
+bin_width = 1.0
+mouse_name = ep.mouse_names[0]
+spike_count_frame = ep.loadSpikeCountFrame(mouse_name, bin_width, npy_dir)
+cell_count_frame = spike_count_frame[spike_count_frame.cell_id == cell_id]
+firing_rate = cell_count_frame.spike_count.mean()/bin_width
+firing_std = cell_count_frame.spike_count.std()/bin_width
+spike_counts = cell_count_frame.spike_count
+poiss_dist = poisson(firing_rate)
+spike_bins = np.arange(0, spike_counts.max()+2)
+spike_count_hist = np.histogram(spike_counts, bins=spike_bins, density=True)
+chi_test_res = chisquare(spike_count_hist[0], f_exp=poiss_dist.pmf(spike_bins[:-1]))
