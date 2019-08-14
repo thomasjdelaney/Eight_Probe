@@ -76,30 +76,45 @@ def plotMovingAverages(spike_count_frame, num_cells=10, window_size=10):
     plt.xlabel('Time (s)'); plt.ylabel('Firing Rate (Hz)');
     plt.tight_layout()
 
+def plotChiSquaredStats(bin_width_agg_frame):
+    bin_width_agg_frame['poiss_chi_squared_stat'] = np.log10(bin_width_agg_frame['poiss_chi_squared_stat'])
+    bin_width_agg_frame['gaussian_chi_squared_stat'] = np.log10(bin_width_agg_frame['gaussian_chi_squared_stat'])
+    for mouse_name in ep.mouse_names:
+        agg = bin_width_agg_frame.loc[bin_width_agg_frame.mouse_name == mouse_name]
+        rate_frame = agg[['bin_width', 'poiss_chi_squared_stat', 'gaussian_chi_squared_stat']].groupby('bin_width').agg(['mean', 'std'])
+        rate_frame.reset_index(inplace=True)
+        rate_frame.columns = ['bin_width', 'poiss_chi_squared_stat_mean', 'poiss_chi_squared_stat_std', 'gaussian_chi_squared_stat_mean', 'gaussian_chi_squared_stat_std']
+        plt.plot(rate_frame.bin_width, rate_frame.poiss_chi_squared_stat_mean, color='blue', label='Poisson chi squared stat')
+        plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.poiss_chi_squared_stat_mean - rate_frame.poiss_chi_squared_stat_std, y2=rate_frame.poiss_chi_squared_stat_mean + rate_frame.poiss_chi_squared_stat_std, color='blue', alpha=0.25)
+        plt.plot(rate_frame.bin_width, rate_frame.gaussian_chi_squared_stat_mean, color='orange', label='Gaussian chi squared stat')
+        plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.gaussian_chi_squared_stat_mean - rate_frame.gaussian_chi_squared_stat_std, y2=rate_frame.gaussian_chi_squared_stat_mean + rate_frame.gaussian_chi_squared_stat_std, color='orange', alpha=0.25)
+        plt.savefig(os.path.join(image_dir, 'bin_width_analysis', mouse_name + '_stats_by_bin_width.png'))
+        plt.close()
+
 def loadBinWidthAggregate(npy_dir):
-    column_names = ['bin_width', 'cell_id', 'spike_count_mean', 'spike_count_std', 'mouse_name', 'firing_rate', 'firing_std']
+    column_names = ['bin_width', 'cell_id', 'spike_count_mean', 'spike_count_std', 'mouse_name', 'firing_rate', 'firing_std', 'poiss_chi_squared_stat', 'gaussian_chi_squared_stat']
     bin_width_agg_frame = pd.DataFrame(columns=column_names)
     for mouse_name in ep.mouse_names:
         for bin_width in ep.bin_widths:
             spike_count_frame = ep.loadSpikeCountFrame(mouse_name, bin_width, npy_dir)
             agg_frame = spike_count_frame[['cell_id', 'spike_count', 'bin_width']].groupby(['bin_width', 'cell_id']).agg(['mean', 'std'])
             agg_frame = agg_frame.reset_index()
-            agg_frame.columns = column_names[:-3]
+            agg_frame.columns = column_names[:-5]
             agg_frame['mouse_name'] = mouse_name
             agg_frame['firing_rate'] = agg_frame['spike_count_mean']/bin_width
             agg_frame['firing_std'] = agg_frame['spike_count_std']/bin_width
+            for cell_id in agg_frame.cell_id.unique():
+                spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == cell_id, 'spike_count'].values
+                spike_bins = np.arange(0, spike_counts.max()+2)
+                spike_count_hist = np.histogram(spike_counts, bins=spike_bins, density=True)
+                poiss_dist = poisson(spike_counts.mean() / bin_width)
+                gaussian_dist = norm(spike_counts.mean() / bin_width, spike_counts.std() / bin_width)
+                poiss_chi_squared_test = chisquare(spike_count_hist[0], f_exp=poiss_dist.pmf(spike_bins[:-1]))
+                gaussian_chi_squared_test = chisquare(spike_count_hist[0], f_exp=gaussian_dist.pdf(spike_bins[:-1]))
+                agg_frame.loc[agg_frame.cell_id == cell_id, 'poiss_chi_squared_stat'] = poiss_chi_squared_test.statistic
+                agg_frame.loc[agg_frame.cell_id == cell_id, 'gaussian_chi_squared_stat'] = gaussian_chi_squared_test.statistic
             bin_width_agg_frame = bin_width_agg_frame.append(agg_frame, ignore_index=True)
     return bin_width_agg_frame
 
-cell_id = 0
-bin_width = 1.0
-mouse_name = ep.mouse_names[0]
-spike_count_frame = ep.loadSpikeCountFrame(mouse_name, bin_width, npy_dir)
-cell_count_frame = spike_count_frame[spike_count_frame.cell_id == cell_id]
-firing_rate = cell_count_frame.spike_count.mean()/bin_width
-firing_std = cell_count_frame.spike_count.std()/bin_width
-spike_counts = cell_count_frame.spike_count
-poiss_dist = poisson(firing_rate)
-spike_bins = np.arange(0, spike_counts.max()+2)
-spike_count_hist = np.histogram(spike_counts, bins=spike_bins, density=True)
-chi_test_res = chisquare(spike_count_hist[0], f_exp=poiss_dist.pmf(spike_bins[:-1]))
+agg = loadBinWidthAggregate(npy_dir)
+plotChiSquaredStats(agg)
