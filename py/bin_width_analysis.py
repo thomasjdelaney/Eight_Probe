@@ -78,5 +78,5 @@ def saveBinWidthAnalysisFigs(mouse_name):
     plt.savefig(file_name)
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
 
-if __name__ == '__main__':
+if (not(args.debug)) & (__name__ == '__main__'):
     [saveBinWidthAnalysisFigs(mouse_name) for mouse_name in ep.mouse_names]
