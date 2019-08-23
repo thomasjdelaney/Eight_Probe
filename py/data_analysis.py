@@ -61,6 +61,24 @@ def getSpikeCountCorrelationsForPair(pair_count_dict):
     shuff_corr, shuff_corr_pv = pearsonr(first_spike_counts, second_spike_counts)
     return corr, corr_pv, shuff_corr, shuff_corr_pv
 
+def getPTBiasEstimate(first_spike_counts, second_spike_counts):
+    """
+    For calculating an estimate of the bias on the measurement of mutual information.
+    Arguments:  first_spike_counts, numpy array, spike counts
+                second_spike_counts, numpy array, spike counts
+    Returns:    bias_estimate, float
+    Reference:  Stefano Panzeri, Alessandro Treves, Analytical estimates of limited sampling biases in different information measures, Network: Computation in Neural Systems 7, 87–107, (1996)
+    """
+    response, stimulus = [second_spike_counts, first_spike_counts] if np.argmax([first_spike_counts.max(), second_spike_counts.max()]) else [first_spike_counts, second_spike_counts] # choosing 'stimulus' as the spike count array with fewer possible responses, we will need to loop through these responses.
+    response_bins = np.arange(response.max()+1)
+    stimulus_bins = np.unique(stimulus)
+    relevant_responses = np.intersect1d(response_bins, response).size
+    stimulus_relevant_responses = np.array([np.unique(response[np.flatnonzero(stimulus == s)]).size for s in stimulus_bins])
+    brackets = (stimulus_relevant_responses.sum() - stimulus_bins.size) - (relevant_responses - 1)
+    coef = -1 / (2 * first_spike_counts.size * np.log(2))
+    bias_estimate = coef * brackets if brackets > 0 else 0 # we don't want any positive bias corrections.
+    return bias_estimate
+
 def getMutualInfoForPair(pair_count_dict):
     """
     For calculating the mutual information and suffled mutual information between two spike counts.
@@ -72,9 +90,11 @@ def getMutualInfoForPair(pair_count_dict):
     first_response_alphabet = np.arange(first_spike_counts.max()+1)
     second_response_alphabet = np.arange(second_spike_counts.max()+1)
     plugin_mi = np.max([0, drv.information_mutual(X=first_spike_counts, Y=second_spike_counts, Alphabet_X=first_response_alphabet, Alphabet_Y=second_response_alphabet)])
+    bias_estimate = getPTBiasEstimate(first_spike_counts, second_spike_counts)
+    bias_corrected_mi = np.max([0, plugin_mi + bias_estimate])
     np.random.shuffle(second_spike_counts)
     plugin_shuff_mi = np.max([0, drv.information_mutual(X=first_spike_counts, Y=second_spike_counts, Alphabet_X=first_response_alphabet, Alphabet_Y=second_response_alphabet)])
-    return plugin_mi, plugin_shuff_mi
+    return plugin_mi, plugin_shuff_mi, bias_corrected_mi
 
 def getAnalysisFrameForCellsOld(cell_ids, spike_count_frame):
     """

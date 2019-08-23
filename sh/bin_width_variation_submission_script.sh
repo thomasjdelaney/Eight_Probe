@@ -17,4 +17,3 @@ done
 # run your program, timing it for good measure:
 # NB: Only using 50 cells here because of memory constraints
 time python -m scoop --hostfile $confile -n $nnodes $HOME/Eight_Probe/py/bin_width_variation.py -n 50
-rm confile

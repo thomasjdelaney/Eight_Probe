@@ -53,7 +53,7 @@ def plotMeanCorrelationsVsBinWidth(analysis_frame, measures, measure_label, y_la
     plt.tight_layout()
 
 def saveBinWidthAnalysisFigs(mouse_name):
-    analysis_frame = pd.concat([ep.loadAnalysisFrame(ep.mouse_names[0], bin_width, npy_dir) for bin_width in ep.bin_widths])
+    analysis_frame = pd.concat([ep.loadAnalysisFrame(mouse_name, bin_width, npy_dir) for bin_width in ep.bin_widths])
     mi_lims = [-0.05, np.ceil(analysis_frame['plugin_mi'].max())]
     pos_frame, neg_frame = getPositiveNegativeAnalysisFrames(analysis_frame)
     bin_width_figures_dir = os.path.join(image_dir, 'bin_width_analysis')
