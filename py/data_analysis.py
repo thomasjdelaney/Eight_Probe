@@ -7,8 +7,10 @@ from scipy.stats import pearsonr
 from itertools import combinations
 from multiprocessing import Pool, cpu_count
 from pyitlib import discrete_random_variable as drv
+from functools import reduce
 
 bin_widths = np.array([0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0]) # various bin widths for testing measurement values.
+augmented_bin_widths = np.concatenate([[0.001, 0.002, 0.005], bin_widths])
 
 def getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time):
     """
@@ -23,6 +25,12 @@ def getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time):
     end_time = spon_start_time + num_bins * bin_width
     return np.arange(spon_start_time, end_time + bin_width, bin_width)
 
+def getSpikeCountFromTimesAndBins(cell_id, spike_time_dict, spike_count_bins):
+    """
+    helper function for getActiveCellBinFrame. Gets binned spike counts.
+    """
+    return np.histogram(spike_time_dict[cell_id], bins=spike_count_bins)[0]
+
 def getCellSpikeCountBinFrame(cell_id, spike_time_dict, spike_count_bins):
     """
     Helper function for getSpikeCountBinFrame.
@@ -32,6 +40,22 @@ def getCellSpikeCountBinFrame(cell_id, spike_time_dict, spike_count_bins):
     bin_starts = spike_count_bins[:-1]
     bin_stops = spike_count_bins[1:]
     return pd.DataFrame({'cell_id':np.repeat(cell_id, num_rows), 'spike_count':spike_counts, 'bin_start_time':bin_starts, 'bin_stop_time':bin_stops})
+
+def getActiveCellBinFrame(cell_ids, spike_time_dict, spike_count_bins):
+    """
+    For getting a frame showing the number of active cells in each bin.
+    Arguments:  cell_ids, numpy.array (int), the cell ids
+                spike_time_dict, dict, cell_id => spike_times
+                spike_count_bins, numpy.array (float), the bin boundaries
+    Returns:    DataFrame, bin_start_time, bin_stop_time, num_active_cells
+    """
+    active_cell_frame = pd.DataFrame({'bin_start_time':spike_count_bins[:-1], 'bin_stop_time':spike_count_bins[1:], 'num_active_cells':0})
+    with Pool() as pool:
+        spike_counts_future = pool.starmap_async(getSpikeCountFromTimesAndBins, zip(cell_ids, [spike_time_dict]*cell_ids.size, [spike_count_bins]*cell_ids.size))
+        spike_counts_future.wait()
+    total_active_cells = reduce(lambda x, y: x + (y>0), spike_counts_future.get(), np.zeros(active_cell_frame.shape[0], dtype=int))
+    active_cell_frame.loc[:, 'num_active_cells'] = total_active_cells
+    return active_cell_frame
 
 def getSpikeCountBinFrame(cell_ids, spike_time_dict, spike_count_bins):
     """

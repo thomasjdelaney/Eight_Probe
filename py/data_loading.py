@@ -116,3 +116,14 @@ def loadAnalysisFrame(mouse_name, bin_width, npy_dir):
     """
     file_name = os.path.join(npy_dir, 'analysis_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'analysis.npy')
     return pd.read_pickle(file_name)
+
+def loadActiveCellFrame(mouse_name, bin_width, npy_dir):
+    """
+    For loading one of the active cell frames from file.
+    Arguments:  mouse_name, string, the name of the mouse.
+                bin_width, float, the bin width
+    Returns:    active_cell_frame, DataFrame, bin_start_time, bin_end_time, num_active_cells, bin_width, mouse_name, region
+    """
+    file_name = os.path.join(npy_dir, 'active_cell_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_active.npy')
+    return pd.read_pickle(file_name)
+
