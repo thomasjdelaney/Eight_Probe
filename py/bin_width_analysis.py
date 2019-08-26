@@ -52,6 +52,21 @@ def plotMeanCorrelationsVsBinWidth(analysis_frame, measures, measure_label, y_la
     plt.title(title, fontsize='large') if title != '' else None
     plt.tight_layout()
 
+def plotMIVsBinWidth(analysis_frame, mi_lims, colours=['blue', 'orange', 'green'], labels=['Plugin', 'Shuffled', 'Corrected'], use_legend=True, title=''):
+    agg_frame = analysis_frame[['plugin_mi', 'plugin_shuff_mi', 'bias_corrected_mi', 'bin_width']].groupby('bin_width').agg(['mean', 'std', 'count'])
+    for m,measure in enumerate(['plugin_mi', 'plugin_shuff_mi', 'bias_corrected_mi']):
+        agg_frame.loc[:, measure + '_std_err'] = (agg_frame[measure]['std']/np.sqrt(agg_frame[measure]['count'])).values
+        plt.plot(agg_frame.index.values, agg_frame[measure]['mean'].values, color=colours[m], label=labels[m])
+        plt.fill_between(x=agg_frame.index.values, y1=agg_frame[measure]['mean'].values + agg_frame[measure + '_std_err'].values, y2=agg_frame[measure]['mean'].values - agg_frame[measure + '_std_err'].values, color=colours[m], alpha=0.25)
+    plt.ylabel('Mutual Information (bits)', fontsize='large')
+    plt.xlabel('Bin width (s)', fontsize='large')
+    plt.xlim([0.0, 4.0])
+    plt.ylim(mi_lims)
+    plt.xticks(fontsize='large'); plt.yticks(fontsize='large')
+    plt.legend(fontsize='large') if use_legend else None
+    plt.title(title, fontsize='large') if title != '' else None
+    plt.tight_layout()
+
 def saveBinWidthAnalysisFigs(mouse_name):
     analysis_frame = pd.concat([ep.loadAnalysisFrame(mouse_name, bin_width, npy_dir) for bin_width in ep.bin_widths])
     mi_lims = [-0.05, np.ceil(analysis_frame['plugin_mi'].max())]
@@ -73,7 +88,7 @@ def saveBinWidthAnalysisFigs(mouse_name):
     plt.savefig(file_name)
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     plt.figure(figsize=(5,4))
-    plotMeanCorrelationsVsBinWidth(analysis_frame, ['plugin_mi', 'plugin_shuff_mi'], 'MI', 'MI (bits)', mi_lims, title='all pairs MI')
+    plotMIVsBinWidth(analysis_frame, mi_lims, title='all pairs MI')
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_info_all_pairs.png')
     plt.savefig(file_name)
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
