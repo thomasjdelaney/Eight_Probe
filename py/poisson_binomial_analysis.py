@@ -8,7 +8,7 @@ import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt
 import poibin.poibin as pb
-from scipy.stats import beta
+from scipy.stats import beta, poisson
 
 parser = argparse.ArgumentParser(description='A script for experimenting with the Poisson Binomial distribution')
 parser.add_argument('-n', '--number_of_binomials', help='Number of binomial variable to sum up.', type=int, default=10)
@@ -30,6 +30,7 @@ poisson_binomial_dist = pb.PoiBin(poisson_binomial_params)
 poisson_possible_outcomes = np.arange(args.number_of_binomials+1)
 poisson_binomial_mean = poisson_binomial_params.sum()
 poisson_binomial_var = ((1-poisson_binomial_params) * poisson_binomial_params).sum()
+poisson_distribution = poisson(poisson_binomial_mean)
 
 plt.figure(figsize=(10,5))
 plt.subplot(1,2,1)
@@ -39,6 +40,7 @@ plt.legend(fontsize='large')
 
 plt.subplot(1,2,2)
 plt.plot(poisson_possible_outcomes, poisson_binomial_dist.pmf(poisson_possible_outcomes), label='Poisson-Binomial PMF')
+plt.plot(poisson_possible_outcomes, poisson_distribution.pmf(poisson_possible_outcomes), label='Poisson PMF')
 plt.xlabel(r'$N$', fontsize='large'); plt.ylabel(r'$PB(N)$', fontsize='large');
 plt.title('Mean = ' + str(np.round(poisson_binomial_mean,1)) + ', Variance = ' + str(np.round(poisson_binomial_var,1)), fontsize='large')
 plt.legend(fontsize='large')
