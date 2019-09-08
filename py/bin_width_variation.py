@@ -14,6 +14,7 @@ from scoop import futures
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
+parser.add_argument('-f', '--save_firing_rate_frame', help='Flag to indicate whether or not firing rates should be saved.', default=False, action='store_true')
 parser.add_argument('-a', '--save_analysis_frame', help='Flag to indicate whether or not analysis should be performed and saved.', default=False, action='store_true')
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
@@ -84,10 +85,16 @@ if (not args.debug) & (__name__ == "__main__"):
         for bin_width in ep.augmented_bin_widths:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
             spike_count_save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
+            if args.save_firing_rate_frame:
+                firing_rate_frame = ep.getFiringRateFrameFromSpikeCountFrame(spike_count_frame, bin_width)
+                save_file = os.path.join(npy_dir, 'firing_rate_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'firing.npy')
+                firing_rate_frame.to_pickle(save_file)
+                print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
             if args.save_analysis_frame:
                 analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pairs, spike_count_frame)))
                 analysis_frame['bin_width'] = bin_width
                 save_file = os.path.join(npy_dir, 'analysis_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'analysis.npy')
                 analysis_frame.to_pickle(save_file)
+                print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 

@@ -183,3 +183,17 @@ def getAllBinsFrameForCells(cell_ids, spike_time_dict, spon_start_time):
         analysis_frame['bin_width'] = bin_width
         analysis_frames += [analysis_frame]
     return pd.concat(analysis_frames, ignore_index=True)
+
+def getFiringRateFrameFromSpikeCountFrame(spike_count_frame, bin_width):
+    """
+    For making a firing rate frame given a spike count frame, and the bin width.
+    Arguments:  spike_count_frame, DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time, bin_width
+    Returns:    firing_rate_frame, DataFrame, cell_id, spike_count_mean, spike_count_std, firing_rate, firing_std
+    """
+    column_names = ['cell_id', 'spike_count_mean', 'spike_count_std', 'firing_rate', 'firing_std']
+    firing_rate_frame = spike_count_frame[['cell_id', 'spike_count']].groupby('cell_id').agg(['mean', 'std'])
+    firing_rate_frame = firing_rate_frame.reset_index()
+    firing_rate_frame.columns = column_names[:3]
+    firing_rate_frame['firing_rate'] = firing_rate_frame['spike_count_mean']/bin_width
+    firing_rate_frame['firing_std'] = firing_rate_frame['spike_count_std']/bin_width
+    return firing_rate_frame
