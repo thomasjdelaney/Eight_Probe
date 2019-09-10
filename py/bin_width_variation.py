@@ -82,7 +82,7 @@ if (not args.debug) & (__name__ == "__main__"):
         cell_ids = cell_ids[:args.number_of_cells] if args.number_of_cells > 0 else cell_ids # selecting fewer cells for testing
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
         pairs = np.array(list(combinations(cell_ids, 2)))
-        for bin_width in ep.augmented_bin_widths:
+        for bin_width in ep.selected_bin_widths:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
             spike_count_save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
             if args.save_firing_rate_frame:
