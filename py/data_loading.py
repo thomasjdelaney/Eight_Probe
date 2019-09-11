@@ -134,5 +134,5 @@ def loadFiringRateFrame(mouse_name, bin_width, npy_dir):
                 bin_width, float, the bin width   
     Returns:    firing_rate_frame, DataFrame, cell_id, spike_count_mean, spike_count_std, firing_rate, firing_std
     """
-    file_name = os.path.join(npy_dir, 'active_cell_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_firing.npy')
+    file_name = os.path.join(npy_dir, 'firing_rate_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_firing.npy')
     return pd.read_pickle(file_name)
