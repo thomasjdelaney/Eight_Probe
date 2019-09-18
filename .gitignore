@@ -1,3 +1,4 @@
 mat/
 *.pyc
 *.npy
+*.cpython-37.pyc
