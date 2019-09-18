@@ -13,6 +13,25 @@ bin_widths = np.array([0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1
 augmented_bin_widths = np.concatenate([[0.001, 0.002, 0.005], bin_widths])
 selected_bin_widths = np.array([1.0, 2.0, 3.0])
 
+def getRegionallyDistributedCells(cell_info, num_cells):
+    """
+    For getting num_cells cell_ids distributed across the different available brain regions. cell_info should be prefiltered here.
+    Will return the same number of cells for each region, so the number of cells returned may be less than the number requested!!!
+    Arguments:  cell_info, DataFrame, *This should be filtered before using this function*
+                num_cells, the number of cells to include
+    Returns:    distributed_cells, numpy.array int, cell_ids
+    """
+    regions = cell_info.cell_region.unique()
+    num_regions = regions.size
+    cells_per_region = num_cells // num_regions
+    distributed_cells = np.zeros(cells_per_region * num_regions, dtype=int)
+    cells_added = 0
+    for region in regions:
+        random_region_cells = np.random.choice(cell_info.loc[cell_info.cell_region == region].index.values, cells_per_region)
+        distributed_cells[np.arange(cells_added, cells_added + random_region_cells.size)] = random_region_cells
+        cells_added += random_region_cells.size
+    return distributed_cells
+
 def getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time):
     """
     Get the bins for a given bin width, and latest spike time.

@@ -79,7 +79,8 @@ if (not args.debug) & (__name__ == "__main__"):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
         spon_start_time = ep.spon_start_times[m]
         cell_ids = cell_info[cell_info.mouse_name == mouse_name].index.values
-        cell_ids = cell_ids[:args.number_of_cells] if args.number_of_cells > 0 else cell_ids # selecting fewer cells for testing
+        # cell_ids = cell_ids[:args.number_of_cells] if args.number_of_cells > 0 else cell_ids # selecting fewer cells for testing
+        cell_ids = ep.getRegionallyDistributedCells(cell_info.loc[cell_info.mouse_name == mouse_name], args.number_of_cells)
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
         pairs = np.array(list(combinations(cell_ids, 2)))
         for bin_width in ep.selected_bin_widths:
