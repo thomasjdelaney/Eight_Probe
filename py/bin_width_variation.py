@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description='For varying the bin width used fro
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
 parser.add_argument('-f', '--save_firing_rate_frame', help='Flag to indicate whether or not firing rates should be saved.', default=False, action='store_true')
 parser.add_argument('-a', '--save_analysis_frame', help='Flag to indicate whether or not analysis should be performed and saved.', default=False, action='store_true')
+parser.add_argument('-c', '--num_chunks', help='Number of chunks to split the pairs into before processing.', default=10, type=int)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -72,6 +73,17 @@ def reduceAnalysisDicts(first_dict, second_dict):
     """
     return {k:np.append(first_dict[k], second_dict[k]) for k in first_dict.keys()}
 
+def saveAnalysisFrame(analysis_frame, chunk_num, save_file):
+    """
+    Saves the analysis_frame to save_file as a csv with or without a header according to chunk_num. 
+    If chunk_num == 0, save with header, else append.
+    """
+    if chunk_num == 0:
+        analysis_frame.to_csv(save_file, index=False)
+    else:
+        analysis_frame.to_csv(save_file, mode='a', header=False, index=False)
+    return None
+
 if (not args.debug) & (__name__ == "__main__"):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
@@ -83,6 +95,7 @@ if (not args.debug) & (__name__ == "__main__"):
         cell_ids = ep.getRegionallyDistributedCells(cell_info.loc[cell_info.mouse_name == mouse_name], args.number_of_cells)
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
         pairs = np.array(list(combinations(cell_ids, 2)))
+        chunked_pairs = np.array_split(pairs, args.num_chunks)
         for bin_width in ep.selected_bin_widths:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
             spike_count_save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
@@ -92,10 +105,13 @@ if (not args.debug) & (__name__ == "__main__"):
                 firing_rate_frame.to_pickle(save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
             if args.save_analysis_frame:
-                analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pairs, spike_count_frame)))
-                analysis_frame['bin_width'] = bin_width
-                save_file = os.path.join(npy_dir, 'analysis_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'analysis.npy')
-                analysis_frame.to_pickle(save_file)
+                save_file = os.path.join(csv_dir, 'analysis_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'analysis.csv')
+                removed = os.remove(save_file) if os.path.exists(save_file) else None
+                for i,pair_chunk in enumerate(chunked_pairs):
+                    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing chunk number ' + str(i) + '...')
+                    analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pair_chunk, spike_count_frame)))
+                    analysis_frame['bin_width'] = bin_width
+                    saveAnalysisFrame(analysis_frame, i, save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 

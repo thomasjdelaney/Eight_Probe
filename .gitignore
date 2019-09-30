@@ -2,3 +2,4 @@ mat/
 *.pyc
 *.npy
 *.cpython-37.pyc
+csv/analysis_frames/
