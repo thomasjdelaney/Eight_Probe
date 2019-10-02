@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/bootstrap/__main__.py", line 302, in <module>
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/bootstrap/__main__.py", line 92, in main
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/bootstrap/__main__.py", line 290, in run
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/bootstrap/__main__.py", line 271, in futures_startup
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/futures.py", line 64, in _startup
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/_control.py", line 230, in runController
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/_types.py", line 384, in sendResult
+  File "/cm/shared/languages/Anaconda3-5.2.0/lib/python3.7/site-packages/scoop-0.7.1.1-py2.7.egg/scoop/_comm/scoopzmq.py", line 319, in sendResult
+TypeError: cannot serialize 'greenlet.greenlet' object
+Assertion failed: false (src/session_base.cpp:628)
+=>> PBS: job killed: walltime 3611 exceeded limit 3600

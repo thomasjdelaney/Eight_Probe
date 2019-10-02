@@ -27,7 +27,7 @@ def getRegionallyDistributedCells(cell_info, num_cells):
     distributed_cells = np.zeros(cells_per_region * num_regions, dtype=int)
     cells_added = 0
     for region in regions:
-        random_region_cells = np.random.choice(cell_info.loc[cell_info.cell_region == region].index.values, cells_per_region)
+        random_region_cells = np.random.choice(cell_info.loc[cell_info.cell_region == region].index.values, cells_per_region, replace=False)
         distributed_cells[np.arange(cells_added, cells_added + random_region_cells.size)] = random_region_cells
         cells_added += random_region_cells.size
     return distributed_cells

@@ -1,0 +1,46 @@
+[2019-09-30 22:10:58,530] launcher  INFO    SCOOP 0.7 1.1 on linux using Python 3.7.2 (default, Dec 29 2018, 06:19:36) [GCC 7.3.0], API: 1013
+[2019-09-30 22:10:58,530] launcher  INFO    Detected PBS environment.
+[2019-09-30 22:10:58,530] launcher  INFO    Deploying 32 worker(s) over 32 host(s).
+[2019-09-30 22:10:58,531] launcher  INFO    Worker distribution: 
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-029:	0 + origin
+[2019-09-30 22:10:58,531] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,531] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,531] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,531] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,531] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,531] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,531] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+[2019-09-30 22:10:58,532] launcher  INFO       node31-030:	1 
+2019-09-30T22:11:07.711315 INFO: Loading cell info...
+2019-09-30T22:11:07.738602 INFO: Processing mouse Krebs...
+2019-09-30T22:11:11.282945 INFO: Processing bin width 1.0...
+2019-09-30T22:11:11.470109 INFO: /newhome/td16954/Eight_Probe/npy/firing_rate_frames/Krebs_1p0_firing.npy saved.
+2019-09-30T22:11:11.470777 INFO: Processing chunk number 0...
+[2019-09-30 22:11:12,237] scoopzmq  (b'10.131.0.221:61479') ERROR   A worker exited unexpectedly. Read the worker logs for more information. SCOOP pool will now shutdown.
+[2019-09-30 22:11:12,730] launcher  (127.0.0.1:43720) INFO    Root process is done.
+[2019-09-30 22:10:59,309] __main__  INFO    Worker(s) launched using /bin/bash
+[2019-09-30 22:10:59,616] __main__  INFO    Worker(s) launched using /bin/bash
+[2019-09-30 22:10:59,889] __main__  INFO    Worker(s) launched using /bin/bash
