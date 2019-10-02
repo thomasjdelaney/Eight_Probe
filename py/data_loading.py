@@ -107,15 +107,18 @@ def loadSpikeCountFrame(mouse_name, bin_width, npy_dir):
     file_name = os.path.join(npy_dir, 'spike_count_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'spike_counts.npy')
     return pd.read_pickle(file_name)
 
-def loadAnalysisFrame(mouse_name, bin_width, npy_dir):
+def loadAnalysisFrame(mouse_name, bin_width, file_dir):
     """
     For loading one of the analysis frames from file.
     Arguments:  mouse_name, string, the name of the mouse.
                 bin_width, float, the bin width
+                file_dir, string, either npy_dir, or csv_dir
     Returns:    analysis_frame, DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv
     """
-    file_name = os.path.join(npy_dir, 'analysis_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'analysis.npy')
-    return pd.read_pickle(file_name)
+    file_ext = os.path.basename(file_dir)
+    file_name = os.path.join(file_dir, 'analysis_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'analysis.' + file_ext)
+    analysis_frame = pd.read_pickle(file_name) if file_ext == 'npy' else pd.read_csv(file_name)
+    return analysis_frame
 
 def loadActiveCellFrame(mouse_name, bin_width, npy_dir):
     """
