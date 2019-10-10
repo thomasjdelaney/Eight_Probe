@@ -27,6 +27,20 @@ mat_dir = os.path.join(proj_dir, 'mat')
 sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 
+def plotMeasureHistogram(analysis_frame, measurement, x_label, y_label, x_lims=None, title=''):
+    plt.hist(analysis_frame[measurement], bins=50)
+    plt.xlim(x_lims) if x_lims != None else None
+    plt.xlabel(x_label, fontsize='x-large')
+    plt.ylabel(y_label, fontsize='x-large')
+    plt.title(title, fontsize='x-large') if title != '' else None
+    plt.xticks(fontsize='large'); plt.yticks(fontsize='large')
+
 m=0
 mouse_name = ep.mouse_names[m]
 analysis_frame = ep.loadAnalysisFrame(mouse_name, args.bin_width, csv_dir)
+
+plotMeasureHistogram(analysis_frame, 'corr_coef', 'Corr. Coef.', 'Num. Occurances', x_lims=(-1,1), title='Num pairs = ' + str(analysis_frame.shape[0]))
+file_name = os.path.join(image_dir, 'correlation_histograms','test_corr_hist.png')
+plt.savefig(file_name)
+# need to add regions 
+
