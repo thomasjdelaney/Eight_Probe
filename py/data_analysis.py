@@ -27,9 +27,20 @@ def getRegionallyDistributedCells(cell_info, num_cells):
     distributed_cells = np.zeros(cells_per_region * num_regions, dtype=int)
     cells_added = 0
     for region in regions:
-        random_region_cells = np.random.choice(cell_info.loc[cell_info.cell_region == region].index.values, cells_per_region, replace=False)
-        distributed_cells[np.arange(cells_added, cells_added + random_region_cells.size)] = random_region_cells
-        cells_added += random_region_cells.size
+        region_cell_info = cell_info.loc[cell_info.cell_region == region]
+        num_region_cells = region_cell_info.shape[0]
+        if cells_per_region > num_region_cells:
+            cells_to_add = region_cell_info.index.values
+        else:
+            cells_to_add = np.random.choice(cell_info.loc[cell_info.cell_region == region].index.values, cells_per_region, replace=False)
+        distributed_cells[np.arange(cells_added, cells_added + cells_to_add.size)] = cells_to_add
+        cells_added += cells_to_add.size
+    more_to_add = distributed_cells.size - cells_added
+    if more_to_add > 0:
+        cells_so_far = np.setdiff1d(distributed_cells, 0)
+        all_cells = cell_info.index.values
+        cells_to_add = np.random.choice(np.setdiff1d(all_cells, cells_so_far), more_to_add, replace=False)
+        distributed_cells[np.arange(cells_added, cells_added + cells_to_add.size)] = cells_to_add
     return distributed_cells
 
 def getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time):
