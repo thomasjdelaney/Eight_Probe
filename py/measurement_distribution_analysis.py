@@ -96,5 +96,5 @@ if (not args.debug) & (__name__ == '__main__'):
         mouse_regional_aggregation['mouse_name'] = mouse_name
         measure_statistics = measure_statistics.append(mouse_regional_aggregation, ignore_index=True)
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Saving measure statistics...')
-    measure_statistics.to_csv(os.path.join(csv_dir, 'measure_statistics.csv'))
+    measure_statistics.to_csv(os.path.join(csv_dir, 'measure_statistics_' + str(bin_width).replace('.', 'p') + '.csv'))
 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
