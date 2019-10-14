@@ -36,9 +36,9 @@ def plotFiringRateHistogram(firing_rate_region_frame, mouse_name, bin_width, reg
     probe_ids = firing_rate_region_frame.probe_id.unique()
     if separate_probes:
         for probe_id in probe_ids:
-            plt.hist(firing_rate_region_frame.loc[firing_rate_frame.probe_id == probe_id, 'firing_rate'].values, bins=bins, alpha=0.4, label=region + ' ' + str(probe_id), density=use_density)
+            plt.hist(firing_rate_region_frame.loc[firing_rate_frame.probe_id == probe_id, 'firing_rate'].values, bins=bins, alpha=0.4, label=region + ' ' + str(probe_id), density=use_density, align='left')
     else:
-        plt.hist(firing_rate_region_frame.loc[:, 'firing_rate'].values, bins=bins, label=region, density=use_density)
+        plt.hist(firing_rate_region_frame.loc[:, 'firing_rate'].values, bins=bins, label=region, density=use_density, align='left')
     plt.xlabel('Firing rate (Hz)', fontsize='x-large')
     plt.ylabel('Num. Cells', fontsize='x-large')
     plt.xticks(fontsize='large'); plt.yticks(fontsize='large')
@@ -57,7 +57,7 @@ if (not args.debug) & (__name__ == '__main__'):
     for mouse_name in ep.mouse_names:
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
         firing_rate_frame = ep.loadFiringRateFrame(mouse_name, args.bin_width, npy_dir)
-        firing_rate_frame = firing_rate_frame.join(cell_info, how='left')
+        firing_rate_frame = firing_rate_frame.join(cell_info, how='left', on='cell_id')
         for region in firing_rate_frame.cell_region.unique():
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing region ' + region + '...')
             firing_rate_region_frame = firing_rate_frame.loc[firing_rate_frame['cell_region'] == region, :]

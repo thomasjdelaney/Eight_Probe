@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 from scipy.stats import pearsonr
-from itertools import combinations
+from itertools import combinations, product
 from multiprocessing import Pool, cpu_count
 from pyitlib import discrete_random_variable as drv
 from functools import reduce
@@ -228,3 +228,56 @@ def getFiringRateFrameFromSpikeCountFrame(spike_count_frame, bin_width):
     firing_rate_frame['firing_rate'] = firing_rate_frame['spike_count_mean']/bin_width
     firing_rate_frame['firing_std'] = firing_rate_frame['spike_count_std']/bin_width
     return firing_rate_frame
+
+def getRegionalAnalysisFrame(analysis_frame, region_pair):
+    """
+    For selecting from the analysis frame according to the regions in region_pair.
+    Arguments:  analysis_frame, pandas DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv
+                region_pair, double string, a double of strings containing region names
+    Return:     filtered analysis frame
+    """
+    return analysis_frame.loc[((analysis_frame.first_cell_region == region_pair[0]) & (analysis_frame.second_cell_region == region_pair[1])) | ((analysis_frame.first_cell_region == region_pair[1]) & (analysis_frame.second_cell_region == region_pair[0]))]
+
+def joinCellAnalysis(cell_info, analysis_frame):
+    """
+    For joining cell_info on an analysis_frame giving the regions of the first and second cells.
+    Arguments:  cell_info, the cell info table
+                analysis_frame, pandas DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv
+    Returns:    analysis frame with extra columns.
+    """
+    analysis_frame = analysis_frame.join(cell_info['cell_region'], how='left', on='first_cell_id')
+    analysis_frame = analysis_frame.rename(columns={'cell_region':'first_cell_region'})
+    analysis_frame = analysis_frame.join(cell_info['cell_region'], how='left', on='second_cell_id')
+    analysis_frame = analysis_frame.rename(columns={'cell_region':'second_cell_region'})
+    return analysis_frame
+
+def getRegionalMeasureAggFrame(measure_agg_frame, region_pair):
+    """
+    For selecting from the measure aggregation frame according to the given region pair
+    Arguments:  measure_agg_frame, pandas DataFrame, contains all measurements aggregated over and between regions
+                region_pair, double string, a double of strings containing region names
+    Returns:    filtered measure_agg_frame
+    """
+    return measure_agg_frame.loc[((measure_agg_frame.first_region == region_pair[0]) & (measure_agg_frame.second_region == region_pair[1])) | ((measure_agg_frame.first_region == region_pair[1]) & (measure_agg_frame.second_region == region_pair[0]))]
+
+def getRegionalMeasureMatrix(measure_frame, measure, mouse_name=None, regions=None):
+    """
+    For getting a symmetric martix of pairwise measurements. mouse_name and region pairs are optional.
+    Arguments:  measure_frame, measure_agg_frame, pandas DataFrame, contains all measurements aggregated over and between regions
+                measure, one of 'mean_corr', 'mean_shuff_corr', 'mean_info', 'std_corr', 'std_shuff_corr', 'std_info'
+    Returns:    a matrix of measurement values, the size of the number of regions
+    """
+    measure_frame = measure_frame.loc[measure_frame.mouse_name == mouse_name] if mouse_name != None else measure_frame
+    if regions == None:
+        regions = measure_frame[(measure_frame.first_region == measure_frame.second_region)].sort_values(measure, ascending=False).first_region.unique()
+        region_pairs = product(regions, regions)
+    else: 
+        region_pairs = product(regions, regions)
+    measure_matrix = np.zeros([regions.size, regions.size])
+    for region_pair in region_pairs:
+        first_ind = np.flatnonzero(regions == region_pair[0])[0]
+        second_ind = np.flatnonzero(regions == region_pair[1])[0]
+        measure_value = getRegionalMeasureAggFrame(measure_frame, region_pair).iloc[0][measure]
+        measure_matrix[first_ind, second_ind] = measure_value
+        measure_matrix[second_ind, first_ind] = measure_value
+    return measure_matrix, regions

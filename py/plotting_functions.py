@@ -42,3 +42,14 @@ def plotRasterWithComponent(spike_time_dict, cell_info, start_time, stop_time, c
     plotRaster(spike_time_dict, cell_info, start_time, stop_time)
     plt.tight_layout()
 
+def plotMeasureHistogram(analysis_frame, measurement, x_label, y_label, x_lims=None, title=''):
+    """
+    For plotting the histogram of a measurement in the analysis frame. 
+    """
+    plt.figure(figsize=(6,5))
+    plt.hist(analysis_frame[measurement], bins=21, align='left')
+    plt.xlim(x_lims) if x_lims != None else None
+    plt.xlabel(x_label, fontsize='x-large')
+    plt.ylabel(y_label, fontsize='x-large')
+    plt.title(title, fontsize='x-large') if title != '' else None
+    plt.xticks(fontsize='large'); plt.yticks(fontsize='large')

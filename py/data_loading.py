@@ -40,7 +40,7 @@ def getSpikesForCell(cell_id, cell_info, mouse_spikes, spon_start_time):
     cell_spike_times = probe_spikes['st'].flatten()[probe_spikes['clu'].flatten() == specific_cell_info['mouse_probe_cell_id']]
     return cell_spike_times[cell_spike_times >= spon_start_time]
 
-def loadSpikeTimeDictOld(mouse_name, cell_ids, cell_info, mat_dir):
+def loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir):
     """
     For loading a dictionary of cell_id => spike times.
     Arguments:  mouse_name, string, the name of the mouse
@@ -48,8 +48,6 @@ def loadSpikeTimeDictOld(mouse_name, cell_ids, cell_info, mat_dir):
                 cell_info, pandas.DataFrame, a table of information on the cells, gives the probe id, and the mouse_probe_cell_id
                 mat_dir, the directory where the spikes file can be found
     Returns:    spike_dict, dictionary, cell_id => spike times
-
-    DEPRECATED: New loadSpikeTimeDict is parallelised and is therefore slightly faster, or perhaps much faster.
     """
     cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
     spon_start_time = spon_start_times[np.flatnonzero(mouse_names == mouse_name)[0]]
@@ -59,7 +57,7 @@ def loadSpikeTimeDictOld(mouse_name, cell_ids, cell_info, mat_dir):
     spike_times_for_cells = [getSpikesForCell(cell_id, cell_info, mouse_spikes, spon_start_time) for cell_id in cell_ids]
     return {cell_id:spike_times for (cell_id, spike_times) in zip(cell_ids, spike_times_for_cells)}
 
-def loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir):
+def loadSpikeTimeDictInefficient(mouse_name, cell_ids, cell_info, mat_dir):
     """
     For loading a dictionary of cell_id => spike times.
     Arguments:  mouse_name, string, the name of the mouse
@@ -67,6 +65,8 @@ def loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir):
                 cell_info, pandas.DataFrame, a table of information on the cells, gives the probe id, and the mouse_probe_cell_id
                 mat_dir, the directory where the spikes file can be found
     Returns:    spike_dict, dictionary, cell_id => spike times
+
+    DEPRECATED: This parallelised version is slower than the single-threaded version.
     """
     cell_ids = np.array([cell_ids]) if np.isscalar(cell_ids) else cell_ids
     spon_start_time = spon_start_times[np.flatnonzero(mouse_names == mouse_name)[0]]
@@ -139,3 +139,12 @@ def loadFiringRateFrame(mouse_name, bin_width, npy_dir):
     """
     file_name = os.path.join(npy_dir, 'firing_rate_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_firing.npy')
     return pd.read_pickle(file_name)
+
+def loadMeasureStatFile(bin_width, csv_dir):
+    """
+    For loading the csv containing mean and std values for correlation, shuffled correlation, and info across and within regions.
+    Arguments:  bin_width, float, the bin width to use.
+                csv_dir, string, directory
+    Returns:    pandas DataFrame
+    """
+    return pd.read_csv(os.path.join(csv_dir, 'measure_statistics_' + str(bin_width).replace('.', 'p') + '.csv'), index_col=0)
