@@ -11,7 +11,7 @@ from functools import reduce
 
 bin_widths = np.array([0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0]) # various bin widths for testing measurement values.
 augmented_bin_widths = np.concatenate([[0.001, 0.002, 0.005], bin_widths])
-selected_bin_widths = np.array([0.1, 1.0, 2.0, 3.0])
+selected_bin_widths = np.array([0.2, 1.0, 2.0, 3.0])
 
 def getRegionallyDistributedCells(cell_info, num_cells):
     """
@@ -260,7 +260,7 @@ def getRegionalMeasureAggFrame(measure_agg_frame, region_pair):
     """
     return measure_agg_frame.loc[((measure_agg_frame.first_region == region_pair[0]) & (measure_agg_frame.second_region == region_pair[1])) | ((measure_agg_frame.first_region == region_pair[1]) & (measure_agg_frame.second_region == region_pair[0]))]
 
-def getRegionalMeasureMatrix(measure_frame, measure, mouse_name=None, regions=None):
+def getRegionalMeasureMatrix(measure_frame, measure, mouse_name=None, regions=np.array(None)):
     """
     For getting a symmetric martix of pairwise measurements. mouse_name and region pairs are optional.
     Arguments:  measure_frame, measure_agg_frame, pandas DataFrame, contains all measurements aggregated over and between regions
@@ -268,7 +268,7 @@ def getRegionalMeasureMatrix(measure_frame, measure, mouse_name=None, regions=No
     Returns:    a matrix of measurement values, the size of the number of regions
     """
     measure_frame = measure_frame.loc[measure_frame.mouse_name == mouse_name] if mouse_name != None else measure_frame
-    if regions == None:
+    if np.all(regions == None):
         regions = measure_frame[(measure_frame.first_region == measure_frame.second_region)].sort_values(measure, ascending=False).first_region.unique()
         region_pairs = product(regions, regions)
     else: 

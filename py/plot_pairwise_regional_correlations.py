@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from itertools import product
 
 parser = argparse.ArgumentParser(description='For plotting matrices of the mean correlations and std correlations within and across regions.')
-parser.add_argument('-b', '--bin_width', help='The bin width to use.', type=float, default=2.0)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -27,21 +26,33 @@ mat_dir = os.path.join(proj_dir, 'mat')
 sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 
-def plotMeasureMatrix(measure_matrix, tick_labels, xlabel):
-    return 0
+def plotMeasureMatrix(measure_matrix, tick_labels, xlabel, suffix, bin_width, **kwargs):
+    fig, ax = plt.subplots(nrows=1, ncols=1)
+    im = ax.matshow(measure_matrix, cmap='Blues', **kwargs)
+    ax.set_xticklabels(labels=np.hstack([[''],tick_labels]), rotation=45, fontsize='large')
+    ax.set_yticklabels(labels=np.hstack([[''],tick_labels]), rotation=45, fontsize='large')
+    ax.set_xlim(-0.5, 8.5)
+    ax.set_ylim(8.5, -0.5)
+    ax.set_xlabel(xlabel, fontsize='x-large')
+    fig.subplots_adjust(right=0.8)
+    cbar_ax = fig.add_axes([0.85, 0.11, 0.05, 0.77])
+    fig.colorbar(im, cax=cbar_ax)
+    file_name = os.path.join(image_dir, 'regional_measure_matrices', mouse_name + '_' + str(bin_width).replace('.', 'p') + suffix + '.png')
+    plt.savefig(file_name)
+    plt.close()
+    return file_name
 
-measure_frame = ep.loadMeasureStatFile(args.bin_width, csv_dir)
-mouse_name = ep.mouse_names[0]
-measure = 'mean_corr'
-mean_corr_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_corr', mouse_name=mouse_name)
-
-fig, ax = plt.subplots(nrows=1, ncols=1)
-im = ax.matshow(mean_corr_matrix, cmap='Blues')
-ax.set_xticklabels(labels=np.hstack([[''],regions]), rotation=45, fontsize='large'); ax.set_yticklabels(labels=np.hstack([[''],regions]), rotation=45, fontsize='large')
-ax.set_xlim(-0.5, 8.5); ax.set_ylim(8.5, -0.5)
-ax.set_xlabel('Mean Corr. Coef', fontsize='x-large')
-fig.subplots_adjust(right=0.8)
-cbar_ax = fig.add_axes([0.85, 0.11, 0.05, 0.77])
-fig.colorbar(im, cax=cbar_ax)
-file_name = os.path.join(image_dir, 'regional_measure_matrices', mouse_name + '_' + str(args.bin_width).replace('.', 'p') + '_corr.png')
-plt.savefig(file_name)
+if (not args.debug) & (__name__ == '__main__'):
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
+    for bin_width in ep.selected_bin_widths[1:]:
+        print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width)  + '...')
+        measure_frame = ep.loadMeasureStatFile(bin_width, csv_dir)
+        for mouse_name in ep.mouse_names:
+            print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
+            mean_corr_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_corr', mouse_name=mouse_name)
+            mean_corr_shuff_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_shuff_corr', mouse_name=mouse_name, regions=regions)
+            file_name = plotMeasureMatrix(mean_corr_matrix, regions, 'Mean Corr. Coef', '_corr', bin_width)
+            print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+            file_name = plotMeasureMatrix(mean_corr_shuff_matrix, regions, 'Mean Corr. Coef (Shuffled)', '_corr_shuff', bin_width, vmin=mean_corr_matrix.min(), vmax=mean_corr_matrix.max())
+            print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
