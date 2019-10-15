@@ -27,7 +27,6 @@ mat_dir = os.path.join(proj_dir, 'mat')
 sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 
-
 def getFullRegionPairList(analysis_frame):
     data_regions = analysis_frame.first_cell_region.unique()
     comb_list = list(combinations(data_regions, 2))
@@ -63,8 +62,8 @@ def plotHistogramsSave(region_pair_analysis_frame, region_pair, mouse_name, bin_
     plt.savefig(getFileName('information_histograms', mouse_name, args.bin_width, region_pair, '_info_hist')); plt.close('all')
 
 if (not args.debug) & (__name__ == '__main__'):
-    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
     measure_statistics = pd.DataFrame()
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
     for m,mouse_name in enumerate(ep.mouse_names):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
