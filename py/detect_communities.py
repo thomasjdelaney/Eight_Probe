@@ -49,9 +49,17 @@ def rectifyMatrix(matrix):
     matrix[matrix < 0] = 0
     return matrix
 
-def sparsifyMeasureMatrix(measure_matrix, percentile):
-    threshold = np.percentile(measure_matrix[measure_matrix.nonzero()], percentile)
-    measure_matrix[measure_matrix < threshold] = 0
+def sparsifyMeasureMatrix(measure_matrix, analysis_frame, percentile=95):
+    """
+    Finds the 5 and 95 percentile values from the shuffled correlation column of the analysis_frame. Zeros any measure values between those two values.
+    The retionale is that those values are noise and therefore should not be regarded as connections in our correlation network.
+    Arguments:  measure_matrix, 
+                analysis_frame,
+                percentile
+    Returns:    a sparser matrix
+    """
+    thresholds = np.percentile(analysis_frame.shuff_corr, [100 - percentile, percentile])
+    measure_matrix[(measure_matrix > threshold[0]) & (measure_matrix < threshold[1])] = 0
     return measure_matrix
 
 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
@@ -64,8 +72,9 @@ print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse name ' + mou
 analysis_frame = ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir)
 analysis_frame = ep.joinCellAnalysis(cell_info, analysis_frame)
 corr_matrix, cell_ids = getMeasureMatrix(analysis_frame, 'corr_coef')
-rectified_corr_matrix = rectifyMatrix(corr_matrix)
 sparsified_matrix = sparsifyMeasureMatrix(rectified_corr_matrix, args.percentile)
+rectified_sparse_corr_matrix = rectifyMatrix(sparsified_matrix)
+absolute_sparse_corr_matrix = np.abs(sparsified_matrix)
 
 # rectified correlations
 # absolute correlations
