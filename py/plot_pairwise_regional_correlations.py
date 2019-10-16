@@ -44,7 +44,7 @@ def plotMeasureMatrix(measure_matrix, tick_labels, xlabel, suffix, bin_width, **
 
 if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
-    for bin_width in ep.selected_bin_widths[1:]:
+    for bin_width in ep.selected_bin_widths:
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width)  + '...')
         measure_frame = ep.loadMeasureStatFile(bin_width, csv_dir)
         for mouse_name in ep.mouse_names:

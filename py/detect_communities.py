@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from itertools import combinations 
 
 parser = argparse.ArgumentParser(description='For detecting communities.')
+parser.add_argument('-p', '--percentile', help='Percentile to use when sparsifying matrix.', default=5.0, type=float)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -48,6 +49,11 @@ def rectifyMatrix(matrix):
     matrix[matrix < 0] = 0
     return matrix
 
+def sparsifyMeasureMatrix(measure_matrix, percentile):
+    threshold = np.percentile(measure_matrix[measure_matrix.nonzero()], percentile)
+    measure_matrix[measure_matrix < threshold] = 0
+    return measure_matrix
+
 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
 cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
@@ -58,6 +64,9 @@ print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse name ' + mou
 analysis_frame = ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir)
 analysis_frame = ep.joinCellAnalysis(cell_info, analysis_frame)
 corr_matrix, cell_ids = getMeasureMatrix(analysis_frame, 'corr_coef')
+rectified_corr_matrix = rectifyMatrix(corr_matrix)
+sparsified_matrix = sparsifyMeasureMatrix(rectified_corr_matrix, args.percentile)
 
 # rectified correlations
 # absolute correlations
+# sparsify matrix
