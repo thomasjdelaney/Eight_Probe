@@ -117,11 +117,9 @@ if (not args.debug) & (__name__ == '__main__'):
                 nnr.plotModEigValsVsNullEigHist(network_modularity_matrix, samples_eig_vals)
                 plt.savefig(os.path.join(image_dir, 'community_detection', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_eig_hist.png'))
                 plt.close()
-                signal_final_cell_info.to_pickle(os.path.join(npy_dir, mouse_name + str(bin_width).replace('.','p') + '_' + args.correction + '_signal_final_cell_info.pkl'))
-                noise_final_cell_info.to_pickle(os.path.join(npy_dir, mouse_name + str(bin_width).replace('.','p') + '_' + args.correction + '_noise_final_cell_info.pkl'))
+                signal_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_signal_final_cell_info.pkl'))
+                noise_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_noise_final_cell_info.pkl'))
                 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')    
     
-# TODO  move npy files into suitably named directory
-#       import regional plotting function and sorting functions.
-#       make the regional plots
+# TODO  import regional plotting function and sorting functions.
 #       recreate fig3 c of the new paper
