@@ -42,8 +42,33 @@ def plotMeasureMatrix(measure_matrix, tick_labels, xlabel, suffix, bin_width, **
     plt.close()
     return file_name
 
+def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False):
+    """
+    For making a similar figure to figure 3, c from a recent paper that uses the 8 probe data.
+    """
+    relevant_measure_frame = measure_frame.loc[measure_frame.mouse_name == mouse_name]
+    regions = relevant_measure_frame.first_region.unique()
+    fig = plt.figure(figsize=(7,4))
+    for first_region, second_region in zip(relevant_measure_frame.first_region, relevant_measure_frame.second_region):
+        regional_measure_frame = ep.getRegionalMeasureAggFrame(relevant_measure_frame, (first_region, second_region))
+        if first_region == second_region:
+            plt.scatter(list(regions).index(first_region) + 1, regional_measure_frame.iloc[0]['mean_corr'], color=ep.region_to_colour[first_region])
+        else:
+            inds = list(regions).index(first_region) + 1, list(regions).index(second_region) + 1
+            plt.scatter(inds, np.repeat(regional_measure_frame.iloc[0]['mean_corr'],2), color='black')
+    plt.xticks(range(0,regions.size+2), np.hstack([[''], regions]), fontsize='x-large', rotation=30)
+    plt.ylabel('Mean Corr. Coef.', fontsize='x-large')
+    plt.title(mouse_name, fontsize='x-large') if use_title else None
+    plt.tight_layout()
+    file_name = os.path.join(image_dir, 'within_between_comparison', mouse_name + '_' + str(bin_width).replace('.','p') + '_corr_comp.png')
+    plt.savefig(file_name)
+    plt.close() 
+    return file_name
+
 if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
+    cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
     for bin_width in ep.selected_bin_widths:
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width)  + '...')
         measure_frame = ep.loadMeasureStatFile(bin_width, csv_dir)
@@ -54,5 +79,7 @@ if (not args.debug) & (__name__ == '__main__'):
             file_name = plotMeasureMatrix(mean_corr_matrix, regions, 'Mean Corr. Coef', '_corr', bin_width)
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
             file_name = plotMeasureMatrix(mean_corr_shuff_matrix, regions, 'Mean Corr. Coef (Shuffled)', '_corr_shuff', bin_width, vmin=mean_corr_matrix.min(), vmax=mean_corr_matrix.max())
+            print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+            file_name = plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=True)
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
