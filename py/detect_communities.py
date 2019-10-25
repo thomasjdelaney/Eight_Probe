@@ -62,7 +62,7 @@ if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
-    for bin_width in ep.selected_bin_widths[1:]:
+    for bin_width in ep.selected_bin_widths:
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
         for mouse_name in  ep.mouse_names:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse name ' + mouse_name + '...')
