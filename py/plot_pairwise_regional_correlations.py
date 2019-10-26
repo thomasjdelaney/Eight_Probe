@@ -58,7 +58,7 @@ def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False):
             plt.scatter(inds, np.repeat(regional_measure_frame.iloc[0]['mean_corr'],2), color='black')
     plt.xticks(range(0,regions.size+2), np.hstack([[''], regions]), fontsize='x-large', rotation=30)
     plt.ylabel('Mean Corr. Coef.', fontsize='x-large')
-    plt.title(mouse_name, fontsize='x-large') if use_title else None
+    plt.title(mouse_name + ', Bin width=' + str(bin_width), fontsize='x-large') if use_title else None
     plt.tight_layout()
     file_name = os.path.join(image_dir, 'within_between_comparison', mouse_name + '_' + str(bin_width).replace('.','p') + '_corr_comp.png')
     plt.savefig(file_name)
