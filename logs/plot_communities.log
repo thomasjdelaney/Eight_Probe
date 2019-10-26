@@ -1,0 +1,11 @@
+2019-10-26T16:37:56.084924 INFO: Starting main function...
+Traceback (most recent call last):
+  File "py/plot_communities.py", line 79, in <module>
+    signal_final_cell_info = loadCommunityInfo(mouse_name, bin_width, npy_dir)
+  File "py/plot_communities.py", line 43, in loadCommunityInfo
+    return pd.read_pickle(os.path.join(npy_dir, 'communities', file_base_name))
+  File "/home/pgrads/td16954/linux/.local/lib/python3.6/site-packages/pandas/io/pickle.py", line 145, in read_pickle
+    f, fh = _get_handle(path, "rb", compression=compression, is_text=False)
+  File "/home/pgrads/td16954/linux/.local/lib/python3.6/site-packages/pandas/io/common.py", line 403, in _get_handle
+    f = open(path_or_buf, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/space/td16954/Eight_Probe/npy/communities/Krebs0p05_rectified_signal_final_cell_info.pkl'
