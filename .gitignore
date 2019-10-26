@@ -1,6 +1,5 @@
 mat/
 *.pyc
 *.npy
-*.pkl
 *.cpython-37.pyc
 csv/analysis_frames/
