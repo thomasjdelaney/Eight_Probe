@@ -1,11 +1,16 @@
-2019-10-26T16:37:56.084924 INFO: Starting main function...
-Traceback (most recent call last):
-  File "py/plot_communities.py", line 79, in <module>
-    signal_final_cell_info = loadCommunityInfo(mouse_name, bin_width, npy_dir)
-  File "py/plot_communities.py", line 43, in loadCommunityInfo
-    return pd.read_pickle(os.path.join(npy_dir, 'communities', file_base_name))
-  File "/home/pgrads/td16954/linux/.local/lib/python3.6/site-packages/pandas/io/pickle.py", line 145, in read_pickle
-    f, fh = _get_handle(path, "rb", compression=compression, is_text=False)
-  File "/home/pgrads/td16954/linux/.local/lib/python3.6/site-packages/pandas/io/common.py", line 403, in _get_handle
-    f = open(path_or_buf, mode)
-FileNotFoundError: [Errno 2] No such file or directory: '/space/td16954/Eight_Probe/npy/communities/Krebs0p05_rectified_signal_final_cell_info.pkl'
+2019-10-26T21:55:38.770185 INFO: Starting main function...
+2019-10-26T21:56:57.619895 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Krebs_0p05_regional_cluster_map.png saved.
+2019-10-26T21:58:15.793527 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Waksman_0p05_regional_cluster_map.png saved.
+2019-10-26T21:59:33.859417 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Robbins_0p05_regional_cluster_map.png saved.
+2019-10-26T22:00:52.755243 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Krebs_0p2_regional_cluster_map.png saved.
+2019-10-26T22:02:11.660777 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Waksman_0p2_regional_cluster_map.png saved.
+2019-10-26T22:03:30.880661 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Robbins_0p2_regional_cluster_map.png saved.
+2019-10-26T22:04:49.076234 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Krebs_1p0_regional_cluster_map.png saved.
+2019-10-26T22:06:08.287816 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Waksman_1p0_regional_cluster_map.png saved.
+2019-10-26T22:07:26.427713 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Robbins_1p0_regional_cluster_map.png saved.
+2019-10-26T22:08:45.511438 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Krebs_2p0_regional_cluster_map.png saved.
+2019-10-26T22:10:04.326880 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Waksman_2p0_regional_cluster_map.png saved.
+2019-10-26T22:11:22.577441 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Robbins_2p0_regional_cluster_map.png saved.
+2019-10-26T22:12:41.585463 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Krebs_3p0_regional_cluster_map.png saved.
+2019-10-26T22:14:00.982097 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Waksman_3p0_regional_cluster_map.png saved.
+2019-10-26T22:15:18.724124 INFO: /space/td16954/Eight_Probe/images/community_detection/regional_cluster_maps/Robbins_3p0_regional_cluster_map.png saved.
