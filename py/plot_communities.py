@@ -78,7 +78,7 @@ print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
 for bin_width in ep.selected_bin_widths:
     for mouse_name in ep.mouse_names:
         signal_final_cell_info = loadCommunityInfo(mouse_name, bin_width, npy_dir)
-        plotRegionalClusterMap(signal_final_cell_info)
+        plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width)
         fig_file_name = os.path.join(image_dir, 'community_detection', 'regional_cluster_maps', mouse_name + '_' + str(bin_width).replace('.','p') + '_regional_cluster_map.png')
         plt.savefig(fig_file_name)
         print(dt.datetime.now().isoformat() + ' INFO: ' + fig_file_name + ' saved.')
