@@ -42,7 +42,7 @@ def loadCommunityInfo(mouse_name, bin_width, npy_dir, correction='rectified', is
     file_base_name = mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + correction + sig_or_noise + '_final_cell_info.pkl'
     return pd.read_pickle(os.path.join(npy_dir, 'communities', file_base_name))
 
-def plotRegionalClusterMap(signal_final_cell_info):
+def plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width):
     required_regions = signal_final_cell_info.cell_region.unique()
     num_nodes = signal_final_cell_info.shape[0]
     sorted_final_cell_info = signal_final_cell_info.sort_values(['consensus_cluster', 'cell_region', 'height'], ascending=[False, True, True])
@@ -60,7 +60,7 @@ def plotRegionalClusterMap(signal_final_cell_info):
     cmap = colors.ListedColormap(np.vstack([colors.to_rgba('gainsboro'), list(ep.region_to_colour.values())]))
     bounds = range(required_regions.size+2)
     norm = colors.BoundaryNorm(bounds, cmap.N)
-    plt.figure(figsize=(20,21))
+    plt.figure()
     ax = plt.gca()
     im = ax.matshow(regional_cluster_matrix, cmap=cmap, norm=norm)
     for i in range(cluster_changes.size-2):
@@ -71,6 +71,7 @@ def plotRegionalClusterMap(signal_final_cell_info):
     cb = plt.colorbar(im, cax=cax, cmap=cmap, norm=norm, boundaries=bounds, ticks=np.array(bounds)[1:] - 0.5)
     cb.ax.tick_params(labelsize='x-large')
     cb.set_ticklabels([c.replace('_', ' ').capitalize() for c in [''] + list(required_regions)] )
+    plt.title("Mouse name=" + mouse_name + ', Bin width=' + str(bin_width), fontsize='large')
     plt.tight_layout()
 
 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
