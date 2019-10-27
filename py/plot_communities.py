@@ -52,11 +52,13 @@ def plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width):
         j_region = sorted_final_cell_info.iloc[j]['cell_region']
         i_cluster = sorted_final_cell_info.iloc[i]['consensus_cluster']
         j_cluster = sorted_final_cell_info.iloc[j]['consensus_cluster']
-        if (i_region == j_region) & (i_cluster == j_cluster):
-            regional_cluster_matrix[i,j] = list(required_regions).index(i_region)+1
+        regional_cluster_matrix[i,j] = list(required_regions).index(i_region)+1 if (i_region == j_region) & (i_cluster == j_cluster) else 0
     regional_cluster_matrix = regional_cluster_matrix + regional_cluster_matrix.T
+    for i in range(num_nodes):
+        i_region = sorted_final_cell_info.iloc[i]['cell_region']
+        regional_cluster_matrix[i,i] = list(required_regions).index(i_region)+1
     sorted_clustering = sorted_final_cell_info['consensus_cluster'].values
-    cluster_changes = np.hstack([-1, np.flatnonzero(np.diff(sorted_clustering) != 0), sorted_clustering.size-1]) + 0.5
+    cluster_changes = np.hstack([-0.5, np.flatnonzero(np.diff(sorted_clustering) != 0), sorted_clustering.size-0.5])
     cmap = colors.ListedColormap(np.vstack([colors.to_rgba('gainsboro'), list(ep.region_to_colour.values())]))
     bounds = range(required_regions.size+2)
     norm = colors.BoundaryNorm(bounds, cmap.N)
@@ -71,17 +73,18 @@ def plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width):
     cb = plt.colorbar(im, cax=cax, cmap=cmap, norm=norm, boundaries=bounds, ticks=np.array(bounds)[1:] - 0.5)
     cb.ax.tick_params(labelsize='x-large')
     cb.set_ticklabels([c.replace('_', ' ').capitalize() for c in [''] + list(required_regions)] )
-    plt.title("Mouse name=" + mouse_name + ', Bin width=' + str(bin_width), fontsize='large')
+    ax.set_title("Mouse name=" + mouse_name + ', Bin width=' + str(bin_width), fontsize='large')
     plt.tight_layout()
 
-print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
-for bin_width in ep.selected_bin_widths:
-    for mouse_name in ep.mouse_names:
-        signal_final_cell_info = loadCommunityInfo(mouse_name, bin_width, npy_dir)
-        plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width)
-        fig_file_name = os.path.join(image_dir, 'community_detection', 'regional_cluster_maps', mouse_name + '_' + str(bin_width).replace('.','p') + '_regional_cluster_map.png')
-        plt.savefig(fig_file_name)
-        print(dt.datetime.now().isoformat() + ' INFO: ' + fig_file_name + ' saved.')
+if (not args.debug) & (__name__ == "__main__"):
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
+    for bin_width in ep.selected_bin_widths:
+        for mouse_name in ep.mouse_names:
+            signal_final_cell_info = loadCommunityInfo(mouse_name, bin_width, npy_dir)
+            plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width)
+            fig_file_name = os.path.join(image_dir, 'community_detection', 'regional_cluster_maps', mouse_name + '_' + str(bin_width).replace('.','p') + '_regional_cluster_map.png')
+            plt.savefig(fig_file_name)
+            print(dt.datetime.now().isoformat() + ' INFO: ' + fig_file_name + ' saved.')
 
 # TODO  dictionary of proper names
 #       make the figures bigger
