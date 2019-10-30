@@ -59,6 +59,8 @@ def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False):
     plt.xticks(range(0,regions.size+2), np.hstack([[''], regions]), fontsize='x-large', rotation=30)
     plt.ylabel('Mean Corr. Coef.', fontsize='x-large')
     plt.title(mouse_name + ', Bin width=' + str(bin_width), fontsize='x-large') if use_title else None
+    y_lim = plt.ylim()[1]
+    plt.text(6.5, y_lim - 0.1*y_lim, 'Bin width=' + str(bin_width) + 's', fontweight='extra bold', fontsize='x-large')
     plt.tight_layout()
     file_name = os.path.join(image_dir, 'within_between_comparison', mouse_name + '_' + str(bin_width).replace('.','p') + '_corr_comp.png')
     plt.savefig(file_name)
@@ -80,6 +82,6 @@ if (not args.debug) & (__name__ == '__main__'):
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
             file_name = plotMeasureMatrix(mean_corr_shuff_matrix, regions, 'Mean Corr. Coef (Shuffled)', '_corr_shuff', bin_width, vmin=mean_corr_matrix.min(), vmax=mean_corr_matrix.max())
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
-            file_name = plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=True)
+            file_name = plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False)
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')

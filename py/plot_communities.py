@@ -59,12 +59,14 @@ def plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width):
         regional_cluster_matrix[i,i] = list(required_regions).index(i_region)+1
     sorted_clustering = sorted_final_cell_info['consensus_cluster'].values
     cluster_changes = np.hstack([-0.5, np.flatnonzero(np.diff(sorted_clustering) != 0), sorted_clustering.size-0.5])
-    cmap = colors.ListedColormap(np.vstack([colors.to_rgba('gainsboro'), list(ep.region_to_colour.values())]))
+    cmap = colors.ListedColormap(np.vstack([colors.to_rgba('gainsboro'), list([ep.region_to_colour[region] for region in required_regions])]))
     bounds = range(required_regions.size+2)
     norm = colors.BoundaryNorm(bounds, cmap.N)
-    plt.figure()
+    plt.figure(figsize=(6.6, 4.8))
     ax = plt.gca()
     im = ax.matshow(regional_cluster_matrix, cmap=cmap, norm=norm)
+    x_lim, y_lim = ax.get_xlim()[1], ax.get_ylim()[0]
+    ax.text(0.6*x_lim, -0.05 + 0.1*y_lim, 'Bin width=' + str(bin_width) + 's', fontweight='extra bold', fontsize='large')
     for i in range(cluster_changes.size-2):
         ax.plot([cluster_changes[i+1], cluster_changes[i+1]], [cluster_changes[i], cluster_changes[i+2]], color='white', linewidth=1.0)
         ax.plot([cluster_changes[i], cluster_changes[i+2]], [cluster_changes[i+1], cluster_changes[i+1]], color='white', linewidth=1.0)
@@ -72,8 +74,7 @@ def plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width):
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cb = plt.colorbar(im, cax=cax, cmap=cmap, norm=norm, boundaries=bounds, ticks=np.array(bounds)[1:] - 0.5)
     cb.ax.tick_params(labelsize='x-large')
-    cb.set_ticklabels([c.replace('_', ' ').capitalize() for c in [''] + list(required_regions)] )
-    ax.set_title("Mouse name=" + mouse_name + ', Bin width=' + str(bin_width), fontsize='large')
+    cb.set_ticklabels([c.replace('_', ' ').capitalize() for c in ['mixed regions'] + list(required_regions)] )
     plt.tight_layout()
 
 if (not args.debug) & (__name__ == "__main__"):
