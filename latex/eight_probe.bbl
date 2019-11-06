@@ -1,0 +1,29 @@
+\begin{thebibliography}{9} 
+
+  \bibitem{humphries} 
+  Mark D. Humphries, Javier A. Caballero, Mat Evans, Silvia Maggi, Abhinav Singh,
+  \emph{Spectral rejection for testing hypotheses of structure in networks}.
+  arXiv:1901.04747,
+  (2019)
+
+  \bibitem{cohen1}
+  Marlene R Cohen, John H R Maunsell, 
+  \emph{Attention improves performance primarily by reducing interneuronal correlations}.
+  Nature Neuroscience 12,  
+  1594–1600,
+  (2009)
+
+  \bibitem{stringer}       
+  Carsen Stringer, Marius Pachitariu, Nicholas Steinmetz, Charu Bai Reddy, Matteo Carandini, Kenneth D. Harris, 
+  \emph{Spontaneous behaviors drive multidimensional, brainwide activity}.
+  Science 364, 
+  (2019)
+
+  \bibitem{cohen2}
+  Marlene R Cohen, Adam Kohn, 
+  \emph{Measuring and interpreting neuronal correlations}.
+  Nature Neuroscience 14,  
+  811-819,
+  (2011)
+  
+\end{thebibliography}
