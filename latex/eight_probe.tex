@@ -77,16 +77,45 @@
     The data were divided into time bins of various widths ranging from $0.01$s to $4$s. If the total length of the recording period was not an integer multiple of the time bin width, we cut off the remaining time at the end of the recording period. This period was at most $3.99$s. This is far less than the total recording time of around $1$ hour.
 
     \subsection{Correlation coefficients}
+    We calculated Pearson's correlation coefficient for pairs of neurons. For jointly distributed random variables $X$ and $Y$, Pearson's correlation coefficient is defined as:
+    \begin{align}\label{eq:dist_pearsons_corr}
+        \rho_{XY} =& \frac{\cov(X,Y)}{\sigma_X \sigma_Y} \\
+                  =& \frac{E[(X - \mu_X)(Y - \mu_Y)]}{\sigma_X \sigma_Y}
+    \end{align}
+    where $E$ denotes the expected value, $\mu$ denotes the mean, and $\sigma$ denotes the standard deviation. The correlation coefficient is a normalised measure of the covariance. It can take values between $1$ (completely correlated) and $-1$ (completely anti-correlated). Two independent variables will have a correlation coefficient of $0$. But, having $0$ correlation does not imply independence.
 
-    \subsubsection{Spike Count Correlation, $r_{SC}$}\label{sec:spike_count_correlation}
+    If we do not know the means and standard deviations required for equation \ref{eq:dist_pearsons_corr}, but we have samples from $X$ and $Y$, Pearson's sample correlation coefficient is defined as:
+    \begin{align}
+        r_{XY} = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2}\sqrt{\sum_{i=1}^n (y_i - \bar{y})^2}}
+    \end{align}
+    where $\lbrace (x_i, y_i) \rbrace$ for $i \in \lbrace 1, \dots, n \rbrace$ are the paired samples from $X$ and $Y$, and $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i$, and $\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i$ are the sample means.
 
-    \subsubsection{Separating Correlations \& Anti-correlations}\label{sec:corr_anti_corr}
+    In practice we used the python function \texttt{scipy.stats.pearsonr} to calculate the correlation coefficients.
+
+        \subsubsection{Spike Count Correlation, $r_{SC}$}\label{sec:spike_count_correlation}
+        The spike count correlation ($r_{SC}$) of two cells is the correlation between the spike counts of those cells in response to a given stimulus condition. In this study, there was only one stimulus condition, that of no stimulus. The subjects engaged in spontaneous behaviour during recording.
+
+
+        \subsubsection{Separating Correlations \& Anti-correlations}\label{sec:corr_anti_corr} 
+        In order to compare the effect of bin width on measures of negative $r_{SC}$ (anti-correlation) and positive $r_{SC}$ separately, we had to separate correlated and anti-correlated pairs. To do this, we simply measured the mean $r_{SC}$, taking the mean across all the bin widths. If this quantity was positive or zero we regarded the pair as positively correlated. If this quantity was negative we regarded the pair as anti-correlated.
 
     \subsection{Network analysis}
+        \subsubsection{Correlation networks}
+        In order to analyse functional networks created by the neurons in our ensemble, we measured the spike count correlation between each pair of neurons. These measurements induced an undirected weighted network between the neurons. The weight of each connection was equal to the spike count correlation between each pair of neurons. 
 
-    \subsubsection{Correlation networks}
+        \subsubsection{Rectified correlations}
+        At the time of writing, the community detection method outlined in \cite{Humphries} could only be applied to networks with positively weighted connections. But many neuron pairs were negatively correlated. To apply the community detection method, we \textit{rectified} the network, by setting all the negative weights to zero.
 
-    \subsubsection{Community detection}
+        (IDEA: We should also do negatively correlated network analysis. Reverse the signs of the correlations, then set the negative correlations to zero, then do the analysis.)
+
+        \subsubsection{Weighted configuration model}
+
+        \subsubsection{Sparse weighted configuration model}
+
+        \subsubsection{Network Noise Rejection}
+        
+
+        \subsubsection{Community detection}
 
 
 
