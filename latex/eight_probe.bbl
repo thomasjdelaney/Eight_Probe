@@ -25,5 +25,25 @@
   Nature Neuroscience 14,  
   811-819,
   (2011)
-  
+
+  \bibitem{jun}
+  J. J. Jun et al., 
+  \emph{Fully integrated silicon probes for high-density recording of neural activity}. 
+  Nature 551, 
+  232–236, 
+  (2017)
+
+  \bibitem{fosdick}
+  Bailey K. Fosdick, Daniel B. Larremore, Joel Nishimura, Johan Ugander,
+  \emph{Configuring random graph models with fixed degree sequences}.
+  arXiv:1608.00607
+  (2017)
+
+  \bibitem{humphries2}
+  Mark D. Humphries, 
+  \emph{Spike-train communities: finding groups of similar spike trains}.
+  Journal of Neuroscience 31, 
+  2321–2336,
+  (2011)
+
 \end{thebibliography}

@@ -6,3 +6,15 @@
 \BOOKMARK [2][-]{subsection.2.1}{Brain regions}{section.2}% 6
 \BOOKMARK [1][-]{section.3}{Methods}{}% 7
 \BOOKMARK [2][-]{subsection.3.1}{Binning data}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Correlation coefficients}{section.3}% 9
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Spike Count Correlation, rSC}{subsection.3.2}% 10
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Separating Correlations \046 Anti-correlations}{subsection.3.2}% 11
+\BOOKMARK [2][-]{subsection.3.3}{Network analysis}{section.3}% 12
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Communities}{subsection.3.3}% 13
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Correlation networks}{subsection.3.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Rectified correlations}{subsection.3.3}% 15
+\BOOKMARK [3][-]{subsubsection.3.3.4}{Weighted configuration model}{subsection.3.3}% 16
+\BOOKMARK [3][-]{subsubsection.3.3.5}{Sparse weighted configuration model}{subsection.3.3}% 17
+\BOOKMARK [3][-]{subsubsection.3.3.6}{Spectral rejection}{subsection.3.3}% 18
+\BOOKMARK [3][-]{subsubsection.3.3.7}{Node rejection}{subsection.3.3}% 19
+\BOOKMARK [3][-]{subsubsection.3.3.8}{Community detection}{subsection.3.3}% 20

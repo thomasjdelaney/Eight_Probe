@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.7)  6 NOV 2019 19:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.7)  15 NOV 2019 16:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -527,6 +527,13 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 ]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 60.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 81.
+
+(/opt/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 81.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -534,11 +541,23 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2] (./eight_probe.bbl
-(/opt/texlive/2016/texmf-dist/tex/latex/ucs/data/uni-32.def
-File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-))
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 82.
+[2]
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 111.
+
+ (/opt/texlive/2016/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 113.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 113.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 113.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -547,31 +566,70 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 82.
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[4]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[5]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[6] (./eight_probe.bbl
+(/opt/texlive/2016/texmf-dist/tex/latex/ucs/data/uni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+))
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 166.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[7]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 166.
  (./eight_probe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 82.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 82.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 166.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 166.
 Package rerunfilecheck Info: File `eight_probe.out' has not changed.
-(rerunfilecheck)             Checksum: DCEDC3B8EE16CACF82933086497522DF;481.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 82.
+(rerunfilecheck)             Checksum: 03C5534B7D89F3271791B7D31CE66FB6;1461.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 166.
  ) 
 Here is how much of TeX's memory you used:
- 9154 strings out of 493013
- 138087 string characters out of 6136083
- 243760 words of memory out of 5000000
- 12539 multiletter control sequences out of 15000+600000
- 17940 words of font info for 47 fonts, out of 8000000 for 9000
+ 9270 strings out of 493013
+ 139871 string characters out of 6136083
+ 247238 words of memory out of 5000000
+ 12618 multiletter control sequences out of 15000+600000
+ 20397 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,10n,43p,536b,381s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,11n,43p,1006b,428s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/opt/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</opt/texlive/2016/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></opt/texlive/2016/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmr12.pfb></opt/texlive/2016/texmf-dist/font
-s/type1/urw/times/utmb8a.pfb></opt/texlive/2016/texmf-dist/fonts/type1/urw/time
-s/utmr8a.pfb></opt/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on eight_probe.pdf (3 pages, 59281 bytes).
+texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/texlive/2016/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmex10.pfb></opt/texlive/2016/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi12.pfb></opt/texlive/2016/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmmi8.pfb></opt/texlive/2016/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr12.pfb></opt/texlive/2016/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr8.pfb></opt/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb></opt/texlive/2016/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></opt/t
+exlive/2016/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></opt/texlive/2016/texm
+f-dist/fonts/type1/urw/times/utmr8a.pfb></opt/texlive/2016/texmf-dist/fonts/typ
+e1/urw/times/utmri8a.pfb>
+Output written on eight_probe.pdf (7 pages, 132714 bytes).
 PDF statistics:
- 96 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
- 18 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 230 PDF objects out of 1000 (max. 8388607)
+ 207 compressed objects within 3 object streams
+ 44 named destinations out of 1000 (max. 500000)
+ 161 words of extra memory for PDF output out of 10000 (max. 10000000)
 

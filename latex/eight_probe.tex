@@ -70,7 +70,25 @@
 
 \section{Data}
     \subsection{Brain regions}
-    We collected from nine different brain regions. They were: ...
+    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. 
+    \begin{enumerate}
+        \item male, wild type, P73. % Robbins
+        \item female, TetO-GCaMP6s, Camk2a-tTa, P113 % Waksman
+        \item male, Ai32, Pvalb-Cre, P99 % Krebs
+    \end{enumerate}
+    Eight probes were used to collect readings from 2296, 2668, and 1462 cells respectively. Data were collected from nine brain regions in each mouse:
+    \begin{itemize}
+        \item Caudate Putamen (CP)
+        \item Frontal Motor Cortex (Frmoctx)
+        \item Hippocampal formation (Hpf)
+        \item Lateral Septum (Ls)
+        \item Midbrain (Mb)
+        \item Superior Colliculus (Sc)
+        \item Somatomotor cortex (Sommoctx)
+        \item Thalamus (Th)
+        \item Primary visual cortex (V1)
+    \end{itemize}
+    Readings were continuous and lasted for about 1 hour \cite{stringer}.
 
 \section{Methods}
     \subsection{Binning data}
@@ -100,22 +118,45 @@
         In order to compare the effect of bin width on measures of negative $r_{SC}$ (anti-correlation) and positive $r_{SC}$ separately, we had to separate correlated and anti-correlated pairs. To do this, we simply measured the mean $r_{SC}$, taking the mean across all the bin widths. If this quantity was positive or zero we regarded the pair as positively correlated. If this quantity was negative we regarded the pair as anti-correlated.
 
     \subsection{Network analysis}
+        \subsubsection{Communities}
+        Given some network represented by an adjacency matrix $\mathbf{A}$, a community within that network is defined as a collection of nodes where the number of connections within these nodes is higher than the expected number of connections between these nodes. In order to quantify the `expected' number of connections, we need a model of a community-less network.
+
         \subsubsection{Correlation networks}
         In order to analyse functional networks created by the neurons in our ensemble, we measured the spike count correlation between each pair of neurons. These measurements induced an undirected weighted network between the neurons. The weight of each connection was equal to the spike count correlation between each pair of neurons. 
 
         \subsubsection{Rectified correlations}
-        At the time of writing, the community detection method outlined in \cite{Humphries} could only be applied to networks with positively weighted connections. But many neuron pairs were negatively correlated. To apply the community detection method, we \textit{rectified} the network, by setting all the negative weights to zero.
+        At the time of writing, the community detection method outlined in \cite{humphries} could only be applied to networks with positively weighted connections. But many neuron pairs were negatively correlated. To apply the community detection method, we \textit{rectified} the network, by setting all the negative weights to zero.
 
         (IDEA: We should also do negatively correlated network analysis. Reverse the signs of the correlations, then set the negative correlations to zero, then do the analysis.)
 
-        \subsubsection{Weighted configuration model}
+        \subsubsection{Weighted configuration model}\label{sec:weight_configuration_model}
+        The \textit{weighted configuration model} is a canonical null network model for weighted networks. Given some data network, the weighted configuration model null network will preserve the degree sequence and weight sequence of each node in the data network. But the edges will be distributed randomly \cite{fosdick}. Any structure in the data network beyond its degree sequence and weight sequence will be removed in the weighted configuration model. So, this model can be used in testing the hypothesis that this extra structure exists. 
 
-        \subsubsection{Sparse weighted configuration model}
+        \subsubsection{Sparse weighted configuration model}\label{sec:sparse_weighted_configuration_model}
+        The \textit{sparse weighted configuration model} is another null network model. Similar in nature to the weighted configuration model (see section \ref{sec:weight_configuration_model}), but the sparsity of the data network is preserved in the null network. This is achieved by sampling from a probability distributon for the creation or non-creation of each possible connection, then distributing the weight of the data network randomly in this sparse network \cite{humphries}.
 
-        \subsubsection{Network Noise Rejection}
+        \subsubsection{Spectral rejection}\label{sec:spectral_rejection}
+        We made use of the spectral rejection algorithm as outlined in \cite{humphries}. The spectral rejection algorithm is a method for finding structure in a network not captured by a supposed null model, if such structure exists. 
         
+        To describe the method, we denote our data network matrix $\mathbf{W}$, we denote the expected network of our null network model as $\left\langle \mathbf{P} \right\rangle$. Then the departure of our data network from the null network can be described by the matrix
+        \begin{align}
+          \mathbf{B} = \mathbf{W} - \left\langle \mathbf{P} \right\rangle
+        \end{align}
+        a common choice for $\left\langle \mathbf{P} \right\rangle$ in community detection is the `configuration model' \cite{fosdick, humphries2}. The matrix $\mathbf{B}$ is often called the configuration matrix, in this context we will use the term `deviation matrix' as it captures the deviation of $\mathbf{W}$ from the null model. 
+
+        To test for structure in the network represented by $\mathbf{W}$, we examine the eigenspectrum of $\mathbf{B}$ and compare it the eigenspectrum of our null model. Firstly, note that since our data model doesn't allow self loops, and is not directed, the matrix representing the network will be symmetric and positive semi-definite, and will therefore be invertible with real eigenvalues. We selected a null model with the same characteristics. 
+        
+        To find the eigenspectrum of the null model, we generated $N$ samples from our null model $P_1, \dots, P_N$, and we measured their deviation matrices $B_1, \dots, B_N$. We then calculated the eigenspectrum of each of those samples. We calculated the upper bound of the null model eigenspectrum by taking the mean of the largest eigenvalues of $B_1, \dots, B_N$. We calculated a lower bound on the null model eigenspectrum by taking the mean of the smallest eigenvalues of $B_1, \dots, B_N$. 
+
+        We then calculated the eigenspectrum of $\mathbf{B}$, our data network deviation matrix. If any of those eigenvalues lay outside of the upper or lower bounds of the null model eigenspectrum, this is evidence of additional structure not captured by the null model. If we chose the sparse weighted configuration model (seec section \ref{sec:sparse_weighted_configuration_model}) as our null network model, then eigenvalues lying below the lower bound indicate $n$-partite structure in the network. For example, if one eigenvalue lay below the lower bound, this would indicate some bipartite structure in the data network. If any eigenvalues lay above the upper bound of the null model eigenspectrum, this is evidence of community structure in the data network. For example, one eigenvalue of $\mathbf{B}$ lying above the upper bound of the null model eigenspectrum indicates the presence of two communities in the network \cite{humphries2}.
+
+        \subsubsection{Node rejection}
+        If there are $d$ data eigenvalues lying outside of the null network eigenspectrum, the $d$ eigenvectors corresponding to these eigenvalues will form a vector space. If we project the nodes of our network into this vector space, by projecting either rows or colmns of the data matrix, we can see how strongly each node contributes to the vector space. Nodes that contribute strongly to the additional structure will project far away from the origin, nodes that do not contribute to the additional structure will project close to the origin. We want to use this information to discard those nodes that do not contribute.
+
+        We can test whether a node projects \textit{far} away from the origin or \textit{close} to the origin using the eigenvalues and eigenvectors of $B_1, \dots, B_N$. The $j$th eigenvector and eigenvalue of $B_i$ gives a value for a null network's projection into the $j$th dimension of the additional structure vector space. The matrices $B_1, \dots, B_N$ give $N$ projections into that dimension. These projections are a distribution of null networks' projections. If the data nodes projection exceeds that of the null network projections this node is judged to project \textit{far} from the origin, and therefore contribute to the additional structure. Otherwise, the node is judged to project \textit{close} to the origin, and is therefore rejected \cite{humphries}.
 
         \subsubsection{Community detection}
+        Another application for this $d$ dimensional space is community detection.
 
 
 
