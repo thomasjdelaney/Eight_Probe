@@ -29,20 +29,6 @@ mat_dir = os.path.join(proj_dir, 'mat')
 sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 
-def loadCommunityInfo(mouse_name, bin_width, npy_dir, correction='rectified', is_signal=True):
-    """
-    For loading in a cell_info frame with detected communities attached.
-    Arguments:  mouse_name, string
-                bin_width, float,
-                npy_dir, string, directory
-                correction, rectified or absolute
-                is_signal, flag for signal or noise
-    Returns:    pandas DataFrame
-    """
-    sig_or_noise = '_signal' if is_signal else '_noise'
-    file_base_name = mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + correction + sig_or_noise + '_final_cell_info.pkl'
-    return pd.read_pickle(os.path.join(npy_dir, 'communities', file_base_name))
-
 def plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width):
     required_regions = signal_final_cell_info.cell_region.unique()
     num_nodes = signal_final_cell_info.shape[0]
@@ -82,7 +68,7 @@ if (not args.debug) & (__name__ == "__main__"):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
     for bin_width in ep.selected_bin_widths:
         for mouse_name in ep.mouse_names:
-            signal_final_cell_info = loadCommunityInfo(mouse_name, bin_width, npy_dir, correction=args.correction)
+            signal_final_cell_info = ep.loadCommunityInfo(mouse_name, bin_width, npy_dir, correction=args.correction)
             plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width)
             fig_file_name = os.path.join(image_dir, 'community_detection', 'regional_cluster_maps', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') +'_regional_cluster_map.png')
             plt.savefig(fig_file_name)
