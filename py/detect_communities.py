@@ -13,7 +13,7 @@ from multiprocessing import Pool
 from itertools import combinations 
 
 parser = argparse.ArgumentParser(description='For detecting communities.')
-parser.add_argument('-c', '--correction', help='Correction type. Either "absolute" or "rectified".', default='rectified', choices=['rectified', 'absolute'], type=str)
+parser.add_argument('-c', '--correction', help='Correction type. Either "absolute", "rectified", or "negative".', default='rectified', choices=['rectified', 'negative', 'absolute'], type=str)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -41,8 +41,22 @@ def getMeasureMatrix(analysis_frame, measure):
         measure_matrix[second_ind, first_ind] = measure_value
     return measure_matrix, cell_ids
 
-def rectifyMatrix(matrix):
-    matrix[matrix < 0] = 0
+def rectifyMatrix(matrix, correction):
+    """
+    For preparing the correlation matrix for the network noise rejection process. 'rectified' keeps only positive correlations, 'negative' keeps only negative correlations but flips their sign, 'absolute' takes the absolute value of the correlations.
+    Arguments:  matrix, the correlations matrix, sparsified at this point.
+                correction, the type of correction to make to the matrix ['rectified', 'negative', 'absolute']
+    Returns:    the corrected matrix
+    """
+    if correction == 'rectified': # preserve positive correlations
+        matrix[matrix < 0] = 0
+    elif correction == 'negative': # preserve negative correlations
+        matrix = -matrix
+        matrix[matrix < 0] = 0
+    elif correction == 'absolute': # keep absolute value of correlations
+        matrix = np.abs(matrix)
+    else:
+        sys.exit("unrecognised correction value.")
     return matrix
 
 def sparsifyMeasureMatrix(measure_matrix, analysis_frame, percentile=95):
@@ -72,7 +86,7 @@ if (not args.debug) & (__name__ == '__main__'):
             corr_matrix, cell_ids = getMeasureMatrix(analysis_frame, 'corr_coef')
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Sparsifying and rectifying...')
             sparsified_matrix = sparsifyMeasureMatrix(corr_matrix.copy(), analysis_frame, 95)
-            corrected_sparse_corr_matrix = rectifyMatrix(sparsified_matrix.copy()) if args.correction == 'rectified' else np.abs(sparsified_matrix.copy())
+            corrected_sparse_corr_matrix = rectifyMatrix(sparsified_matrix.copy(), args.correction)
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Checking the data is symmetric...')
             corrected_sparse_corr_matrix = nnr.checkDirected(corrected_sparse_corr_matrix.copy())
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Getting the biggest component...')
