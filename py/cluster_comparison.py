@@ -12,7 +12,7 @@ import pandas as pd
 import datetime as dt
 import matplotlib.pyplot as plt
 from scipy.stats import entropy
-from sklearn.metrics import mutual_info_score, adjusted_mutual_info_score, normalized_mutual_info_score
+from sklearn.metrics import mutual_info_score, adjusted_mutual_info_score, normalized_mutual_info_score, adjusted_rand_score
 from math import isclose
 
 parser = argparse.ArgumentParser(description='For comparing clusterings using the variation of information matric (VI)')
@@ -60,10 +60,11 @@ def buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, correction):
     vi = joint_entropy - mi # variation of information
     norm_vi = 1 - (mi/joint_entropy) if joint_entropy != 0 else 0
     norm_id = 1 - norm_mi # information distance
-    return {'bin_width':bin_width, 'mouse_name':mouse_name, 'num_communities':signal_final_cell_info.consensus_cluster.max()+1, 'regional_clustering_entropy':entropy(region_clustering_rv.values), 'consensus_clustering_entropy':entropy(consensus_clustering_rv.values), 'joint_entropy':joint_entropy, 'mutual_information':mi, 'adjusted_mutual_information':adj_mi, 'normalised_mutual_information':norm_mi, 'variation_of_information':vi, 'normalised_variation_of_information':norm_vi, 'normalised_information_distance':norm_id}
+    adj_rand_ind = adjusted_rand_index(signal_final_cell_info['regional_cluster'], signal_final_cell_info['consensus_cluster'])
+    return {'bin_width':bin_width, 'mouse_name':mouse_name, 'num_communities':signal_final_cell_info.consensus_cluster.max()+1, 'regional_clustering_entropy':entropy(region_clustering_rv.values), 'consensus_clustering_entropy':entropy(consensus_clustering_rv.values), 'joint_entropy':joint_entropy, 'mutual_information':mi, 'adjusted_mutual_information':adj_mi, 'normalised_mutual_information':norm_mi, 'variation_of_information':vi, 'normalised_variation_of_information':norm_vi, 'normalised_information_distance':norm_id, 'adjusted_rand_index':adj_rand_ind}
 
 def plotClusteringCompMeasure(cluster_comp_frame, measure):
-    measure_to_ylabel = {'num_communities':'Num. Communities', 'regional_clustering_entropy':r'Regional clustering $H$ (bits)', 'consensus_clustering_entropy':r'Consensus clustering $H$ (bits)', 'joint_entropy':r'Joint $H$ (bits)', 'mutual_information':'Mutual Info. (bits)', 'adjusted_mutual_information':'Adj. Mutual Info.', 'normalised_mutual_information':'Norm. Mutual Info.', 'variation_of_information':'Var. of Info. (bits)', 'normalised_variation_of_information':'Norm. Var. of Info.', 'normalised_information_distance':'Norm. Info. Distance'}
+    measure_to_ylabel = {'num_communities':'Num. Communities', 'regional_clustering_entropy':r'Regional clustering $H$ (bits)', 'consensus_clustering_entropy':r'Consensus clustering $H$ (bits)', 'joint_entropy':r'Joint $H$ (bits)', 'mutual_information':'Mutual Info. (bits)', 'adjusted_mutual_information':'Adj. Mutual Info.', 'normalised_mutual_information':'Norm. Mutual Info.', 'variation_of_information':'Var. of Info. (bits)', 'normalised_variation_of_information':'Norm. Var. of Info.', 'normalised_information_distance':'Norm. Info. Distance', 'adjusted_rand_index':'Adj. Rand Index'}
     for mouse_name in ep.mouse_names:
         relevant_cluster_comp_frame = cluster_comp_frame.loc[cluster_comp_frame.mouse_name == mouse_name, ['bin_width', measure]]
         plt.plot(relevant_cluster_comp_frame.bin_width, relevant_cluster_comp_frame[measure], label=mouse_name)
@@ -78,7 +79,7 @@ def plotClusteringCompMeasure(cluster_comp_frame, measure):
 
 if (not args.debug) & (__name__ == "__main__"):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
-    cluster_comp_frame = pd.DataFrame(columns=['bin_width', 'mouse_name', 'num_communities', 'regional_clustering_entropy', 'consensus_clustering_entropy', 'joint_entropy', 'mutual_information', 'adjusted_mutual_information', 'normalised_mutual_information', 'variation_of_information', 'normalised_variation_of_information', 'normalised_information_distance'])
+    cluster_comp_frame = pd.DataFrame(columns=['bin_width', 'mouse_name', 'num_communities', 'regional_clustering_entropy', 'consensus_clustering_entropy', 'joint_entropy', 'mutual_information', 'adjusted_mutual_information', 'normalised_mutual_information', 'variation_of_information', 'normalised_variation_of_information', 'normalised_information_distance', 'adjusted_rand_index'])
     for bin_width in ep.selected_bin_widths:
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
         for mouse_name in ep.mouse_names:
