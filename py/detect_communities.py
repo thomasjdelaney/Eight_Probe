@@ -76,6 +76,7 @@ if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
+    summary_frame = pd.DataFrame(columns=['correction', 'bin_width', 'mouse_name', 'below_space_dims', 'exceeding_space_dims', 'max_modularity', 'consensus_modularity', 'consensus_iterations'])
     for bin_width in ep.selected_bin_widths:
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
         for mouse_name in  ep.mouse_names:
@@ -126,14 +127,17 @@ if (not args.debug) & (__name__ == '__main__'):
                 max_mod_cluster, max_modularity, consensus_clustering, consensus_modularity, consensus_iterations = nnr.consensusCommunityDetect(final_weighted_adjacency_matrix, signal_expected_wcm, exceeding_space_dims+1, exceeding_space_dims+1)
                 signal_final_cell_info['consensus_cluster'] = consensus_clustering
                 nnr.plotClusterMap(final_weighted_adjacency_matrix, consensus_clustering, is_sort=True)
-                plt.savefig(os.path.join(image_dir, 'community_detection', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_cons_cluster_map.png'))
+                plt.savefig(os.path.join(image_dir, 'community_detection', 'consensus_clustering', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_cons_cluster_map.png'))
                 plt.close()
                 nnr.plotModEigValsVsNullEigHist(network_modularity_matrix, samples_eig_vals)
-                plt.savefig(os.path.join(image_dir, 'community_detection', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_eig_hist.png'))
+                plt.savefig(os.path.join(image_dir, 'community_detection', 'eigenspectrum_histograms', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_eig_hist.png'))
                 plt.close()
                 signal_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_signal_final_cell_info.pkl'))
                 noise_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_noise_final_cell_info.pkl'))
-                print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')    
+                summary_frame = summary_frame.append({'correction':args.correction, 'bin_width':bin_width, 'mouse_name':mouse_name, 'below_space_dims':below_space_dims, 'exceeding_space_dims':exceeding_space_dims, 'max_modularity':max_modularity, 'consensus_modularity':consensus_modularity, 'consensus_iterations':consensus_iterations}, ignore_index=True)
+    csv_file_name = os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '.csv')
+    summary_frame.to_csv(csv_file_name, index=False)
+    print(dt.datetime.now().isoformat() + ' INFO: ' + csv_file_name + ' saved.')    
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')    
     
 # TODO  import regional plotting function and sorting functions.
-#       recreate fig3 c of the new paper
