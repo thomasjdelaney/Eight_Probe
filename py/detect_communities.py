@@ -127,7 +127,7 @@ if (not args.debug) & (__name__ == '__main__'):
                 max_mod_cluster, max_modularity, consensus_clustering, consensus_modularity, consensus_iterations = nnr.consensusCommunityDetect(final_weighted_adjacency_matrix, signal_expected_wcm, exceeding_space_dims+1, exceeding_space_dims+1)
                 signal_final_cell_info['consensus_cluster'] = consensus_clustering
                 nnr.plotClusterMap(final_weighted_adjacency_matrix, consensus_clustering, is_sort=True)
-                plt.savefig(os.path.join(image_dir, 'community_detection', 'consensus_clustering', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_cons_cluster_map.png'))
+                plt.savefig(os.path.join(image_dir, 'community_detection', 'consensus_clusterings', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_cons_cluster_map.png'))
                 plt.close()
                 nnr.plotModEigValsVsNullEigHist(network_modularity_matrix, samples_eig_vals)
                 plt.savefig(os.path.join(image_dir, 'community_detection', 'eigenspectrum_histograms', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_eig_hist.png'))
