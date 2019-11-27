@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.7)  26 NOV 2019 18:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.7)  27 NOV 2019 14:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -586,7 +586,7 @@ Overfull \hbox (1.43636pt too wide) in paragraph at lines 152--154
  a neu-ron is $[][] []$.
  []
 
-<figures/entropy_limit.png, id=219, 289.08pt x 216.81pt>
+<figures/entropy_limit.png, id=224, 289.08pt x 216.81pt>
 File: figures/entropy_limit.png Graphic file (type png)
 
 <use figures/entropy_limit.png>
@@ -692,7 +692,7 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [12] (./eight_probe.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 338.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 347.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -701,19 +701,19 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [13]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 338.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 347.
  (./eight_probe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 338.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 338.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 347.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 347.
 Package rerunfilecheck Info: File `eight_probe.out' has not changed.
-(rerunfilecheck)             Checksum: 5D63E57C5FEB19844C6DAACE1CDC6F87;2537.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 338.
+(rerunfilecheck)             Checksum: E976CDCD7716A0000E21860E94738798;2652.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 347.
  ) 
 Here is how much of TeX's memory you used:
- 9361 strings out of 493013
- 141314 string characters out of 6136083
- 250201 words of memory out of 5000000
- 12654 multiletter control sequences out of 15000+600000
+ 9366 strings out of 493013
+ 141429 string characters out of 6136083
+ 250339 words of memory out of 5000000
+ 12657 multiletter control sequences out of 15000+600000
  20397 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,11n,43p,1006b,398s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -731,10 +731,10 @@ ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></opt/texlive/2016
 nts/type1/urw/times/utmb8a.pfb></opt/texlive/2016/texmf-dist/fonts/type1/urw/ti
 mes/utmr8a.pfb></opt/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 
-Output written on eight_probe.pdf (13 pages, 208247 bytes).
+Output written on eight_probe.pdf (13 pages, 209920 bytes).
 PDF statistics:
- 393 PDF objects out of 1000 (max. 8388607)
- 358 compressed objects within 4 object streams
- 96 named destinations out of 1000 (max. 500000)
- 262 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 401 PDF objects out of 1000 (max. 8388607)
+ 366 compressed objects within 4 object streams
+ 98 named destinations out of 1000 (max. 500000)
+ 270 words of extra memory for PDF output out of 10000 (max. 10000000)
 

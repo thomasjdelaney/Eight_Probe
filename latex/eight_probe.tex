@@ -300,17 +300,22 @@
       \end{align}
       The joint distribution allows us to define the mutual information between two clusterings, $I(\mathcal{C};\mathcal{C}^{\prime})$ \cite{meila}.
 
-      \subsubsection{Information based similarity measures}
+      \subsubsection{Information based similarity measures}\label{sec:information_similarity_measures}
       The mutual information between two clusterings is a similarity measure, with $I(\mathcal{C};\mathcal{C}^{\prime}) = 0$ if $\mathcal{C}$ and $\mathcal{C}^{\prime}$ are completely different, and $I(\mathcal{C};\mathcal{C}^{\prime}) = H(\mathcal{C}) = H(\mathcal{C}^{\prime})$ if $\mathcal{C}$ and $\mathcal{C}^{\prime}$ are identical. This can be normalised in a number of different ways to make more similarity measures \cite{vinh}
       \begin{align}
           NMI_{joint} &= \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{H(\mathcal{C}, \mathcal{C}^{\prime})} \\
           NMI_{max} &= \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{\max \lbrace H(\mathcal{C}), H(\mathcal{C}^{\prime}) \rbrace} \\
-          NMI_{sum} &= \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{H(\mathcal{C}) + H(\mathcal{C}^{\prime}) } \\
+          NMI_{sum} &= \frac{2I(\mathcal{C};\mathcal{C}^{\prime})}{H(\mathcal{C}) + H(\mathcal{C}^{\prime}) } \\
           NMI_{sqrt} &= \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{\sqrt{H(\mathcal{C}) H(\mathcal{C}^{\prime}) }} \\
           NMI_{min} &= \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{\min \lbrace H(\mathcal{C}), H(\mathcal{C}^{\prime}) \rbrace}
       \end{align}
+      We can control for chance similarities between the two clusterings by measuring the \textit{adjusted mutual information} between the clusterings. This is defined as 
+      \begin{align}
+        AMI_{sum} = \frac{I(\mathcal{C};\mathcal{C}^{\prime}) - E \lbrace I(\mathcal{C};\mathcal{C}^{\prime}) \rbrace}{\frac{1}{2}\left[ H(\mathcal{C}) + H(\mathcal{C}^{\prime})\right] - E \lbrace I(\mathcal{C};\mathcal{C}^{\prime})  \rbrace}
+      \end{align}
+      The first term in the demoniator, taking the average of the marginal entropies, can be replaced by taking the maximum, minimum, or the geometric mean \cite{vinh}.
 
-      \subsubsection{Information based metrics}
+      \subsubsection{Information based metrics}\label{sec:information_metrics}
       The variation of information between two clusterings $VI(\mathcal{C};\mathcal{C}^{\prime})$ (see section \ref{sec:variation_of_information}) is a metric on the space of clusterings \cite{meila}. That is, 
       \begin{align}
           VI(\mathcal{C};\mathcal{C}^{\prime}) &\geq 0 \\
@@ -329,7 +334,11 @@
           NVI(\mathcal{C};\mathcal{C}^{\prime}) & = 1 - \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{H(\mathcal{C}, \mathcal{C}^{\prime})} \\
           d_{max} & = 1 - \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{\max \lbrace H(\mathcal{C}), H(\mathcal{C}^{\prime}) \rbrace}
       \end{align}
-      
+     
+      \subsubsection{Comparing detected communities and anatomical divisions}
+      In order to quantify the difference or similarity between the communities detected in our correlation network and the anatomical classification of the cells in that network, we considered the communities and the anatomical regions as clusters in two different clusterings, $\mathcal{C}_{comm}$ and $\mathcal{C}_{anat}$, respectively. We then measured the similarity between the clusterings using the mutual information, the adjusted mutual information, and the normalised mutual information. We measured the difference between, or the distance between, the clusterings using the variation of information, the normalised variation of information, and the normalised information distance. We also measured the difference between the clusterings using the adjusted Rand Index, just to use a non-information based measure.
+
+      We took all of these measures for communities detected using different time bin widths. This gave us an idea of the effect of time bin width on correlation networks in neural ensembles relative to anatomical regions within those ensembles.
 
 
 \newpage

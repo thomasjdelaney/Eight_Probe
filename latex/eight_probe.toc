@@ -30,3 +30,4 @@
 \contentsline {subsubsection}{\numberline {3.5.2}Clusterings as random variables}{11}{subsubsection.3.5.2}
 \contentsline {subsubsection}{\numberline {3.5.3}Information based similarity measures}{11}{subsubsection.3.5.3}
 \contentsline {subsubsection}{\numberline {3.5.4}Information based metrics}{12}{subsubsection.3.5.4}
+\contentsline {subsubsection}{\numberline {3.5.5}Comparing detected communities and anatomical divisions}{12}{subsubsection.3.5.5}
