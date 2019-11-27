@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.7)  27 NOV 2019 14:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.7)  27 NOV 2019 17:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -691,7 +691,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[12] (./eight_probe.bbl)
+[12]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[13] (./eight_probe.bbl)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 347.
 
 
@@ -700,7 +707,7 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[13]
+[14]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 347.
  (./eight_probe.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 347.
@@ -710,9 +717,9 @@ Package rerunfilecheck Info: File `eight_probe.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 347.
  ) 
 Here is how much of TeX's memory you used:
- 9366 strings out of 493013
- 141429 string characters out of 6136083
- 250339 words of memory out of 5000000
+ 9367 strings out of 493013
+ 141436 string characters out of 6136083
+ 251339 words of memory out of 5000000
  12657 multiletter control sequences out of 15000+600000
  20397 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -731,10 +738,10 @@ ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></opt/texlive/2016
 nts/type1/urw/times/utmb8a.pfb></opt/texlive/2016/texmf-dist/fonts/type1/urw/ti
 mes/utmr8a.pfb></opt/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 
-Output written on eight_probe.pdf (13 pages, 209920 bytes).
+Output written on eight_probe.pdf (14 pages, 210827 bytes).
 PDF statistics:
- 401 PDF objects out of 1000 (max. 8388607)
- 366 compressed objects within 4 object streams
- 98 named destinations out of 1000 (max. 500000)
+ 407 PDF objects out of 1000 (max. 8388607)
+ 371 compressed objects within 4 object streams
+ 99 named destinations out of 1000 (max. 500000)
  270 words of extra memory for PDF output out of 10000 (max. 10000000)
 
