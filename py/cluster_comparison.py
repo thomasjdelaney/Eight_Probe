@@ -60,11 +60,11 @@ def buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, correction):
     vi = joint_entropy - mi # variation of information
     norm_vi = 1 - (mi/joint_entropy) if joint_entropy != 0 else 0
     norm_id = 1 - norm_mi # information distance
-    adj_rand_ind = adjusted_rand_index(signal_final_cell_info['regional_cluster'], signal_final_cell_info['consensus_cluster'])
+    adj_rand_ind = adjusted_rand_score(signal_final_cell_info['regional_cluster'], signal_final_cell_info['consensus_cluster'])
     return {'bin_width':bin_width, 'mouse_name':mouse_name, 'num_communities':signal_final_cell_info.consensus_cluster.max()+1, 'regional_clustering_entropy':entropy(region_clustering_rv.values), 'consensus_clustering_entropy':entropy(consensus_clustering_rv.values), 'joint_entropy':joint_entropy, 'mutual_information':mi, 'adjusted_mutual_information':adj_mi, 'normalised_mutual_information':norm_mi, 'variation_of_information':vi, 'normalised_variation_of_information':norm_vi, 'normalised_information_distance':norm_id, 'adjusted_rand_index':adj_rand_ind}
 
-def plotClusteringCompMeasure(cluster_comp_frame, measure):
-    measure_to_ylabel = {'num_communities':'Num. Communities', 'regional_clustering_entropy':r'Regional clustering $H$ (bits)', 'consensus_clustering_entropy':r'Consensus clustering $H$ (bits)', 'joint_entropy':r'Joint $H$ (bits)', 'mutual_information':'Mutual Info. (bits)', 'adjusted_mutual_information':'Adj. Mutual Info.', 'normalised_mutual_information':'Norm. Mutual Info.', 'variation_of_information':'Var. of Info. (bits)', 'normalised_variation_of_information':'Norm. Var. of Info.', 'normalised_information_distance':'Norm. Info. Distance', 'adjusted_rand_index':'Adj. Rand Index'}
+def plotClusteringCompMeasure(cluster_comp_frame, measure, correction):
+    measure_to_ylabel = {'num_communities':'Num. Communities', 'regional_clustering_entropy':r'Regional clustering $H$ (bits)', 'consensus_clustering_entropy':r'Consensus clustering $H$ (bits)', 'joint_entropy':r'Joint $H$ (bits)', 'mutual_information':'Mutual Info. (bits)', 'adjusted_mutual_information':'Adj. Mutual Info.', 'normalised_mutual_information':'Norm. Mutual Info.', 'variation_of_information':'Var. of Info. (bits)', 'normalised_variation_of_information':'Norm. Var. of Info.', 'normalised_information_distance':'Norm. Info. Distance', 'adjusted_rand_index':'Adj. Rand Index', 'max_modularity':'Modularity'}
     for mouse_name in ep.mouse_names:
         relevant_cluster_comp_frame = cluster_comp_frame.loc[cluster_comp_frame.mouse_name == mouse_name, ['bin_width', measure]]
         plt.plot(relevant_cluster_comp_frame.bin_width, relevant_cluster_comp_frame[measure], label=mouse_name)
@@ -72,7 +72,7 @@ def plotClusteringCompMeasure(cluster_comp_frame, measure):
     plt.xlabel('Bin width (s)', fontsize='x-large')
     plt.ylabel(measure_to_ylabel[measure], fontsize='x-large')
     plt.tight_layout()
-    file_name = os.path.join(image_dir, 'clustering_comparison', measure + '.png')
+    file_name = os.path.join(image_dir, 'clustering_comparison', measure + '_' + correction + '.png')
     plt.savefig(file_name)
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     plt.close()
@@ -90,6 +90,7 @@ if (not args.debug) & (__name__ == "__main__"):
     cluster_comp_frame.to_csv(file_name, index=False)
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     for measure in cluster_comp_frame.columns[2:]:
-        plotClusteringCompMeasure(cluster_comp_frame, measure)
+        plotClusteringCompMeasure(cluster_comp_frame, measure, args.correction)
+    plotClusteringCompMeasure(pd.read_csv(os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '.csv')), 'max_modularity', args.correction)
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 
