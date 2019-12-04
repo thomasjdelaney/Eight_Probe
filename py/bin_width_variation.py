@@ -101,6 +101,7 @@ if (not args.debug) & (__name__ == "__main__"):
             spike_count_save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
             if args.save_firing_rate_frame:
                 firing_rate_frame = ep.getFiringRateFrameFromSpikeCountFrame(spike_count_frame, bin_width)
+                # firing_rate_frame = ep.getFiringRateFrameFromSpikeTimeDict(spike_time_dict, bin_width, spon_start_time)
                 save_file = os.path.join(npy_dir, 'firing_rate_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'firing.npy')
                 firing_rate_frame.to_pickle(save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')

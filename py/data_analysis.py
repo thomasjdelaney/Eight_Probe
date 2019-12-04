@@ -13,6 +13,7 @@ bin_widths = np.array([0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1
 augmented_bin_widths = np.concatenate([[0.001, 0.002, 0.005], bin_widths])
 selected_bin_widths = np.array([0.05, 0.2, 1.0, 2.0, 3.0])
 
+
 def getRegionallyDistributedCells(cell_info, num_cells):
     """
     For getting num_cells cell_ids distributed across the different available brain regions. cell_info should be prefiltered here.
@@ -225,6 +226,34 @@ def getFiringRateFrameFromSpikeCountFrame(spike_count_frame, bin_width):
     firing_rate_frame = spike_count_frame[['cell_id', 'spike_count']].groupby('cell_id').agg(['mean', 'std'])
     firing_rate_frame = firing_rate_frame.reset_index()
     firing_rate_frame.columns = column_names[:3]
+    firing_rate_frame['firing_rate'] = firing_rate_frame['spike_count_mean']/bin_width
+    firing_rate_frame['firing_std'] = firing_rate_frame['spike_count_std']/bin_width
+    return firing_rate_frame
+
+def getFiringRateDict(cell_id, spike_time_dict, spike_count_bins):
+    spike_counts = np.histogram(spike_time_dict[cell_id], bins=spike_count_bins)[0]
+    return {'cell_id':cell_id, 'spike_count_mean':spike_counts.mean(), 'spike_count_std':spike_counts.std()}
+    
+def reduceFiringRateDicts(first_dict, second_dict):
+    """
+    A function for use with map-reduce. Takes two dictionaries with the same keys and concatenates their values.
+    """
+    return {k:np.append(first_dict[k], second_dict[k]) for k in first_dict.keys()}
+
+def getFiringRateFrameFromSpikeTimeDict(spike_time_dict, bin_width, spon_start_time):
+    """
+    For making a firing rate frame given a spike_time_dict, and the bin width.
+    Arguments:  spike_time_dict, dict, cell_id => spike_times
+                bin_width, float
+    Returns:    firing_rate_frame, DataFrame, cell_id, spike_count_mean, spike_count_std, firing_rate, firing_std
+    """
+    num_cells = len(spike_time_dict)
+    init_dict = {'cell_id':np.array([], dtype=int), 'spike_count_mean':np.array([]), 'spike_count_std':np.array([])}
+    spike_count_bins = getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time)
+    with Pool() as pool:
+        dict_future = pool.starmap_async(getFiringRateDict, zip(list(spike_time_dict.keys()), [spike_time_dict] * num_cells, [spike_count_bins] * num_cells))
+        dict_future.wait()
+    firing_rate_frame = pd.DataFrame.from_dict(reduce(reduceFiringRateDicts, dict_future.get(), init_dict))
     firing_rate_frame['firing_rate'] = firing_rate_frame['spike_count_mean']/bin_width
     firing_rate_frame['firing_std'] = firing_rate_frame['spike_count_std']/bin_width
     return firing_rate_frame
