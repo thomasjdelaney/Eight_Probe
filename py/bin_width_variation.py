@@ -32,7 +32,23 @@ mat_dir = os.path.join(proj_dir, 'mat')
 sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 
-def constructMapFuncArgs(pairs, spike_count_frame):
+def constructMapFuncArgs(pairs, spike_time_dict, bin_width, spon_start_time):
+    """
+    For constructing a list of dictionaries to be passed into a mapping function for scoop.futures.mapReduce.
+    In this context the mapping function can only take one argument.
+    Arguments:  pairs, numpy.array, all the possible pairs.
+                spike_time_dict, cell_id => spike times
+    Returns:    List of dictionaries, each with two keys, values are arrays of spike counts.
+    """
+    spike_count_bins = ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time)
+    dict_list = list([])
+    for pair in pairs:
+        first_spike_counts = np.histogram(spike_time_dict[pair[0]], bins=spike_count_bins)[0]
+        second_spike_counts = np.histogram(spike_time_dict[pair[1]], bins=spike_count_bins)[0]
+        dict_list.append({pair[0]:first_spike_counts, pair[1]:second_spike_counts})
+    return dict_list
+
+def constructMapFuncArgsOld(pairs, spike_count_frame):
     """
     For constructing a list of dictionaries to be passed into a mapping function for scoop.futures.mapReduce. 
     In this context the mapping function can only take one argument.
@@ -91,17 +107,15 @@ if (not args.debug) & (__name__ == "__main__"):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
         spon_start_time = ep.spon_start_times[m]
         cell_ids = cell_info[cell_info.mouse_name == mouse_name].index.values
-        # cell_ids = cell_ids[:args.number_of_cells] if args.number_of_cells > 0 else cell_ids # selecting fewer cells for testing
         cell_ids = ep.getRegionallyDistributedCells(cell_info.loc[cell_info.mouse_name == mouse_name], args.number_of_cells)
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
         pairs = np.array(list(combinations(cell_ids, 2)))
         chunked_pairs = np.array_split(pairs, args.num_chunks)
         for bin_width in ep.selected_bin_widths:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
-            spike_count_save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
+            # spike_count_save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
             if args.save_firing_rate_frame:
-                firing_rate_frame = ep.getFiringRateFrameFromSpikeCountFrame(spike_count_frame, bin_width)
-                # firing_rate_frame = ep.getFiringRateFrameFromSpikeTimeDict(spike_time_dict, bin_width, spon_start_time)
+                firing_rate_frame = ep.getFiringRateFrameFromSpikeTimeDict(spike_time_dict, bin_width, spon_start_time)
                 save_file = os.path.join(npy_dir, 'firing_rate_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'firing.npy')
                 firing_rate_frame.to_pickle(save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
@@ -110,7 +124,7 @@ if (not args.debug) & (__name__ == "__main__"):
                 removed = os.remove(save_file) if os.path.exists(save_file) else None
                 for i,pair_chunk in enumerate(chunked_pairs):
                     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing chunk number ' + str(i) + '...')
-                    analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pair_chunk, spike_count_frame)))
+                    analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pair_chunk, spike_time_dict, bin_width, spon_start_time)
                     analysis_frame['bin_width'] = bin_width
                     saveAnalysisFrame(analysis_frame, i, save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')

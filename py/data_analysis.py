@@ -256,6 +256,8 @@ def getFiringRateFrameFromSpikeTimeDict(spike_time_dict, bin_width, spon_start_t
     firing_rate_frame = pd.DataFrame.from_dict(reduce(reduceFiringRateDicts, dict_future.get(), init_dict))
     firing_rate_frame['firing_rate'] = firing_rate_frame['spike_count_mean']/bin_width
     firing_rate_frame['firing_std'] = firing_rate_frame['spike_count_std']/bin_width
+    firing_rate_frame.sort_values('cell_id', inplace=True)
+    firing_rate_frame.reset_index(drop=True, inplace=True)
     return firing_rate_frame
 
 def getRegionalAnalysisFrame(analysis_frame, region_pair):
