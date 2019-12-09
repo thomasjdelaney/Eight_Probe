@@ -124,7 +124,7 @@ if (not args.debug) & (__name__ == "__main__"):
                 removed = os.remove(save_file) if os.path.exists(save_file) else None
                 for i,pair_chunk in enumerate(chunked_pairs):
                     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing chunk number ' + str(i) + '...')
-                    analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pair_chunk, spike_time_dict, bin_width, spon_start_time)
+                    analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pair_chunk, spike_time_dict, bin_width, spon_start_time)))
                     analysis_frame['bin_width'] = bin_width
                     saveAnalysisFrame(analysis_frame, i, save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
