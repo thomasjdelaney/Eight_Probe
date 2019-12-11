@@ -32,20 +32,17 @@ mat_dir = os.path.join(proj_dir, 'mat')
 sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 
-def constructMapFuncArgs(pairs, spike_time_dict, bin_width, spon_start_time):
+def constructMapFuncArgs(pairs, spike_count_dict):
     """
     For constructing a list of dictionaries to be passed into a mapping function for scoop.futures.mapReduce.
     In this context the mapping function can only take one argument.
     Arguments:  pairs, numpy.array, all the possible pairs.
-                spike_time_dict, cell_id => spike times
+                spike_count_dict, cell_id => spike counts
     Returns:    List of dictionaries, each with two keys, values are arrays of spike counts.
     """
-    spike_count_bins = ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time)
     dict_list = list([])
     for pair in pairs:
-        first_spike_counts = np.histogram(spike_time_dict[pair[0]], bins=spike_count_bins)[0]
-        second_spike_counts = np.histogram(spike_time_dict[pair[1]], bins=spike_count_bins)[0]
-        dict_list.append({pair[0]:first_spike_counts, pair[1]:second_spike_counts})
+        dict_list.append({pair[0]:spike_count_dict[pair[0]], pair[1]:spike_count_dict[pair[1]]})
     return dict_list
 
 def constructMapFuncArgsOld(pairs, spike_count_frame):
@@ -113,9 +110,9 @@ if (not args.debug) & (__name__ == "__main__"):
         chunked_pairs = np.array_split(pairs, args.num_chunks)
         for bin_width in ep.selected_bin_widths:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
-            # spike_count_save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
+            spike_count_dict = ep.getSpikeCountDict(spike_time_dict, bin_width, spon_start_time)
             if args.save_firing_rate_frame:
-                firing_rate_frame = ep.getFiringRateFrameFromSpikeTimeDict(spike_time_dict, bin_width, spon_start_time)
+                firing_rate_frame = ep.getFiringRateFrameFromSpikeCountDict(spike_count_dict, bin_width)
                 save_file = os.path.join(npy_dir, 'firing_rate_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + 'firing.npy')
                 firing_rate_frame.to_pickle(save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
@@ -124,7 +121,7 @@ if (not args.debug) & (__name__ == "__main__"):
                 removed = os.remove(save_file) if os.path.exists(save_file) else None
                 for i,pair_chunk in enumerate(chunked_pairs):
                     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing chunk number ' + str(i) + '...')
-                    analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pair_chunk, spike_time_dict, bin_width, spon_start_time)))
+                    analysis_frame = pd.DataFrame.from_dict(futures.mapReduce(getAnalysisDictForPair, reduceAnalysisDicts, constructMapFuncArgs(pair_chunk, spike_count_dict)))
                     analysis_frame['bin_width'] = bin_width
                     saveAnalysisFrame(analysis_frame, i, save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')

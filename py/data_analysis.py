@@ -57,6 +57,24 @@ def getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time):
     end_time = spon_start_time + num_bins * bin_width
     return np.arange(spon_start_time, end_time + bin_width, bin_width)
 
+def getSpikeCountsFromTimes(spike_times, spike_count_bins):
+    return np.histogram(spike_times, bins=spike_count_bins)[0]
+
+def getSpikeCountDict(spike_time_dict, bin_width, spon_start_time):
+    """
+    For getting a dictionary cell_id => spike counts.
+    Arguments:  spike_time_dict, cell_id => spike times
+                bin_width,
+                spon_start_time, the time at which spontaneous behaviour begins
+    Returns:    dictionary cell_id => spike counts
+    """
+    spike_count_bins = getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time)
+    num_cells = len(spike_time_dict)
+    with Pool() as pool:
+        spike_count_futures = pool.starmap_async(getSpikeCountsFromTimes, zip(list(spike_time_dict.values()), [spike_count_bins] * num_cells))
+        spike_count_futures.wait()
+    return dict(zip(list(spike_time_dict.keys()), spike_count_futures.get()))
+
 def getSpikeCountFromTimesAndBins(cell_id, spike_time_dict, spike_count_bins):
     """
     helper function for getActiveCellBinFrame. Gets binned spike counts.
@@ -254,6 +272,20 @@ def getFiringRateFrameFromSpikeTimeDict(spike_time_dict, bin_width, spon_start_t
         dict_future = pool.starmap_async(getFiringRateDict, zip(list(spike_time_dict.keys()), [spike_time_dict] * num_cells, [spike_count_bins] * num_cells))
         dict_future.wait()
     firing_rate_frame = pd.DataFrame.from_dict(reduce(reduceFiringRateDicts, dict_future.get(), init_dict))
+    firing_rate_frame['firing_rate'] = firing_rate_frame['spike_count_mean']/bin_width
+    firing_rate_frame['firing_std'] = firing_rate_frame['spike_count_std']/bin_width
+    firing_rate_frame.sort_values('cell_id', inplace=True)
+    firing_rate_frame.reset_index(drop=True, inplace=True)
+    return firing_rate_frame
+
+def getFiringRateFrameFromSpikeCountDict(spike_count_dict, bin_width):
+    """
+    For making a firing rate frame given a spike_count_dict, and the bin width.
+    Arguments:  spike_count_dict, dict, cell_id => spike_counts
+                bin_width, float,
+    Returns:    firing_rate_frame, DataFrame, cell_id, spike_count_mean, spike_count_std, firing_rate, firing_std
+    """
+    firing_rate_frame = pd.DataFrame.from_dict({'cell_id':np.array(list(spike_count_dict.keys()), dtype=int), 'spike_count_mean':np.array(list(spike_count_dict.values())).mean(axis=1), 'spike_count_std':np.array(list(spike_count_dict.values())).std(axis=1)})
     firing_rate_frame['firing_rate'] = firing_rate_frame['spike_count_mean']/bin_width
     firing_rate_frame['firing_std'] = firing_rate_frame['spike_count_std']/bin_width
     firing_rate_frame.sort_values('cell_id', inplace=True)
