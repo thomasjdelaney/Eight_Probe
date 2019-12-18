@@ -72,6 +72,7 @@ if (not args.debug) & (__name__ == "__main__"):
             plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width)
             fig_file_name = os.path.join(image_dir, 'community_detection', 'regional_cluster_maps', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') +'_regional_cluster_map.png')
             plt.savefig(fig_file_name)
+            plt.close()
             print(dt.datetime.now().isoformat() + ' INFO: ' + fig_file_name + ' saved.')
 
 # TODO  dictionary of proper names

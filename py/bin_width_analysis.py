@@ -28,11 +28,16 @@ sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 
 def getPositiveNegativeAnalysisFrames(analysis_frame):
+    all_pairs = analysis_frame.loc[:,['first_cell_id', 'second_cell_id']].values
     paired_frame = analysis_frame[['corr_coef', 'first_cell_id', 'second_cell_id']].groupby(['first_cell_id', 'second_cell_id']).agg(['mean', 'std', 'count'])
     pos_pairs = paired_frame[paired_frame['corr_coef']['mean'] >= 0.0].index.values
+    pos_pairs = np.array(list(map(np.array, pos_pairs)))
     neg_pairs = paired_frame[paired_frame['corr_coef']['mean'] < 0.0].index.values
-    pos_frame = pd.concat([analysis_frame[(analysis_frame.first_cell_id == pair[0]) & (analysis_frame.second_cell_id == pair[1])]for pair in pos_pairs])
-    neg_frame = pd.concat([analysis_frame[(analysis_frame.first_cell_id == pair[0]) & (analysis_frame.second_cell_id == pair[1])]for pair in neg_pairs])
+    neg_pairs = np.array(list(map(np.array, neg_pairs)))
+    pos_analysis_inds = np.where(np.in1d(np.ravel_multi_index(all_pairs.T, all_pairs.max(0) + 1), np.ravel_multi_index(pos_pairs.T, pos_pairs.max(0) + 1)))[0]
+    neg_analysis_inds = np.where(np.in1d(np.ravel_multi_index(all_pairs.T, all_pairs.max(0) + 1), np.ravel_multi_index(neg_pairs.T, neg_pairs.max(0) + 1)))[0]
+    pos_frame = analysis_frame.loc[pos_analysis_inds]
+    neg_frame = analysis_frame.loc[neg_analysis_inds]
     return pos_frame, neg_frame
 
 def plotMeanCorrelationsVsBinWidth(analysis_frame, measures, measure_label, y_label, y_limits, colours=['blue', 'orange'], use_legend=True, title=''):
@@ -45,7 +50,7 @@ def plotMeanCorrelationsVsBinWidth(analysis_frame, measures, measure_label, y_la
     plt.fill_between(x=agg_frame.index.values, y1=agg_frame[measures[1]]['mean'].values + agg_frame['shuff_std_err'].values, y2=agg_frame[measures[1]]['mean'].values - agg_frame['shuff_std_err'].values, color=colours[1], alpha=0.25, label=r'Shuff. St. err.')
     plt.ylabel(y_label, fontsize='large')
     plt.xlabel('Bin width (s)', fontsize='large')
-    plt.xlim([0.0, 4.0]);
+    plt.xlim([0.0, agg_frame.index.values.max()]);
     plt.ylim(y_limits)
     plt.xticks(fontsize='large'); plt.yticks(fontsize='large')
     plt.legend(fontsize='large') if use_legend else None
@@ -68,7 +73,7 @@ def plotMIVsBinWidth(analysis_frame, mi_lims, colours=['blue', 'orange', 'green'
     plt.tight_layout()
 
 def saveBinWidthAnalysisFigs(mouse_name):
-    analysis_frame = pd.concat([ep.loadAnalysisFrame(mouse_name, bin_width, npy_dir) for bin_width in ep.bin_widths])
+    analysis_frame = pd.concat([ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir) for bin_width in ep.selected_bin_widths], ignore_index=True)
     mi_lims = [-0.05, np.ceil(analysis_frame['plugin_mi'].max())]
     pos_frame, neg_frame = getPositiveNegativeAnalysisFrames(analysis_frame)
     bin_width_figures_dir = os.path.join(image_dir, 'bin_width_analysis')
