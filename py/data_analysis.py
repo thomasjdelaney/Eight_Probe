@@ -57,6 +57,17 @@ def getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time):
     end_time = spon_start_time + num_bins * bin_width
     return np.arange(spon_start_time, end_time + bin_width, bin_width)
 
+def getRelevantMotionSVD(mouse_face, time_bins):
+    """
+    Get the relevant motion SVD values from the given mouse face dict.
+    Arguments:  mouse_face, dict, contains all the information from the mouse videos
+                time_bins, numpy.array (float),  the time bin boundaries for binning spikes
+    Returns:    numpy.array (float), trimmed mouse_face['motionSVD']
+    """
+    mouse_face_times = mouse_face.get('times')[0]
+    is_relevant = (time_bins[0] <= mouse_face_times) & (mouse_face_times <= time_bins[-1])
+    return mouse_face_times[is_relevant], mouse_face.get('motionSVD')[is_relevant, :]
+
 def getSpikeCountsFromTimes(spike_times, spike_count_bins):
     return np.histogram(spike_times, bins=spike_count_bins)[0]
 
