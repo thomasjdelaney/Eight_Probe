@@ -62,7 +62,8 @@ def getRelevantMotionSVD(mouse_face, time_bins):
     Get the relevant motion SVD values from the given mouse face dict.
     Arguments:  mouse_face, dict, contains all the information from the mouse videos
                 time_bins, numpy.array (float),  the time bin boundaries for binning spikes
-    Returns:    numpy.array (float), trimmed mouse_face['motionSVD']
+    Returns:    numpy.array (float), relevant mouse face times
+                numpy.array (float), 2-d (num time bins, num components), trimmed mouse_face['motionSVD']
     """
     mouse_face_times = mouse_face.get('times')[0]
     is_relevant = (time_bins[0] <= mouse_face_times) & (mouse_face_times <= time_bins[-1])
@@ -355,3 +356,37 @@ def getRegionalMeasureMatrix(measure_frame, measure, mouse_name=None, regions=np
         measure_matrix[first_ind, second_ind] = measure_value
         measure_matrix[second_ind, first_ind] = measure_value
     return measure_matrix, regions
+
+def getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
+    """
+    For getting the histogram of spike counts by SVD comp value.
+    mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
+    mouse_face = ep.getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
+    Arguments:  mouse_face, dict, contains all the information from the motion videos.
+                spike_count_dict, dictionary of arrays of spike counts.
+                time_bins, numpy.array (float), the bins for the whole experiment
+                num_bins_svd, int, the number of bins to split the SVD components into.
+    Returns:    mouse_face, dict, adds keys svd_times, svd_comps, spike_count_array, svd_spike_count_hists, svd_hists, svd_bin_borders
+    """
+    svd_times, svd_comps = getRelevantMotionSVD(mouse_face, time_bins)
+    spike_count_array = np.array(list(spike_count_dict.values()))
+    svd_spike_count_hists = np.zeros((svd_comps.shape[1], len(spike_count_dict), num_bins_svd), dtype=int)
+    svd_hists = np.zeros((svd_comps.shape[1], num_bins_svd), dtype=int)
+    svd_bin_borders = np.zeros((svd_comps.shape[1], num_bins_svd+1), dtype=float)
+    for i,svd_comp in enumerate(svd_comps.T):
+        svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd, density=True)
+        spike_counts_by_svd_comp = np.zeros((len(spike_count_dict), num_bins_svd), dtype=int)
+        for j,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
+            svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
+            svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
+            spike_counts_by_svd_comp[:,j] = spike_count_array[:, svd_bin_value_time_bin_inds-1].sum(axis=1)
+        svd_spike_count_hists[i, :, :] = spike_counts_by_svd_comp
+        svd_hists[i, :] = svd_counts
+        svd_bin_borders[i, :] = svd_bins
+    mouse_face['svd_times'] = svd_times
+    mouse_face['svd_comps'] = svd_comps
+    mouse_face['svd_spike_count_hists'] = svd_spike_count_hists
+    mouse_face['svd_hists'] = svd_hists
+    mouse_face['svd_bin_borders'] = svd_bin_borders
+    return mouse_face
+
