@@ -8,6 +8,7 @@ from itertools import combinations, product
 from multiprocessing import Pool, cpu_count
 from pyitlib import discrete_random_variable as drv
 from functools import reduce
+from sklearn.preprocessing import normalize
 
 bin_widths = np.array([0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0]) # various bin widths for testing measurement values.
 augmented_bin_widths = np.concatenate([[0.001, 0.002, 0.005], bin_widths])
@@ -368,13 +369,14 @@ def getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, time_bins, num_
                 num_bins_svd, int, the number of bins to split the SVD components into.
     Returns:    mouse_face, dict, adds keys svd_times, svd_comps, spike_count_array, svd_spike_count_hists, svd_hists, svd_bin_borders
     """
+    total_exp_time = time_bins[-1] - time_bins[0]
     svd_times, svd_comps = getRelevantMotionSVD(mouse_face, time_bins)
     spike_count_array = np.array(list(spike_count_dict.values()))
-    svd_spike_count_hists = np.zeros((svd_comps.shape[1], len(spike_count_dict), num_bins_svd), dtype=int)
-    svd_hists = np.zeros((svd_comps.shape[1], num_bins_svd), dtype=int)
-    svd_bin_borders = np.zeros((svd_comps.shape[1], num_bins_svd+1), dtype=float)
+    svd_spike_count_hists = np.zeros((svd_comps.shape[1], len(spike_count_dict), num_bins_svd), dtype=int) # (num comps, num cells, num svd bins)
+    svd_hists = np.zeros((svd_comps.shape[1], num_bins_svd), dtype=int) # (num comps, num svd bins)
+    svd_bin_borders = np.zeros((svd_comps.shape[1], num_bins_svd+1), dtype=float) # (num comps, num svd bins + 1)
     for i,svd_comp in enumerate(svd_comps.T):
-        svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd, density=True)
+        svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd)
         spike_counts_by_svd_comp = np.zeros((len(spike_count_dict), num_bins_svd), dtype=int)
         for j,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
             svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
@@ -383,10 +385,14 @@ def getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, time_bins, num_
         svd_spike_count_hists[i, :, :] = spike_counts_by_svd_comp
         svd_hists[i, :] = svd_counts
         svd_bin_borders[i, :] = svd_bins
+    svd_dists = normalize(svd_hists, axis=1, norm='l1')
+    svd_cond_exp = np.divide(np.divide(svd_spike_count_hists.swapaxes(0,1), svd_dists), total_exp_time).swapaxes(0,1) # (num comps, num cells, num svd bins) conditional expectations, conditional on svd value.
+    svd_cond_exp[np.isnan(svd_cond_exp)] = 0.0
     mouse_face['svd_times'] = svd_times
     mouse_face['svd_comps'] = svd_comps
     mouse_face['svd_spike_count_hists'] = svd_spike_count_hists
-    mouse_face['svd_hists'] = svd_hists
+    mouse_face['svd_dists'] = svd_dists
     mouse_face['svd_bin_borders'] = svd_bin_borders
+    mouse_face['svd_cond_exp'] = svd_cond_exp
     return mouse_face
 
