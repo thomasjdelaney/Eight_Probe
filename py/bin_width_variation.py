@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description='For varying the bin width used fro
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
 parser.add_argument('-f', '--save_firing_rate_frame', help='Flag to indicate whether or not firing rates should be saved.', default=False, action='store_true')
 parser.add_argument('-a', '--save_analysis_frame', help='Flag to indicate whether or not analysis should be performed and saved.', default=False, action='store_true')
+parser.add_argument('-z', '--save_conditional_correlations', help='Flag to indicate whether or not to calculate and save conditional correlations.', default=False, action='store_true')
 parser.add_argument('-c', '--num_chunks', help='Number of chunks to split the pairs into before processing.', default=10, type=int)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
@@ -125,5 +126,10 @@ if (not args.debug) & (__name__ == "__main__"):
                     analysis_frame['bin_width'] = bin_width
                     saveAnalysisFrame(analysis_frame, i, save_file)
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
+            if args.save_conditional_correlations:
+                print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing conditional correlations...')
+                mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
+                mouse_face = ep.getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
+                mouse_face = ep.getMouseFaceCondSpikeCounts(mouse_face, spike_time_dict)
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 

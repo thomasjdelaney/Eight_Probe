@@ -396,3 +396,16 @@ def getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, time_bins, num_
     mouse_face['svd_cond_exp'] = svd_cond_exp
     return mouse_face
 
+def getMouseFaceCondSpikeCounts(mouse_face, spike_time_dict):
+    """
+    For reformatting mouse_face['svd_spike_count_hists'] as an array of dictionaries.
+    Arguments:  mouse_face, dict, contains all information from the mouse face videos.
+                spike_time_dict, dict, cell_id => spike times
+    Returns:    mouse_face, with 'svd_spike_count_dicts' key.
+    """
+    num_comps = mouse_face['svd_comps'].shape[1]
+    svd_cond_spike_count_dicts = np.empty(shape=(num_comps,), dtype=dict)
+    for i,svd_cond_spike_counts in enumerate(mouse_face['svd_cond_exp']):
+        svd_cond_spike_count_dicts[i] = dict(zip(spike_time_dict.keys(), svd_cond_spike_counts))
+    mouse_face['svd_cond_spike_count_dicts'] = svd_cond_spike_count_dicts
+    return mouse_face
