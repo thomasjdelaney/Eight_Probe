@@ -78,6 +78,28 @@ def getAnalysisDictForPair(pair_count_dict):
     plugin_mi, plugin_shuff_mi, bias_corrected_mi = ep.getMutualInfoForPair(pair_count_dict)
     return {'corr_coef': np.repeat(corr,1), 'corr_pv':np.repeat(corr_pv,1), 'first_cell_id':np.repeat(pair[0],1), 'plugin_mi':np.repeat(plugin_mi,1), 'plugin_shuff_mi':np.repeat(plugin_shuff_mi,1), 'second_cell_id':np.repeat(pair[1],1), 'shuff_corr':np.repeat(shuff_corr,1), 'shuff_corr_pv':np.repeat(shuff_corr_pv,1), 'bias_corrected_mi':np.repeat(bias_corrected_mi,1)}
 
+def getConditionalAnalysisDictForPair(pair, mouse_face, spike_count_dict):
+    """
+    For getting a dictionary containing conditional correlation measurements for the given pair.
+    Arguments:  pair, np.array (int), the pair of cell_ids.
+                mouse_face, dict, contains all the info from the mouse videos. 
+                spike_count_dict, dict, cell_id => spike_counts.
+    Returns:    dict, keys=(cond_corr_coef, cond_corr_pv, first_cell_id, second_cell_id, shuff_cond_corr, shuff_cond_corr_pv)
+    """
+    n = mouse_face.get('svd_dists').shape[0]
+    first_cond_exp = np.empty((n,50), dtype=float)
+    second_cond_exp = np.empty((n,50), dtype=float)
+    for i,cond_dict in enumerate(mouse_face.get('svd_cond_spike_count_dicts')):
+        first_cond_exp[i] = cond_dict[pair[0]]
+        second_cond_exp[i] = cond_dict[pair[1]]
+    gamma_comp = first_cond_exp * second_cond_exp * mouse_face.get('svd_dists') # step D, page 3 of 11 supp. material
+    expected_product = np.mean(spike_count_dict[pair[0]] * spike_count_dict[pair[1]])
+    expected_first = np.mean(spike_count_dict[pair[0]])
+    expected_second = np.mean(spike_count_dict[pair[1]])
+    conditional_covariance = expected_product - (gamma_comp.sum(axis=0) - (n-1)*expected_first*expected_second)
+    first_cond_std = np.mean(spike_count_dict[pair[0]] * spike_count_dict[pair[0]]) - (np.sum(first_cond_exp*first_cond_exp*mouse_face.get('svd_dists'), axis=0) - (n-1)*expected_first*expected_first)
+    second_cond_std = np.mean(spike_count_dict[pair[1]] * spike_count_dict[pair[1]]) - (np.sum(second_cond_exp*second_cond_exp*mouse_face.get('svd_dists'), axis=0) - (n-1)*expected_second*expected_second)
+
 def reduceAnalysisDicts(first_dict, second_dict):
     """
     Each dict is str => numpy array, and will have the same keys. This function appends the dictionaries together. This is the reduce function for mapReduce.
@@ -131,5 +153,7 @@ if (not args.debug) & (__name__ == "__main__"):
                 mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
                 mouse_face = ep.getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
                 mouse_face = ep.getMouseFaceCondSpikeCounts(mouse_face, spike_time_dict)
+                for i,pair_chunk in enumerate(chunked_pairs):
+
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 
