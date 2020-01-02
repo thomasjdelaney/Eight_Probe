@@ -153,7 +153,7 @@ if (not args.debug) & (__name__ == "__main__"):
                 mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
                 mouse_face = ep.getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
                 mouse_face = ep.getMouseFaceCondSpikeCounts(mouse_face, spike_time_dict)
-                for i,pair_chunk in enumerate(chunked_pairs):
-
+                #for i,pair_chunk in enumerate(chunked_pairs):
+                
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 

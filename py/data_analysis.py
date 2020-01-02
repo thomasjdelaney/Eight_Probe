@@ -372,22 +372,25 @@ def getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, time_bins, num_
     total_exp_time = time_bins[-1] - time_bins[0]
     svd_times, svd_comps = getRelevantMotionSVD(mouse_face, time_bins)
     spike_count_array = np.array(list(spike_count_dict.values()))
-    svd_spike_count_hists = np.zeros((svd_comps.shape[1], len(spike_count_dict), num_bins_svd), dtype=int) # (num comps, num cells, num svd bins)
+    total_spike_counts_by_comp = np.empty(shape=(svd_comps.shape[1], len(spike_count_dict), num_bins_svd), dtype=float)
+    covariance_matrices_by_comp = np.empty(shape=(svd_comps.shape[1], len(spike_count_dict),len(spike_count_dict), num_bins_svd), dtype=float)
     svd_hists = np.zeros((svd_comps.shape[1], num_bins_svd), dtype=int) # (num comps, num svd bins)
     svd_bin_borders = np.zeros((svd_comps.shape[1], num_bins_svd+1), dtype=float) # (num comps, num svd bins + 1)
     for i,svd_comp in enumerate(svd_comps.T):
         svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd)
-        spike_counts_by_svd_comp = np.zeros((len(spike_count_dict), num_bins_svd), dtype=int)
         for j,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
             svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
             svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
-            spike_counts_by_svd_comp[:,j] = spike_count_array[:, svd_bin_value_time_bin_inds-1].sum(axis=1)
-        svd_spike_count_hists[i, :, :] = spike_counts_by_svd_comp
+            total_spike_counts_by_comp[i, :, j] = spike_count_array[:, svd_bin_value_time_bin_inds-1].sum(axis=1)
+            covariance_matrices_by_comp[i, :, :, j] = np.cov(spike_count_array[:, svd_bin_value_time_bin_inds-1])
         svd_hists[i, :] = svd_counts
         svd_bin_borders[i, :] = svd_bins
+    total_spike_counts_by_comp[np.isnan(expected_spike_counts_by_comp)] = 0.0
+    covariance_matrices_by_comp[np.isnan(covariance_matrices_by_comp)] = 0.0
     svd_dists = normalize(svd_hists, axis=1, norm='l1')
-    svd_cond_exp = np.divide(np.divide(svd_spike_count_hists.swapaxes(0,1), svd_dists), total_exp_time).swapaxes(0,1) # (num comps, num cells, num svd bins) conditional expectations, conditional on svd value.
-    svd_cond_exp[np.isnan(svd_cond_exp)] = 0.0
+    cond_exp_by_comp = np.divide(np.divide(total_spike_counts_by_comp.swapaxes(0,1), svd_dists), total_exp_time).swapaxes(0,1) # (num comps, num cells, num svd bins) conditional expectations, conditional on svd value.
+    # np.outer
+    cond_exp_by_comp[np.isnan(cond_exp_by_comp)] = 0.0
     mouse_face['svd_times'] = svd_times
     mouse_face['svd_comps'] = svd_comps
     mouse_face['svd_spike_count_hists'] = svd_spike_count_hists
