@@ -78,10 +78,10 @@ def getAnalysisDictForPair(pair_count_dict):
     plugin_mi, plugin_shuff_mi, bias_corrected_mi = ep.getMutualInfoForPair(pair_count_dict)
     return {'corr_coef': np.repeat(corr,1), 'corr_pv':np.repeat(corr_pv,1), 'first_cell_id':np.repeat(pair[0],1), 'plugin_mi':np.repeat(plugin_mi,1), 'plugin_shuff_mi':np.repeat(plugin_shuff_mi,1), 'second_cell_id':np.repeat(pair[1],1), 'shuff_corr':np.repeat(shuff_corr,1), 'shuff_corr_pv':np.repeat(shuff_corr_pv,1), 'bias_corrected_mi':np.repeat(bias_corrected_mi,1)}
 
-def getConditionalExpectation(spike_counts, time_bins, svd_comp, svd_times, num_bins_svd=50):
+def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, num_bins_svd=50):
     """
     For calculating the conditional expectation of the spike counts given num_bins_svd different binned values of svd_comp.
-    Arguments:  spike_counts, numpy array (int), spike counts
+    Arguments:  spike_count_dict, dict cell_id => spike_counts
                 time_bins, numpy array (float), times for the spike counts.
                 svd_comp, numpy array (float), singular value decomposition component
                 svd_times, numpy array (float), times for the svd measurements
@@ -90,16 +90,15 @@ def getConditionalExpectation(spike_counts, time_bins, svd_comp, svd_times, num_
     svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd)
     spike_count_values = np.arange(spike_counts.min(), spike_counts.max()+1)
     svd_marginal_distn = svd_counts / svd_counts.sum()
-    joint_distn = np.zeros((num_bins_svd, spike_count_values.size), dtype=float)
-    for i,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
-        svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
-        svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
-        svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
-        joint_distn[i, svd_bin_value_spike_count_values] += svd_bin_value_spike_count_counts
-        # can put a loop in here to run through each cell. 
-        # better to return a dictionary similar to spike_count_dict, but for conditional expectations.
-
-
+    joint_distn_dict = dict(zip(spike_count_dict.keys(), np.zeros((len(spike_count_dict), num_bins_svd, spike_count_values.size), dtype=int)))
+    for cell_id, spike_counts in spike_count_dict:
+        for i,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
+            svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
+            svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
+            svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
+            joint_distn_dict[cell_id][i, svd_bin_value_spike_count_values] += svd_bin_value_spike_count_counts
+            # can put a loop in here to run through each cell. 
+            # better to return a dictionary similar to spike_count_dict, but for conditional expectations
 
 def reduceAnalysisDicts(first_dict, second_dict):
     """
