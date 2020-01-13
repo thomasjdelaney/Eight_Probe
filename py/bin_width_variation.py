@@ -11,6 +11,7 @@ import pandas as pd
 import datetime as dt
 from itertools import product, combinations
 from scoop import futures
+from multiprocessing import Pool
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
@@ -85,21 +86,57 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
                 time_bins, numpy array (float), times for the spike counts.
                 svd_comp, numpy array (float), singular value decomposition component
                 svd_times, numpy array (float), times for the svd measurements
-    Returns:    conditional expectation of the spike counts given the svd comp, numpy array (float) of length = num_bins_svd
+    Returns:    svd_marginal_distn, P(Z_i = z_i)
+                conditional_expectation_dict, cell_id => conditional expectation of the spike counts given the svd comp, numpy array (float) of length = num_bins_svd
     """
     svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd)
     svd_marginal_distn = svd_counts / svd_counts.sum()
     conditional_expectation_dict = {}
-    for cell_id, spike_counts in spike_count_dict:
+    for cell_id, spike_counts in spike_count_dict.items():
         spike_count_values = np.arange(spike_counts.min(), spike_counts.max()+1)
-        joint_distn = np.zeros((num_bins_svd, spike_count_values.size), dtype=float) 
+        joint_distn = np.zeros((spike_count_values.size, num_bins_svd), dtype=float) 
         for i,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
             svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
             svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
             svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
-            joint_distn[i, svd_bin_value_spike_count_values] += svd_bin_value_spike_count_counts
-            # can put a loop in here to run through each cell. 
-            # better to return a dictionary similar to spike_count_dict, but for conditional expectations
+            joint_distn[svd_bin_value_spike_count_values, i] += svd_bin_value_spike_count_counts
+        joint_distn = joint_distn / joint_distn.sum()
+        cond_distn = joint_distn / svd_marginal_distn
+        cond_distn[np.isnan(cond_distn)] = 0.0
+        conditional_expectation_dict[cell_id] = np.array([sc * cond_distn[list(spike_count_values).index(sc)] for sc in spike_counts]).sum(axis=0)
+    return svd_marginal_distn, conditional_expectation_dict
+
+def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
+    """
+    For calculating the expected value of the conditional covariance between spike counts.
+    """
+    total_exp_time = time_bins[-1] - time_bins[0]
+    num_cells = len(spike_count_dict)
+    num_comps = mouse_face.get('motionSVD').shape[1]
+    cell_ids = list(spike_count_dict.keys())
+    spike_count_array = np.array(list(spike_count_dict.values()))
+    svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
+    svd_marginal_dists = np.empty(shape=(svd_comps.shape[1], num_bins_svd), dtype=float)
+    cond_exp_dicts = np.empty(shape=(svd_comps.shape[1]), dtype=object)
+    with Pool() as pool:
+        cond_exp_futures = pool.starmap_async(getConditionalExpectation, zip(500*[spike_count_dict], 500*[time_bins], svd_comps.T, 500*[svd_times]))
+        cond_exp_futures.wait()
+    cond_exp_got = cond_exp_futures.get()
+    for i in range(svd_comps.shape[1]):
+        svd_marginal_dists[i], cond_exp_dicts[i] = cond_exp_got[i]
+    conditional_sum = np.zeros((num_cells, num_cells), dtype=float)
+    for c in range(num_comps):
+        for i,j in combinations(range(num_cells), 2):
+            conditional_sum[i,j] += np.dot(svd_marginal_dists[c], cond_exp_dicts[c][cell_ids[i]] * cond_exp_dicts[c][cell_ids[j]])
+    conditional_sum = conditional_sum + conditional_sum.T
+    for c in range(num_comps):
+        for i in range(num_cells):
+            conditional_sum[i,i] = np.dot(svd_marginal_dists[c], cond_exp_dicts[c][cell_ids[i]] * cond_exp_dicts[c][cell_ids[i]])
+    mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
+    product_of_mean_spike_counts = np.outer(spike_count_array.mean(axis=1), spike_count_array.mean(axis=1))
+    return mean_of_products_of_spike_counts + ((num_comps-1) * product_of_mean_spike_counts) - conditional_sum
+    # need to decide where to calculate gammas
+    # need to check if I'm doing the same as before.
 
 def reduceAnalysisDicts(first_dict, second_dict):
     """
@@ -156,5 +193,5 @@ if (not args.debug) & (__name__ == "__main__"):
                 mouse_face = ep.getMouseFaceCondSpikeCounts(mouse_face, spike_time_dict)
                 #for i,pair_chunk in enumerate(chunked_pairs):
                 
-    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Donen_width.')
 
