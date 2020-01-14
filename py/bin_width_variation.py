@@ -106,8 +106,8 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
         cond_distn = joint_distn / svd_marginal_distn
         cond_distn[np.isnan(cond_distn)] = 0.0
         conditional_expectation_dict[cell_id] = np.zeros(num_bins_svd, dtype=float)
-        for sc in spike_counts:
-            conditional_expectation_dict[cell_id] += sc * cond_distn[spike_count_list.index(sc)]
+        for i,sc in enumerate(spike_count_list):
+            conditional_expectation_dict[cell_id] += sc * cond_distn[i]
     return svd_marginal_distn, conditional_expectation_dict
 
 def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
