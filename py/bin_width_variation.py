@@ -3,7 +3,7 @@ For varying the bin width used from 0.005 to 2 seconds, and taking measurements 
 
 We save a frame for spike counts for each time bin containing all cells. We also save a frame for each time bin for all pairs.
 """
-import os, argparse, sys
+import os, argparse, sys, shutil
 if float(sys.version[:3]) < 3.0:
     execfile(os.path.join(os.environ['HOME'], '.pystartup'))
 import numpy as np
@@ -23,6 +23,7 @@ parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, ac
 args = parser.parse_args()
 
 pd.set_option('max_rows',30) # setting display options for terminal display
+np.set_printoptions(linewidth=shutil.get_terminal_size().columns)
 
 proj_dir = os.path.join(os.environ['PROJ'], 'Eight_Probe')
 py_dir = os.path.join(proj_dir, 'py')
@@ -93,22 +94,31 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
     svd_marginal_distn = svd_counts / svd_counts.sum()
     conditional_expectation_dict = {}
     for cell_id, spike_counts in spike_count_dict.items():
-        spike_count_values = np.arange(spike_counts.min(), spike_counts.max()+1)
-        joint_distn = np.zeros((spike_count_values.size, num_bins_svd), dtype=float) 
+        spike_count_list = list(range(spike_counts.min(), spike_counts.max()+1)) # list for faster indexing
+        joint_distn = np.zeros((len(spike_count_list), num_bins_svd), dtype=float) 
         for i,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
             svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
-            svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
-            svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
-            joint_distn[svd_bin_value_spike_count_values, i] += svd_bin_value_spike_count_counts
+            if svd_bin_value_times.size > 0:
+                svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
+                svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
+                joint_distn[svd_bin_value_spike_count_values, i] += svd_bin_value_spike_count_counts
         joint_distn = joint_distn / joint_distn.sum()
         cond_distn = joint_distn / svd_marginal_distn
         cond_distn[np.isnan(cond_distn)] = 0.0
-        conditional_expectation_dict[cell_id] = np.array([sc * cond_distn[list(spike_count_values).index(sc)] for sc in spike_counts]).sum(axis=0)
+        conditional_expectation_dict[cell_id] = np.zeros(num_bins_svd, dtype=float)
+        for sc in spike_counts:
+            conditional_expectation_dict[cell_id] += sc * cond_distn[spike_count_list.index(sc)]
     return svd_marginal_distn, conditional_expectation_dict
 
 def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
     """
     For calculating the expected value of the conditional covariance between spike counts.
+    Arguments:  mouse_face, dict, contains all info about the mouse films,
+                spike_count_dict, Dict, cell_id => spike counts
+                time_bins, the spike count time bin borders,
+    Returns:    E[cov(cell_1, cell_2 | Z_1, ..., Z_500)] expected covariance
+
+    NB getting negative expected variance at the moment, problem unknown.
     """
     total_exp_time = time_bins[-1] - time_bins[0]
     num_cells = len(spike_count_dict)
@@ -135,8 +145,6 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
     mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
     product_of_mean_spike_counts = np.outer(spike_count_array.mean(axis=1), spike_count_array.mean(axis=1))
     return mean_of_products_of_spike_counts + ((num_comps-1) * product_of_mean_spike_counts) - conditional_sum
-    # need to decide where to calculate gammas
-    # need to check if I'm doing the same as before.
 
 def reduceAnalysisDicts(first_dict, second_dict):
     """
