@@ -12,6 +12,7 @@ import datetime as dt
 from itertools import product, combinations
 from scoop import futures
 from multiprocessing import Pool
+from functools import reduce
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
@@ -110,6 +111,28 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
             conditional_expectation_dict[cell_id] += sc * cond_distn[i]
     return svd_marginal_distn, conditional_expectation_dict
 
+def calcWeightedProductCondExp(svd_marginal_dist, first_cond_exp, second_cond_exp):
+    """
+    For calculating the weighted product of two conditional expectations.
+    Arguments:  svd_marginal_dist, numpy array (float), the marginal distribution of the singular value decomposition to use.
+                first_cond_exp, numpy array (float), first conditional expectation.
+                second_cond_exp, numpy array (float), second conditional expectation.
+    Return:     float E[E[X|Z] * E[Y|Z]]
+    """
+    return np.dot(svd_marginal_dist, first_cond_exp * second_cond_exp)
+
+def reduceWeightedProductCondExpFuture(comp_contribution, exp_prod_cond_exp):
+    """
+    For adding the expected values of the product conditional expectations to the conditional sum array.
+    Arguments:  comp_contribution, numpy array (float), initially nans, add to each element incrementally
+                exp_prod_cond_exp, float
+    Returns:    numpy array (float)
+    """
+    first_nan_ind = next(i for i,x in enumerate(comp_contribution.flatten()) if np.isnan(x))
+    first_nan_ind = np.unravel_index(first_nan_ind, comp_contribution.shape)
+    comp_contribution[first_nan_ind] = exp_prod_cond_exp
+    return comp_contribution
+
 def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
     """
     For calculating the expected value of the conditional covariance between spike counts.
@@ -126,22 +149,20 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
     cell_ids = list(spike_count_dict.keys())
     spike_count_array = np.array(list(spike_count_dict.values()))
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
-    svd_marginal_dists = np.empty(shape=(svd_comps.shape[1], num_bins_svd), dtype=float)
-    cond_exp_dicts = np.empty(shape=(svd_comps.shape[1]), dtype=object)
     with Pool() as pool:
         cond_exp_futures = pool.starmap_async(getConditionalExpectation, zip(500*[spike_count_dict], 500*[time_bins], svd_comps.T, 500*[svd_times]))
         cond_exp_futures.wait()
     cond_exp_got = cond_exp_futures.get()
-    for i in range(svd_comps.shape[1]):
-        svd_marginal_dists[i], cond_exp_dicts[i] = cond_exp_got[i]
     conditional_sum = np.zeros((num_cells, num_cells), dtype=float)
     for c in range(num_comps):
+        svd_marginal_dist, cond_exp_dict = cond_exp_got[c]
         for i,j in combinations(range(num_cells), 2):
-            conditional_sum[i,j] += np.dot(svd_marginal_dists[c], cond_exp_dicts[c][cell_ids[i]] * cond_exp_dicts[c][cell_ids[j]])
+            conditional_sum[i,j] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]])
     conditional_sum = conditional_sum + conditional_sum.T
     for c in range(num_comps):
+        svd_marginal_dist, cond_exp_dict = cond_exp_got[c]
         for i in range(num_cells):
-            conditional_sum[i,i] = np.dot(svd_marginal_dists[c], cond_exp_dicts[c][cell_ids[i]] * cond_exp_dicts[c][cell_ids[i]])
+            conditional_sum[i,i] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]])
     mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
     product_of_mean_spike_counts = np.outer(spike_count_array.mean(axis=1), spike_count_array.mean(axis=1))
     return mean_of_products_of_spike_counts + ((num_comps-1) * product_of_mean_spike_counts) - conditional_sum
