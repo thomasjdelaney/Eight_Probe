@@ -90,6 +90,8 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
                 svd_times, numpy array (float), times for the svd measurements
     Returns:    svd_marginal_distn, P(Z_i = z_i)
                 conditional_expectation_dict, cell_id => conditional expectation of the spike counts given the svd comp, numpy array (float) of length = num_bins_svd
+
+    NB check this again.
     """
     svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd)
     svd_marginal_distn = svd_counts / svd_counts.sum()
@@ -102,7 +104,7 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
             if svd_bin_value_times.size > 0:
                 svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
                 svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
-                joint_distn[svd_bin_value_spike_count_values, i] += svd_bin_value_spike_count_counts
+                joint_distn[[spike_count_list.index(spikes) for spikes in svd_bin_value_spike_count_values], i] += svd_bin_value_spike_count_counts 
         joint_distn = joint_distn / joint_distn.sum()
         cond_distn = joint_distn / svd_marginal_distn
         cond_distn[np.isnan(cond_distn)] = 0.0
@@ -143,7 +145,6 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
 
     NB getting negative expected variance at the moment, problem unknown.
     """
-    total_exp_time = time_bins[-1] - time_bins[0]
     num_cells = len(spike_count_dict)
     num_comps = mouse_face.get('motionSVD').shape[1]
     cell_ids = list(spike_count_dict.keys())
@@ -154,18 +155,23 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
         cond_exp_futures.wait()
     cond_exp_got = cond_exp_futures.get()
     conditional_sum = np.zeros((num_cells, num_cells), dtype=float)
+    # conditional_log_sum = np.zeros((num_cells, num_cells), dtype=float)
     for c in range(num_comps):
         svd_marginal_dist, cond_exp_dict = cond_exp_got[c]
         for i,j in combinations(range(num_cells), 2):
             conditional_sum[i,j] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]])
+            # conditional_log_sum[i,j] += np.log(np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]]))
     conditional_sum = conditional_sum + conditional_sum.T
+    # conditional_log_sum = conditional_log_sum + conditional_log_sum.T
     for c in range(num_comps):
         svd_marginal_dist, cond_exp_dict = cond_exp_got[c]
         for i in range(num_cells):
             conditional_sum[i,i] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]])
+            # conditional_log_sum[i,i] += np.log(np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]]))
     mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
     product_of_mean_spike_counts = np.outer(spike_count_array.mean(axis=1), spike_count_array.mean(axis=1))
     return mean_of_products_of_spike_counts + ((num_comps-1) * product_of_mean_spike_counts) - conditional_sum
+    # return mean_of_products_of_spike_counts - np.exp(conditional_log_sum - ((num_comps-1) * np.log(product_of_mean_spike_counts)))
 
 def reduceAnalysisDicts(first_dict, second_dict):
     """
@@ -222,5 +228,5 @@ if (not args.debug) & (__name__ == "__main__"):
                 mouse_face = ep.getMouseFaceCondSpikeCounts(mouse_face, spike_time_dict)
                 #for i,pair_chunk in enumerate(chunked_pairs):
                 
-    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Donen_width.')
+    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 
