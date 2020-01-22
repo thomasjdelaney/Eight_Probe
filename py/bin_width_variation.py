@@ -136,6 +136,28 @@ def reduceWeightedProductCondExpFuture(comp_contribution, exp_prod_cond_exp):
     comp_contribution[first_nan_ind] = exp_prod_cond_exp
     return comp_contribution
 
+def getCompMargCondExp(svd_comps, svd_times, spike_count_dict, time_bins, num_bins_svd=50):
+    """
+    For returning the marginal distribution of each component, and the dictionaries of conditional expectations for each component for each cell.
+    Arguments:  svd_comps, singular value decomposition components
+                svd_times, time stamps for component measures
+                spike_count_dict, Dict, cell_id => spike counts
+                time_bins, the spike count time bin borders,
+    Returns:    svd_marginal_dists, numpy.array (num_comps, num_bins), marginal distributions
+                cond_expected_dicts, list of dictionaries, cell_id => conditional expectation given svd component
+    """
+    num_comps = svd_comps.shape[1]
+    with Pool() as pool:
+        cond_exp_futures = pool.starmap_async(getConditionalExpectation, zip(num_comps*[spike_count_dict], num_comps*[time_bins], svd_comps.T, num_comps*[svd_times]))
+        cond_exp_futures.wait()
+    cond_exp_got = cond_exp_futures.get()
+    svd_marginal_dists = np.empty(shape=(num_comps, num_bins_svd), dtype=float)
+    cond_expected_dicts = []
+    for i in range(num_comps):
+        svd_marginal_dists[i, :] = cond_exp_got[i][0]
+        cond_expected_dicts.append(cond_exp_got[i][1])
+    return svd_marginal_dists, cond_expected_dicts
+
 def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
     """
     For calculating the expected value of the conditional covariance between spike counts.
@@ -151,21 +173,18 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
     cell_ids = list(spike_count_dict.keys())
     spike_count_array = np.array(list(spike_count_dict.values()))
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
-    with Pool() as pool:
-        cond_exp_futures = pool.starmap_async(getConditionalExpectation, zip(500*[spike_count_dict], 500*[time_bins], svd_comps.T, 500*[svd_times]))
-        cond_exp_futures.wait()
-    cond_exp_got = cond_exp_futures.get()
+    svd_marginal_dists, cond_expected_dicts = getCompMargCondExp(svd_comps, svd_times, spike_count_dict, time_bins)
     conditional_sum = np.zeros((num_cells, num_cells), dtype=float)
     # conditional_log_sum = np.zeros((num_cells, num_cells), dtype=float)
     for c in range(num_comps):
-        svd_marginal_dist, cond_exp_dict = cond_exp_got[c]
+        svd_marginal_dist, cond_exp_dict = svd_marginal_dists[c], cond_expected_dicts[c] 
         for i,j in combinations(range(num_cells), 2):
             conditional_sum[i,j] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]])
             # conditional_log_sum[i,j] += np.log(np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]]))
     conditional_sum = conditional_sum + conditional_sum.T
     # conditional_log_sum = conditional_log_sum + conditional_log_sum.T
     for c in range(num_comps):
-        svd_marginal_dist, cond_exp_dict = cond_exp_got[c]
+        svd_marginal_dist, cond_exp_dict = svd_marginal_dists[c], cond_expected_dicts[c]
         for i in range(num_cells):
             conditional_sum[i,i] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]])
             # conditional_log_sum[i,i] += np.log(np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]]))
