@@ -95,22 +95,23 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
     """
     svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd)
     svd_marginal_distn = svd_counts / svd_counts.sum()
+    svd_value_bins = np.digitize(svd_comp, svd_bins, right=True)-1
+    svd_value_bins[svd_value_bins == svd_value_bins.min()] = 0 
     conditional_expectation_dict = {}
     for cell_id, spike_counts in spike_count_dict.items():
         spike_count_list = list(range(spike_counts.min(), spike_counts.max()+1)) # list for faster indexing
         joint_distn = np.zeros((len(spike_count_list), num_bins_svd), dtype=float) 
-        for i,(svd_bin_start, svd_bin_stop) in enumerate(zip(svd_bins[:-1], svd_bins[1:])):
-            svd_bin_value_times = svd_times[np.logical_and(svd_bin_start <= svd_comp, svd_comp < svd_bin_stop)]
+        for i in range(svd_counts.size):
+            svd_bin_value_times = svd_times[np.nonzero(svd_value_bins == i)[0]]
             if svd_bin_value_times.size > 0:
-                svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins)
+                svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins, right=True)
                 svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
                 joint_distn[[spike_count_list.index(spikes) for spikes in svd_bin_value_spike_count_values], i] += svd_bin_value_spike_count_counts 
         joint_distn = joint_distn / joint_distn.sum()
-        cond_distn = joint_distn / svd_marginal_distn
+        with np.errstate(divide='ignore', invalid='ignore'): # avoiding warning messages
+            cond_distn = joint_distn / svd_marginal_distn
         cond_distn[np.isnan(cond_distn)] = 0.0
-        conditional_expectation_dict[cell_id] = np.zeros(num_bins_svd, dtype=float)
-        for i,sc in enumerate(spike_count_list):
-            conditional_expectation_dict[cell_id] += sc * cond_distn[i]
+        conditional_expectation_dict[cell_id] = np.dot(np.array(spike_count_list), cond_distn)
     return svd_marginal_distn, conditional_expectation_dict
 
 def calcWeightedProductCondExp(svd_marginal_dist, first_cond_exp, second_cond_exp):
