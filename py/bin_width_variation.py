@@ -114,51 +114,116 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
         conditional_expectation_dict[cell_id] = np.dot(np.array(spike_count_list), cond_distn)
     return svd_marginal_distn, conditional_expectation_dict
 
-def calcWeightedProductCondExp(svd_marginal_dist, first_cond_exp, second_cond_exp):
+def getCompExpCondCov(svd_comps, svd_times, spike_count_dict, time_bins, num_bins_svd=50):
     """
-    For calculating the weighted product of two conditional expectations.
-    Arguments:  svd_marginal_dist, numpy array (float), the marginal distribution of the singular value decomposition to use.
-                first_cond_exp, numpy array (float), first conditional expectation.
-                second_cond_exp, numpy array (float), second conditional expectation.
-    Return:     float E[E[X|Z] * E[Y|Z]]
-    """
-    return np.dot(svd_marginal_dist, first_cond_exp * second_cond_exp)
-
-def reduceWeightedProductCondExpFuture(comp_contribution, exp_prod_cond_exp):
-    """
-    For adding the expected values of the product conditional expectations to the conditional sum array.
-    Arguments:  comp_contribution, numpy array (float), initially nans, add to each element incrementally
-                exp_prod_cond_exp, float
-    Returns:    numpy array (float)
-    """
-    first_nan_ind = next(i for i,x in enumerate(comp_contribution.flatten()) if np.isnan(x))
-    first_nan_ind = np.unravel_index(first_nan_ind, comp_contribution.shape)
-    comp_contribution[first_nan_ind] = exp_prod_cond_exp
-    return comp_contribution
-
-def getCompMargCondExp(svd_comps, svd_times, spike_count_dict, time_bins, num_bins_svd=50):
-    """
-    For returning the marginal distribution of each component, and the dictionaries of conditional expectations for each component for each cell.
+    For getting the expected conditional covariance for each component individually.
     Arguments:  svd_comps, singular value decomposition components
                 svd_times, time stamps for component measures
                 spike_count_dict, Dict, cell_id => spike counts
                 time_bins, the spike count time bin borders,
-    Returns:    svd_marginal_dists, numpy.array (num_comps, num_bins), marginal distributions
-                cond_expected_dicts, list of dictionaries, cell_id => conditional expectation given svd component
+    Returns:    comp_expected_cond_cov, 
     """
     num_comps = svd_comps.shape[1]
+    num_cells = len(spike_count_dict)
+    spike_count_array = np.array(list(spike_count_dict.values()))
+    mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
     with Pool() as pool:
         cond_exp_futures = pool.starmap_async(getConditionalExpectation, zip(num_comps*[spike_count_dict], num_comps*[time_bins], svd_comps.T, num_comps*[svd_times]))
         cond_exp_futures.wait()
     cond_exp_got = cond_exp_futures.get()
-    svd_marginal_dists = np.empty(shape=(num_comps, num_bins_svd), dtype=float)
-    cond_expected_dicts = []
+    comp_expected_cond_cov = np.empty(shape=(num_comps, num_cells, num_cells), dtype=float)
     for i in range(num_comps):
-        svd_marginal_dists[i, :] = cond_exp_got[i][0]
-        cond_expected_dicts.append(cond_exp_got[i][1])
-    return svd_marginal_dists, cond_expected_dicts
+        svd_marginal_dist = cond_exp_got[i][0]
+        cond_expected_array = np.array(list(cond_exp_got[i][1].values()))
+        comp_expected_cond_cov[i, :, :] = np.tensordot(svd_marginal_dist, np.array([np.outer(s, s) for s in cond_expected_array.T]), axes=(0,0))
+    comp_expected_cond_cov = mean_of_products_of_spike_counts - comp_expected_cond_cov
+    return comp_expected_cond_cov
 
-def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
+def getCompsRankedByExpCondCov(comp_expected_cond_cov, num_comps_returned=4):
+    """
+    For getting some kind of sort order of the components by the expected conditional covariance given these components.
+    Arguments:  comp_expected_cond_cov, numpy.array (num_comps, num_cells, num_cells)
+                num_comps_returned, int, 4, return the top n components
+    Returns:    sort_order, numpy.array (num_comps)
+    """
+    num_comps, num_cells, num_cells = comp_expected_cond_cov.shape
+    num_combos = num_cells * (num_cells - 1)/2
+    ranks = range(num_comps)
+    average_rank_by_comp = np.zeros(comp_expected_cond_cov.shape[0], dtype=int)
+    for i,j in combinations(range(num_cells), 2):
+        average_rank_by_comp[comp_expected_cond_cov[:,i,j].argsort()] += ranks
+    average_rank_by_comp = average_rank_by_comp / num_combos
+    return np.argsort(average_rank_by_comp)[-num_comps_returned:]
+
+def getEasyJointDistribution(samples, bins):
+    """
+    For making an empirical joint distribution out of the samples, using the bins.
+    Arguments:  samples, each column is a separate variable
+                bins, follows the same rules as numpy.histogrammdd's bins argument. (see help(np.histogramdd))
+    Returns:    a joint distribution, numpy.array, dimensions controlled by the number of variables, and the bins
+    """
+    sample_counts, sample_bins = np.histogramdd(samples, bins=bins)
+    sample_joint_dist = sample_counts / sample_counts.sum()
+    return sample_joint_dist, np.array(sample_bins)
+
+def getCellTopRankCondExp(spike_counts, num_bins_svd, num_comps, top_ranked_value_bins, svd_times, time_bins, top_ranked_joint):
+    """
+    Helper function for getTopRankConditionalExpectation
+    """
+    spike_count_list = list(range(spike_counts.min(), spike_counts.max()+1))
+    cell_top_ranked_joint_distn = np.zeros(([spike_counts.max()+1] + ([num_bins_svd] * num_comps)), dtype=int) # ex: 29 x 25 x 25 x 25 x 25
+    for i,(j,k,l,m) in enumerate(top_ranked_value_bins.T): # looping through all the data that we have is faster than looping through all possible combinations
+        svd_bin_value_time = svd_times[i]
+        svd_bin_value_time_bin_ind = np.digitize(svd_bin_value_time, time_bins) - 1
+        cell_top_ranked_joint_distn[spike_count_list.index(spike_counts[svd_bin_value_time_bin_ind]), j, k, l, m] += 1
+    cell_top_ranked_joint_distn = cell_top_ranked_joint_distn / cell_top_ranked_joint_distn.sum()
+    with np.errstate(divide='ignore', invalid='ignore'): # avoiding warning messages
+        cond_distn = cell_top_ranked_joint_distn / top_ranked_joint
+    cond_distn[np.isnan(cond_distn)] = 0.0
+    return np.tensordot(np.array(spike_count_list), cond_distn, axes=(0,0))
+
+def getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bins, svd_times, num_bins_svd):
+    """
+    For making an empirical joint distributon that includes the top ranked SVD components and the spike counts of a cell.
+    Arguments:  spike_count_dict, dict, cell_id => spike_counts
+                top_ranked_comps, numpy.array (float) top ranked SVD components,
+                top_ranked_bins, numpy.array (float)
+                time_bins, numpy.array (float)
+                svd_times, numpy.array (float)
+                num_bins_svd, int
+    Returns:    numpy.array (float)
+    """
+    num_comps = top_ranked_comps.shape[1]
+    num_cells = len(spike_count_dict)
+    top_ranked_joint, top_ranked_bins = getEasyJointDistribution(top_ranked_comps, num_bins_svd)
+    top_ranked_value_bins = np.array([np.digitize(top_ranked_comps[:,comp_ind], top_ranked_bins[comp_ind])-1 for comp_ind in range(num_comps)])
+    top_ranked_value_bins[top_ranked_value_bins == num_bins_svd] = num_bins_svd - 1
+    conditional_expectation_dict = {}
+    spike_counts_list = list(spike_count_dict.values())
+    with Pool() as pool:
+        cond_exp_futures = pool.starmap_async(getCellTopRankCondExp, zip(spike_counts_list, num_cells*[num_bins_svd], num_cells*[num_comps], num_cells*[top_ranked_value_bins], num_cells*[svd_times], num_cells*[time_bins], num_cells*[top_ranked_joint]))
+        cond_exp_futures.wait()
+    conditional_expectation_dict = dict(zip(spike_count_dict.keys(), cond_exp_futures.get()))
+    return top_ranked_joint, conditional_expectation_dict
+
+def getExpectationProductConditionalExpectations(top_ranked_joint, conditional_expectation_dict):
+    """
+    For calculating E[E[X|Z_1,...,Z_4]E[Y|Z_1,...,Z_4]] in a way that avoids memory issues.
+    Arguments:  top_ranked_joint, joint distribution of top ranked components
+                conditional_expectation_dict, cell_id => E[X|Z_1,...,Z_4]
+    Returns:    numpy.array (float) (num_cells, num_cells)
+    """
+    cell_ids = list(conditional_expectation_dict.keys())
+    num_cells = len(cell_ids)
+    expectation_prod_cond_expectations = np.zeros((num_cells, num_cells), dtype=float)
+    for i,j in combinations(range(num_cells),2):
+        expectation_prod_cond_expectations[i,j] = np.tensordot(top_ranked_joint, conditional_expectation_dict[cell_ids[i]] * conditional_expectation_dict[cell_ids[j]], axes=4).flatten()[0]
+    expectation_prod_cond_expectations = expectation_prod_cond_expectations + expectation_prod_cond_expectations.T
+    for i in range(num_cells):
+        expectation_prod_cond_expectations[i,i] = np.tensordot(top_ranked_joint, conditional_expectation_dict[cell_ids[i]] * conditional_expectation_dict[cell_ids[i]], axes=4).flatten()[0]
+    return expectation_prod_cond_expectations
+
+def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=25):
     """
     For calculating the expected value of the conditional covariance between spike counts.
     Arguments:  mouse_face, dict, contains all info about the mouse films,
@@ -168,30 +233,15 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=50):
 
     NB getting negative expected variance at the moment, problem unknown.
     """
-    num_cells = len(spike_count_dict)
-    num_comps = mouse_face.get('motionSVD').shape[1]
-    cell_ids = list(spike_count_dict.keys())
     spike_count_array = np.array(list(spike_count_dict.values()))
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
-    svd_marginal_dists, cond_expected_dicts = getCompMargCondExp(svd_comps, svd_times, spike_count_dict, time_bins)
-    conditional_sum = np.zeros((num_cells, num_cells), dtype=float)
-    # conditional_log_sum = np.zeros((num_cells, num_cells), dtype=float)
-    for c in range(num_comps):
-        svd_marginal_dist, cond_exp_dict = svd_marginal_dists[c], cond_expected_dicts[c] 
-        for i,j in combinations(range(num_cells), 2):
-            conditional_sum[i,j] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]])
-            # conditional_log_sum[i,j] += np.log(np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]]))
-    conditional_sum = conditional_sum + conditional_sum.T
-    # conditional_log_sum = conditional_log_sum + conditional_log_sum.T
-    for c in range(num_comps):
-        svd_marginal_dist, cond_exp_dict = svd_marginal_dists[c], cond_expected_dicts[c]
-        for i in range(num_cells):
-            conditional_sum[i,i] += np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]])
-            # conditional_log_sum[i,i] += np.log(np.dot(svd_marginal_dist, cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]]))
+    comp_expected_cond_cov = getCompExpCondCov(svd_comps, svd_times, spike_count_dict, time_bins)
+    top_ranked_comp_inds = getCompsRankedByExpCondCov(comp_expected_cond_cov)
+    top_ranked_comps = svd_comps[:,top_ranked_comp_inds]
+    top_ranked_joint, conditional_expectation_dict = getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bins, svd_times, num_bins_svd)
+    expectation_prod_cond_expectations = getExpectationProductConditionalExpectations(top_ranked_joint, conditional_expectation_dict)     
     mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
-    product_of_mean_spike_counts = np.outer(spike_count_array.mean(axis=1), spike_count_array.mean(axis=1))
-    return mean_of_products_of_spike_counts + ((num_comps-1) * product_of_mean_spike_counts) - conditional_sum
-    # return mean_of_products_of_spike_counts - np.exp(conditional_log_sum - ((num_comps-1) * np.log(product_of_mean_spike_counts)))
+    return mean_of_products_of_spike_counts - expectation_prod_cond_expectations
 
 def reduceAnalysisDicts(first_dict, second_dict):
     """
