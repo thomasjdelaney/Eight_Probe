@@ -13,6 +13,8 @@ from itertools import product, combinations
 from scoop import futures
 from multiprocessing import Pool
 from functools import reduce
+from sklearn.metrics import r2_score
+from sklearn.linear_model import Ridge, RidgeCV, Lasso, ElasticNet, LassoCV, ElasticNetCV
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
@@ -205,6 +207,33 @@ def getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bi
         cond_exp_futures.wait()
     conditional_expectation_dict = dict(zip(spike_count_dict.keys(), cond_exp_futures.get()))
     return top_ranked_joint, conditional_expectation_dict
+
+def downSampleComps(svd_times, svd_comps, time_bins):
+    """
+    For converting the svd_comps to a lower frequency sampling.
+    Arguments:  svd_times, the times at which the SVD components were measured
+                svd_comps, the svd components themselves
+                time_bins, the spike count time bin borders
+    """
+    lower_freq_svd_comps = np.zeros((time_bins.size-1, svd_comps.shape[1]), dtype=float)
+    lower_freq_inds = np.digitize(svd_times, time_bins) - 1
+    for i in np.unique(lower_freq_inds):
+        lower_freq_svd_comps[i, :] = svd_comps[lower_freq_inds == i, :].mean(axis=0)
+    return lower_freq_svd_comps
+
+def fitLinearModelForSpikeCounts(svd_comps, spike_count_array):
+    """
+    For fitting a linear model to the spike_count_array and svd_comps.
+    Arguments:  svd_comps, the components
+                spike_count_array, array of spike counts
+    Retuns:     
+    """
+    num_cells, num_samples = spike_count_array.shape
+    train_inds = list(range(num_samples//2))
+    test_inds = list(range(num_samples//2, num_samples))
+    y_train, y_test = spike_count_array.T[train_inds,:], spike_count_array.T[test_inds,:]
+    x_train, x_test = svd_comps[train_inds,:], svd_comps[test_inds,:]
+
 
 def getExpectationProductConditionalExpectations(top_ranked_joint, conditional_expectation_dict):
     """
