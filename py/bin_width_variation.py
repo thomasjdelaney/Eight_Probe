@@ -14,7 +14,7 @@ from scoop import futures
 from multiprocessing import Pool
 from functools import reduce
 from sklearn.metrics import r2_score
-from sklearn.linear_model import Ridge, RidgeCV, Lasso, ElasticNet, LassoCV, ElasticNetCV
+from sklearn.linear_model import MultiTaskLasso, MultiTaskLassoCV, MultiTaskElasticNet, MultiTaskElasticNetCV, Ridge, RidgeCV
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
@@ -208,6 +208,9 @@ def getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bi
     conditional_expectation_dict = dict(zip(spike_count_dict.keys(), cond_exp_futures.get()))
     return top_ranked_joint, conditional_expectation_dict
 
+def getAutocorrelation(sequence, num_steps=20):
+    return np.array([1]+list(map(lambda x: np.corrcoef(sequence[:-x], sequence[x:])[0,1], range(1,num_steps))))
+
 def downSampleComps(svd_times, svd_comps, time_bins):
     """
     For converting the svd_comps to a lower frequency sampling.
@@ -233,7 +236,11 @@ def fitLinearModelForSpikeCounts(svd_comps, spike_count_array):
     test_inds = list(range(num_samples//2, num_samples))
     y_train, y_test = spike_count_array.T[train_inds,:], spike_count_array.T[test_inds,:]
     x_train, x_test = svd_comps[train_inds,:], svd_comps[test_inds,:]
-
+    alphas = [0.01, 0.1, 1.0, 10.0, 100.0, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
+    ridge_cv_model = RidgeCV(cv=10, alphas=alphas)
+    ridge_cv_model.fit(x_train, y_train)
+    y_pred = ridge_cv_model.predict(x_test)
+    ridge_cv_r2_score = r2_score(y_test, y_pred)
 
 def getExpectationProductConditionalExpectations(top_ranked_joint, conditional_expectation_dict):
     """
