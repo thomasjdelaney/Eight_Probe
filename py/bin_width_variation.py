@@ -14,7 +14,7 @@ from scoop import futures
 from multiprocessing import Pool
 from functools import reduce
 from sklearn.metrics import r2_score
-from sklearn.linear_model import MultiTaskLasso, MultiTaskLassoCV, MultiTaskElasticNet, MultiTaskElasticNetCV, Ridge, RidgeCV
+from sklearn.linear_model import Lasso, LassoCV, ElasticNet, ElasticNetCV, Ridge, RidgeCV
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
@@ -22,6 +22,7 @@ parser.add_argument('-f', '--save_firing_rate_frame', help='Flag to indicate whe
 parser.add_argument('-a', '--save_analysis_frame', help='Flag to indicate whether or not analysis should be performed and saved.', default=False, action='store_true')
 parser.add_argument('-z', '--save_conditional_correlations', help='Flag to indicate whether or not to calculate and save conditional correlations.', default=False, action='store_true')
 parser.add_argument('-c', '--num_chunks', help='Number of chunks to split the pairs into before processing.', default=10, type=int)
+parser.add_argument('-p', '--num_components', help='Number of principle components to condition upon.', default=1, type=int)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -211,36 +212,58 @@ def getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bi
 def getAutocorrelation(sequence, num_steps=20):
     return np.array([1]+list(map(lambda x: np.corrcoef(sequence[:-x], sequence[x:])[0,1], range(1,num_steps))))
 
-def downSampleComps(svd_times, svd_comps, time_bins):
+def downSampleData(svd_times, svd_comps, spike_count_dict, time_bins, num_samples=200):
     """
-    For converting the svd_comps to a lower frequency sampling.
+    For converting the svd_comps to a lower frequency sampling. We want to destroy some of the autocorrelation in the PCs.
     Arguments:  svd_times, the times at which the SVD components were measured
                 svd_comps, the svd components themselves
+                spike_count_dict, dict, cell_id => spike_counts
                 time_bins, the spike count time bin borders
+                num_samples, the number of samples that we want
     """
-    lower_freq_svd_comps = np.zeros((time_bins.size-1, svd_comps.shape[1]), dtype=float)
-    lower_freq_inds = np.digitize(svd_times, time_bins) - 1
-    for i in np.unique(lower_freq_inds):
-        lower_freq_svd_comps[i, :] = svd_comps[lower_freq_inds == i, :].mean(axis=0)
-    return lower_freq_svd_comps
+    num_time_points, num_components = svd_comps.shape
+    num_time_points_to_skip = np.round(num_time_points/num_samples, 0).astype(int)
+    starting_ind = np.random.randint(0, num_time_points_to_skip)
+    time_point_inds = list(range(starting_ind, num_time_points, num_time_points_to_skip))
+    spike_count_array = np.array(list(spike_count_dict.values()))
+    new_svd_times, new_svd_comps = svd_times[time_point_inds], svd_comps[time_point_inds,:]
+    new_time_bins = time_bins[np.digitize(svd_times[time_point_inds], time_bins)]
+    new_spike_count_dict = dict(zip(spike_count_dict.keys(), spike_count_array[:,np.digitize(svd_times[time_point_inds], time_bins)]))
+    return new_svd_times, new_svd_comps, new_time_bins, new_spike_count_dict
 
-def fitLinearModelForSpikeCounts(svd_comps, spike_count_array):
+def fitLinearModelForSpikeCounts(svd_comps, spike_count_dict):
     """
     For fitting a linear model to the spike_count_array and svd_comps.
     Arguments:  svd_comps, the components
-                spike_count_array, array of spike counts
+                spike_count_dict, cell_id => spike counts
     Retuns:     
     """
+    spike_count_array = np.array(list(spike_count_dict.values()))
     num_cells, num_samples = spike_count_array.shape
+    linear_model_frame = pd.DataFrame(columns=['cell_id', 'ridge', 'ridge_cv', 'lasso', 'lasso_cv', 'elasticnet', 'elasticnet_cv'])
     train_inds = list(range(num_samples//2))
     test_inds = list(range(num_samples//2, num_samples))
-    y_train, y_test = spike_count_array.T[train_inds,:], spike_count_array.T[test_inds,:]
     x_train, x_test = svd_comps[train_inds,:], svd_comps[test_inds,:]
-    alphas = [0.01, 0.1, 1.0, 10.0, 100.0, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
+    alphas = [0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
+    ridge_model = Ridge(alpha=0.1)
     ridge_cv_model = RidgeCV(cv=10, alphas=alphas)
-    ridge_cv_model.fit(x_train, y_train)
-    y_pred = ridge_cv_model.predict(x_test)
-    ridge_cv_r2_score = r2_score(y_test, y_pred)
+    lasso_model = Lasso(alpha=0.1)
+    lasso_cv_model = LassoCV(cv=10, alphas=alphas)
+    elastic_model = ElasticNet(alpha=0.1, l1_ratio=0.7)
+    elastic_cv_model = ElasticNetCV(l1_ratio=0.7, alphas=alphas, cv=10)
+    for i,(cell_id, spike_counts) in enumerate(spike_count_dict.items()):
+        y_train, y_test = spike_count_array.T[train_inds,i], spike_count_array.T[test_inds,i]
+        ridge_model.fit(x_train, y_train); ridge_cv_model.fit(x_train, y_train);
+        lasso_model.fit(x_train, y_train); lasso_cv_model.fit(x_train, y_train);
+        elastic_model.fit(x_train, y_train); elastic_cv_model.fit(x_train, y_train);
+        ridge_y_pred, ridge_cv_y_pred = ridge_model.predict(x_test), ridge_cv_model.predict(x_test)
+        lasso_y_pred, lasso_cv_y_pred = lasso_model.predict(x_test), lasso_cv_model.predict(x_test)
+        elastic_y_pred, elastic_cv_y_pred = elastic_model.predict(x_test), elastic_cv_model.predict(x_test)
+        ridge_r2_score, ridge_cv_r2_score = r2_score(y_test, ridge_y_pred), r2_score(y_test, ridge_cv_y_pred)
+        lasso_r2_score, lasso_cv_r2_score = r2_score(y_test, lasso_y_pred), r2_score(y_test, lasso_cv_y_pred)
+        elastic_r2_score, elastic_cv_r2_score = r2_score(y_test, elastic_y_pred), r2_score(y_test, elastic_cv_y_pred)
+        linear_model_frame.loc[i] = (cell_id, ridge_r2_score, ridge_cv_r2_score, lasso_r2_score, lasso_cv_r2_score, elastic_r2_score, elastic_cv_r2_score)
+    return linear_model_frame
 
 def getExpectationProductConditionalExpectations(top_ranked_joint, conditional_expectation_dict):
     """
@@ -271,6 +294,7 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=25):
     """
     spike_count_array = np.array(list(spike_count_dict.values()))
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
+    svd_times, svd_comps, time_bins, spike_count_dict = downSampleData(svd_times, svd_comps, spike_count_dict, time_bins)
     comp_expected_cond_cov = getCompExpCondCov(svd_comps, svd_times, spike_count_dict, time_bins)
     top_ranked_comp_inds = getCompsRankedByExpCondCov(comp_expected_cond_cov)
     top_ranked_comps = svd_comps[:,top_ranked_comp_inds]
