@@ -272,6 +272,17 @@ def getExpectationProductConditionalExpectations(top_ranked_joint, conditional_e
         expectation_prod_cond_expectations[i,i] = np.tensordot(top_ranked_joint, conditional_expectation_dict[cell_ids[i]] * conditional_expectation_dict[cell_ids[i]], axes=4).flatten()[0]
     return expectation_prod_cond_expectations
 
+def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
+    """
+    For downsampling, fitting, and returning E[X|Z_1,...,Z_m] for every cell X.
+    Arguments:  svd_times, numpy array (float), time stamps for the PCs
+                svd_comps, numpy array (float), PCs of the mouse face videos
+                time_bins, numpy array (float), time stamps for spike counts
+                spike_count_dict, dict, cell_id => spike counts
+    Returns:    numpy array (float), conditional expectation of the spike counts given the PCs
+    """
+    return None
+
 def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=25):
     """
     For calculating the expected value of the conditional covariance between spike counts.
@@ -284,7 +295,8 @@ def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=25):
     """
     spike_count_array = np.array(list(spike_count_dict.values()))
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
-    svd_times, svd_comps, time_bins, spike_count_dict = downSampleData(svd_times, svd_comps, spike_count_dict, time_bins, num_samples=10000)
+    svd_times, svd_comps, time_bins, spike_count_dict = downSampleData(svd_times, svd_comps, spike_count_dict, time_bins, num_samples=5000)
+    # expectation_conditional_spike_counts
     linear_model_frame = fitLinearModelForSpikeCounts(svd_comps, spike_count_dict)
     comp_expected_cond_cov = getCompExpCondCov(svd_comps, svd_times, spike_count_dict, time_bins)
     top_ranked_comp_inds = getCompsRankedByExpCondCov(comp_expected_cond_cov)
