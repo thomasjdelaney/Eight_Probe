@@ -3,7 +3,7 @@ For varying the bin width used from 0.005 to 2 seconds, and taking measurements 
 
 We save a frame for spike counts for each time bin containing all cells. We also save a frame for each time bin for all pairs.
 """
-import os, argparse, sys, shutil
+import os, argparse, sys, shutil, warnings
 if float(sys.version[:3]) < 3.0:
     execfile(os.path.join(os.environ['HOME'], '.pystartup'))
 import numpy as np
@@ -15,6 +15,9 @@ from multiprocessing import Pool
 from functools import reduce
 from sklearn.metrics import r2_score
 from sklearn.linear_model import Lasso, LassoCV, ElasticNet, ElasticNetCV, Ridge, RidgeCV
+from statsmodels.stats.stattools import durbin_watson
+from sklearn.exceptions import ConvergenceWarning
+warnings.simplefilter('ignore', ConvergenceWarning)
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
 parser.add_argument('-n', '--number_of_cells', help='Number of cells to process. Use 0 for all.', type=int, default=10)
@@ -212,65 +215,47 @@ def getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bi
 def getAutocorrelation(sequence, num_steps=20):
     return np.array([1]+list(map(lambda x: np.corrcoef(sequence[:-x], sequence[x:])[0,1], range(1,num_steps))))
 
-def downSampleData(svd_times, svd_comps, spike_count_dict, time_bins, num_samples=4000):
+def getExpectationProductConditionalExpectations(cond_exp_dict):
+    """
+    For calculating E[E[X|Z_1,...,Z_4]E[Y|Z_1,...,Z_M]] in a way that avoids memory issues.
+    Arguments:  cond_exp_dict, cell_id => E[X|Z_1,...,Z_M], conditional expectation for each cell, as a function of Z_1,...,Z_M
+    Returns:    numpy.array (float) (num_cells, num_cells)
+    """
+    cell_ids = list(cond_exp_dict.keys())
+    num_cells = len(cell_ids)
+    expectation_prod_cond_expectations = np.zeros((num_cells, num_cells), dtype=float)
+    for i,j in combinations(range(num_cells),2):
+        expectation_prod_cond_expectations[i,j] = np.mean(cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]])
+    expectation_prod_cond_expectations = expectation_prod_cond_expectations + expectation_prod_cond_expectations.T
+    for i in range(num_cells):
+        expectation_prod_cond_expectations[i,i] = np.mean(cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]])
+    return expectation_prod_cond_expectations
+
+def downSampleData(svd_times, svd_comps, time_bins, spike_count_dict):
     """
     For converting the svd_comps to a lower frequency sampling. We want to destroy some of the autocorrelation in the PCs.
     Arguments:  svd_times, the times at which the SVD components were measured
                 svd_comps, the svd components themselves
-                spike_count_dict, dict, cell_id => spike_counts
                 time_bins, the spike count time bin borders
-                num_samples, the number of samples that we want
+                spike_count_dict, dict, cell_id => spike_counts
+    Returns:    down sampled PC times, comps, and spike times and spike count dict that may or may not be downsampled.
     """
+    num_counts = time_bins.size - 1
     num_time_points, num_components = svd_comps.shape
-    num_time_points_to_skip = np.round(num_time_points/num_samples, 0).astype(int)
-    starting_ind = np.random.randint(0, num_time_points_to_skip)
-    time_point_inds = list(range(starting_ind, num_time_points, num_time_points_to_skip))
-    spike_count_array = np.array(list(spike_count_dict.values()))
-    new_svd_times, new_svd_comps = svd_times[time_point_inds], svd_comps[time_point_inds,:]
-    new_time_bin_inds = np.digitize(svd_times[time_point_inds], time_bins) - 1
-    new_time_bins = time_bins[new_time_bin_inds]
-    new_spike_count_dict = dict(zip(spike_count_dict.keys(), spike_count_array[:,new_time_bin_inds]))
+    num_time_points_to_skip, remainder = np.divmod(num_time_points, num_counts)
+    svd_time_time_bin_inds = np.digitize(svd_times, time_bins)-1
+    if num_time_points_to_skip > 0: # downsample PC
+        u, time_counts = np.unique(svd_time_time_bin_inds, return_counts=True)
+        starting_ind = np.random.randint(0, num_time_points_to_skip)
+        time_point_inds = time_counts.cumsum() - starting_ind
+        new_svd_times, new_svd_comps = svd_times[time_point_inds], svd_comps[time_point_inds,:]
+        new_time_bins, new_spike_count_dict = time_bins, spike_count_dict
+    elif num_time_points_to_skip == 0: # downsample spike counts
+        new_svd_times, new_svd_comps = svd_times, svd_comps
+        new_time_bins = time_bins[svd_time_time_bin_inds]
+        new_spike_counts = np.array(list(spike_count_dict.values()))[:,svd_time_time_bin_inds]
+        new_spike_count_dict = dict(zip(spike_count_dict.keys(), new_spike_counts))
     return new_svd_times, new_svd_comps, new_time_bins, new_spike_count_dict
-
-def fitLinearModelForSpikeCounts(svd_comps, spike_count_dict):
-    """
-    For fitting a linear model to the spike_count_array and svd_comps.
-    Arguments:  svd_comps, the components
-                spike_count_dict, cell_id => spike counts
-    Retuns:     
-    """
-    spike_count_array = np.array(list(spike_count_dict.values()))
-    num_cells, num_samples = spike_count_array.shape
-    linear_model_frame = pd.DataFrame(columns=['cell_id', 'elasticnet_cv'])
-    train_inds = list(range(num_samples//2))
-    test_inds = list(range(num_samples//2, num_samples))
-    x_train, x_test = svd_comps[train_inds,:], svd_comps[test_inds,:]
-    alphas = [0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
-    elastic_cv_model = ElasticNetCV(l1_ratio=0.5, alphas=alphas, cv=10)
-    for i,(cell_id, spike_counts) in enumerate(spike_count_dict.items()):
-        y_train, y_test = spike_count_array.T[train_inds,i], spike_count_array.T[test_inds,i]
-        elastic_cv_model.fit(x_train, y_train)
-        elastic_cv_y_pred = elastic_cv_model.predict(x_test)
-        elastic_cv_r2_score = r2_score(y_test, elastic_cv_y_pred)
-        linear_model_frame.loc[i] = (cell_id, elastic_cv_r2_score)
-    return linear_model_frame
-
-def getExpectationProductConditionalExpectations(top_ranked_joint, conditional_expectation_dict):
-    """
-    For calculating E[E[X|Z_1,...,Z_4]E[Y|Z_1,...,Z_4]] in a way that avoids memory issues.
-    Arguments:  top_ranked_joint, joint distribution of top ranked components
-                conditional_expectation_dict, cell_id => E[X|Z_1,...,Z_4]
-    Returns:    numpy.array (float) (num_cells, num_cells)
-    """
-    cell_ids = list(conditional_expectation_dict.keys())
-    num_cells = len(cell_ids)
-    expectation_prod_cond_expectations = np.zeros((num_cells, num_cells), dtype=float)
-    for i,j in combinations(range(num_cells),2):
-        expectation_prod_cond_expectations[i,j] = np.tensordot(top_ranked_joint, conditional_expectation_dict[cell_ids[i]] * conditional_expectation_dict[cell_ids[j]], axes=4).flatten()[0]
-    expectation_prod_cond_expectations = expectation_prod_cond_expectations + expectation_prod_cond_expectations.T
-    for i in range(num_cells):
-        expectation_prod_cond_expectations[i,i] = np.tensordot(top_ranked_joint, conditional_expectation_dict[cell_ids[i]] * conditional_expectation_dict[cell_ids[i]], axes=4).flatten()[0]
-    return expectation_prod_cond_expectations
 
 def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
     """
@@ -280,31 +265,65 @@ def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
                 time_bins, numpy array (float), time stamps for spike counts
                 spike_count_dict, dict, cell_id => spike counts
     Returns:    numpy array (float), conditional expectation of the spike counts given the PCs
+                linear_model_frame, a dataframe containing information about the linear models, r2 score, durbin-watson score
     """
-    return None
+    num_cells = len(spike_count_dict)
+    down_svd_times, down_svd_comps, down_time_bins, down_spike_count_dict = downSampleData(svd_times, svd_comps, time_bins, spike_count_dict) # downsampling to avoid autocorrelation
+    num_time_points = down_svd_comps.shape[0]
+    train_inds = list(range(num_time_points//2))
+    test_inds = list(range(num_time_points//2, num_time_points))
+    x_train, x_test = down_svd_comps[train_inds,:], down_svd_comps[test_inds,:]
+    alphas = [0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
+    elastic_cv_model = ElasticNetCV(l1_ratio=0.5, alphas=alphas, cv=10, n_jobs=-1)
+    linear_model_frame = pd.DataFrame(columns=['cell_id', 'r2_score', 'durbin_watson'])
+    cond_exp_dict = {}
+    for i,(cell_id, spike_counts) in enumerate(down_spike_count_dict.items()):
+        y_train, y_test = spike_counts[train_inds], spike_counts[test_inds]
+        elastic_cv_model.fit(x_train, y_train)
+        elastic_cv_y_pred = elastic_cv_model.predict(x_test)
+        elastic_cv_r2_score = r2_score(y_test, elastic_cv_y_pred)
+        db_stat = durbin_watson(y_test - elastic_cv_y_pred)
+        linear_model_frame.loc[i] = (cell_id, elastic_cv_r2_score, db_stat)
+        cond_exp_dict[cell_id] = elastic_cv_model.predict(down_svd_comps)
+    linear_model_frame['num_svd_time_points'] = svd_times.size
+    linear_model_frame['num_spike_count_time_points'] = time_bins.size-1
+    linear_model_frame['num_time_points_used'] = num_time_points
+    linear_model_frame.cell_id = linear_model_frame.cell_id.astype(int)
+    return cond_exp_dict, linear_model_frame
 
-def getExpCondCov(mouse_face, spike_count_dict, time_bins, num_bins_svd=25):
+def getCondAnalysisFrame(cell_ids, exp_cond_cov):
     """
-    For calculating the expected value of the conditional covariance between spike counts.
+    For creating a conditional analysis frame, analogous to the analysis frame.
+    Arguments:  cell_ids, list,
+                exp_cond_cov, numpy array (num_cells, num_cells), expectation of conditional covariances
+    Returns:    pandas Dataframe first_cell_id,second_cell_id,cond_corr_coef
+    """
+    cond_analysis_frame = pd.DataFrame(columns=['first_cell_id','second_cell_id','cond_corr_coef'])
+    num_cells = len(cell_ids)
+    for i,(j,k) in enumerate(combinations(range(num_cells),2)):
+        cond_corr_coef = exp_cond_cov[j,k]/np.sqrt(exp_cond_cov[j,j] * exp_cond_cov[k,k])
+        cond_analysis_frame.loc[i] = (cell_ids[j], cell_ids[k], cond_corr_coef)
+    cond_analysis_frame.first_cell_id = cond_analysis_frame.first_cell_id.astype(int)
+    cond_analysis_frame.second_cell_id = cond_analysis_frame.second_cell_id.astype(int)
+    return cond_analysis_frame
+
+def getConditionalAnalysisFrame(mouse_face, spike_count_dict, time_bins):
+    """
+    For getting a conditional analysis frame containing the conditional correlations between spike counts of different cells, 
+        and getting information on the linear models used to calculate the conditional spike counts.
     Arguments:  mouse_face, dict, contains all info about the mouse films,
                 spike_count_dict, Dict, cell_id => spike counts
                 time_bins, the spike count time bin borders,
-    Returns:    E[cov(cell_1, cell_2 | Z_1, ..., Z_500)] expected covariance
-
-    NB getting negative expected variance at the moment, problem unknown.
+    Returns:    conditional analysis frame, linear model frame
     """
-    spike_count_array = np.array(list(spike_count_dict.values()))
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
-    svd_times, svd_comps, time_bins, spike_count_dict = downSampleData(svd_times, svd_comps, spike_count_dict, time_bins, num_samples=5000)
-    # expectation_conditional_spike_counts
-    linear_model_frame = fitLinearModelForSpikeCounts(svd_comps, spike_count_dict)
-    comp_expected_cond_cov = getCompExpCondCov(svd_comps, svd_times, spike_count_dict, time_bins)
-    top_ranked_comp_inds = getCompsRankedByExpCondCov(comp_expected_cond_cov)
-    top_ranked_comps = svd_comps[:,top_ranked_comp_inds]
-    top_ranked_joint, conditional_expectation_dict = getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bins, svd_times, num_bins_svd)
-    expectation_prod_cond_expectations = getExpectationProductConditionalExpectations(top_ranked_joint, conditional_expectation_dict)     
+    cond_exp_dict, linear_model_frame = getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict)
+    spike_count_array = np.array(list(spike_count_dict.values()))
     mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
-    return mean_of_products_of_spike_counts - expectation_prod_cond_expectations
+    expectation_prod_cond_expectations = getExpectationProductConditionalExpectations(cond_exp_dict)
+    exp_cond_cov = mean_of_products_of_spike_counts - expectation_prod_cond_expectations
+    cond_analysis_frame = getCondAnalysisFrame(list(spike_count_dict.keys()), exp_cond_cov)
+    return cond_analysis_frame, linear_model_frame    
 
 def reduceAnalysisDicts(first_dict, second_dict):
     """
@@ -324,6 +343,17 @@ def saveAnalysisFrame(analysis_frame, chunk_num, save_file):
         analysis_frame.to_csv(save_file, index=False)
     else:
         analysis_frame.to_csv(save_file, mode='a', header=False, index=False)
+    return None
+
+def saveCondFrames(cond_analysis_frame, linear_model_frame, mouse_name, bin_width):
+    """
+    For saving the data frames.
+    Arguments:  The frames.
+    """
+    cond_analysis_file = os.path.join(csv_dir, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'conditional_analysis.csv')
+    cond_analysis_frame.to_csv(cond_analysis_file, index=False)
+    linear_model_frame_file = os.path.join(csv_dir, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'linear_models.csv')
+    linear_model_frame.to_csv(linear_model_frame_file, index=False)
     return None
 
 if (not args.debug) & (__name__ == "__main__"):
@@ -357,9 +387,8 @@ if (not args.debug) & (__name__ == "__main__"):
             if args.save_conditional_correlations:
                 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing conditional correlations...')
                 mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
-                mouse_face = ep.getSpikeCountHistsForMotionSVD(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
-                mouse_face = ep.getMouseFaceCondSpikeCounts(mouse_face, spike_time_dict)
-                #for i,pair_chunk in enumerate(chunked_pairs):
-                
+                cond_analysis_frame, linear_model_frame = getConditionalAnalysisFrame(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
+                saveCondFrames(cond_analysis_frame, linear_model_frame)
+                print(dt.datetime.now().isoformat() + ' INFO: Conditional analysis frames saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 
