@@ -215,21 +215,21 @@ def getTopRankConditionalExpectation(spike_count_dict, top_ranked_comps, time_bi
 def getAutocorrelation(sequence, num_steps=20):
     return np.array([1]+list(map(lambda x: np.corrcoef(sequence[:-x], sequence[x:])[0,1], range(1,num_steps))))
 
-def getExpectationProductConditionalExpectations(cond_exp_dict):
+def getCovarianceOfDictPairs(dictionary):
     """
-    For calculating E[E[X|Z_1,...,Z_4]E[Y|Z_1,...,Z_M]] in a way that avoids memory issues.
-    Arguments:  cond_exp_dict, cell_id => E[X|Z_1,...,Z_M], conditional expectation for each cell, as a function of Z_1,...,Z_M
+    For calculating E[XY] in a way that avoids memory issues. Can be used for spike counts and for conditional expectation of spike counts.
+    Arguments:  dictionary, cell_id => some array, conditional expectation for each cell, as a function of Z_1,...,Z_M
     Returns:    numpy.array (float) (num_cells, num_cells)
     """
-    cell_ids = list(cond_exp_dict.keys())
+    cell_ids = list(dictionary.keys())
     num_cells = len(cell_ids)
-    expectation_prod_cond_expectations = np.zeros((num_cells, num_cells), dtype=float)
+    cov_of_dict_pairs = np.zeros((num_cells, num_cells), dtype=float)
     for i,j in combinations(range(num_cells),2):
-        expectation_prod_cond_expectations[i,j] = np.mean(cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[j]])
-    expectation_prod_cond_expectations = expectation_prod_cond_expectations + expectation_prod_cond_expectations.T
+        cov_of_dict_pairs[i,j] = np.cov(dictionary[cell_ids[i]], dictionary[cell_ids[j]])[0,1]
+    cov_of_dict_pairs = cov_of_dict_pairs + cov_of_dict_pairs.T
     for i in range(num_cells):
-        expectation_prod_cond_expectations[i,i] = np.mean(cond_exp_dict[cell_ids[i]] * cond_exp_dict[cell_ids[i]])
-    return expectation_prod_cond_expectations
+        cov_of_dict_pairs[i,i] = np.cov(dictionary[cell_ids[i]], dictionary[cell_ids[i]])[0,1]
+    return cov_of_dict_pairs
 
 def downSampleData(svd_times, svd_comps, time_bins, spike_count_dict):
     """
@@ -318,10 +318,9 @@ def getConditionalAnalysisFrame(mouse_face, spike_count_dict, time_bins):
     """
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
     cond_exp_dict, linear_model_frame = getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict)
-    spike_count_array = np.array(list(spike_count_dict.values()))
-    mean_of_products_of_spike_counts = np.array([np.outer(s, s) for s in spike_count_array.T]).mean(axis=0)
-    expectation_prod_cond_expectations = getExpectationProductConditionalExpectations(cond_exp_dict)
-    exp_cond_cov = mean_of_products_of_spike_counts - expectation_prod_cond_expectations
+    cov_of_spike_counts = getCovarianceOfDictPairs(spike_count_dict)
+    cov_of_cond_expectations = getCovarianceOfDictPairs(cond_exp_dict)
+    exp_cond_cov = cov_of_spike_counts - cov_of_cond_expectations
     cond_analysis_frame = getCondAnalysisFrame(list(spike_count_dict.keys()), exp_cond_cov)
     return cond_analysis_frame, linear_model_frame    
 
