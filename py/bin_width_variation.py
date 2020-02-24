@@ -387,7 +387,7 @@ if (not args.debug) & (__name__ == "__main__"):
                 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing conditional correlations...')
                 mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
                 cond_analysis_frame, linear_model_frame = getConditionalAnalysisFrame(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
-                saveCondFrames(cond_analysis_frame, linear_model_frame)
+                saveCondFrames(cond_analysis_frame, linear_model_frame, mouse_name, bin_width)
                 print(dt.datetime.now().isoformat() + ' INFO: Conditional analysis frames saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 
