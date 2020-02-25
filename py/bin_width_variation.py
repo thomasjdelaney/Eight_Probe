@@ -243,14 +243,14 @@ def downSampleData(svd_times, svd_comps, time_bins, spike_count_dict):
     num_counts = time_bins.size - 1
     num_time_points, num_components = svd_comps.shape
     num_time_points_to_skip, remainder = np.divmod(num_time_points, num_counts)
-    svd_time_time_bin_inds = np.digitize(svd_times, time_bins)-1
     if num_time_points_to_skip > 0: # downsample PC
-        u, time_counts = np.unique(svd_time_time_bin_inds, return_counts=True)
+        time_bin_svd_times = (np.digitize(time_bins, svd_times) - 1)[1:]
         starting_ind = np.random.randint(0, num_time_points_to_skip)
-        time_point_inds = time_counts.cumsum() - starting_ind
+        time_point_inds = time_bin_svd_times - starting_ind
         new_svd_times, new_svd_comps = svd_times[time_point_inds], svd_comps[time_point_inds,:]
         new_time_bins, new_spike_count_dict = time_bins, spike_count_dict
     elif num_time_points_to_skip == 0: # downsample spike counts
+        svd_time_time_bin_inds = np.digitize(svd_times, time_bins)-1
         new_svd_times, new_svd_comps = svd_times, svd_comps
         new_time_bins = time_bins[svd_time_time_bin_inds]
         new_spike_counts = np.array(list(spike_count_dict.values()))[:,svd_time_time_bin_inds]
