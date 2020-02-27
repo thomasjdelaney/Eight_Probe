@@ -3,3 +3,5 @@ mat/
 *.npy
 *.cpython-37.pyc
 csv/analysis_frames/
+csv/conditional_analysis_frames/
+csv/linear_model_frames/
