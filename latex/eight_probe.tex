@@ -71,7 +71,7 @@
 
 \section{Data}
     \subsection{Brain regions}
-    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. 
+    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. The mice were awake and enganging in spontaneous behaviour. 
     \begin{enumerate}
         \item male, wild type, P73. % Robbins
         \item female, TetO-GCaMP6s, Camk2a-tTa, P113 % Waksman
@@ -90,6 +90,9 @@
         \item Primary visual cortex (V1)
     \end{itemize}
     Readings were continuous and lasted for about 1 hour \cite{stringer}.
+
+    \subsection{Video recordings}\label{sec:video_recordings}
+    Video recordings of the mouse's face were taken during the spontaneous behaviour. We had access to the top $500$ principle components and top $500$ eigenvectors of the processed video. The frequency of recording was slightly less than $40$Hz. Recordings were $327 \times 561$ pixels. These principal components were used as behavioural data. We controlled for these components when taking measurements conditional on behaviour. 
 
 \section{Methods}
     \subsection{Binning data}
@@ -119,6 +122,48 @@
 
         \subsubsection{Separating Correlations \& Anti-correlations}\label{sec:corr_anti_corr} 
         In order to compare the effect of bin width on measures of negative $r_{SC}$ (anti-correlation) and positive $r_{SC}$ separately, we had to separate correlated and anti-correlated pairs. To do this, we simply measured the mean $r_{SC}$, taking the mean across all the bin widths. If this quantity was positive or zero we regarded the pair as positively correlated. If this quantity was negative we regarded the pair as anti-correlated.
+
+    \subsection{Conditioning on behavioural data}
+    Our behavioural data consisted of the top $500$ principal components (PCs) of a processed video recording of the mouse's face (see section \ref{sec:video_recordings}). Denoting the spike count of a given cell by $X$, and the PCs by $Z_1,\dots,Z_{500}$, we wanted to model $X$ as a function of $Z_1,\dots,Z_{500}$ in order to estimate
+    \begin{align}
+      E[X|Z_1,\dots,Z_{500}] &= \int_{x \in X} x P(X=x | Z_1,\dots,Z_{500}) dx \\
+        &= \int_{x \in X} x \frac{P(X=x, Z_1,\dots,Z_{500})}{P(Z_1,\dots,Z_{500})} dx
+    \end{align}
+    Given the $500$ components, a na\"{i}ve estimation of $P(Z_1,\dots,Z_{500})$ or $P(X, Z_1,\dots,Z_{500})$ by histogramming was impossible. Therefore we modelled $X$ as a linear combination of the PCs.
+
+        \subsubsection{Linear regression}
+        We modelled the spike count of a given cell, $X$, as a linear combination of the PCs of the video of the mouse's face, $\mathbf{Z} = Z_1,\dots,Z_{500}$. We tried three different types of regularization 
+        \begin{itemize}
+            \item $L1$ or `Lasso'
+            \item $L2$ or `Ridge regression'
+            \item `Elastic net' regularisation (a linear combination of both $L1$ and $L2$ regularisation penalities)
+        \end{itemize}
+        The elastic net regularisation performed the best, so we stuck with that.
+
+        \subsubsection{Elastic net regularisation}
+        Suppose we wish to model $n$ observations of a random variable $X$, $\mathbf{x} = (x_1, \cdots, x_n)$ using $n$ instances of $m$ predictors $\mathbf{Z} = (Z_1, \cdots, Z_m)$. The na\"{i}ve elastic net criterion is
+        \begin{align}\label{eq:elastic_net}
+            L(\lambda_1, \lambda_2, \boldsymbol{\beta}) = | \mathbf{x} - \mathbf{Z} \boldsymbol{\beta} |^2 + \lambda_2 |\boldsymbol{\beta}|_2 + \lambda_1 |\boldsymbol{\beta}|_1
+        \end{align}
+        where
+        \begin{align}
+          |\boldsymbol{\beta}|_2 &= \sum_{j=1}^m \beta_j^2 \\
+          |\boldsymbol{\beta}|_1 &= \sum_{j=1}^m |\beta_j|
+        \end{align}
+        The na\"{i}ve elastic net estimator $\hat{\boldsymbol{\beta}}$ is the minimiser of the system of equations \ref{eq:elastic_net}
+        \begin{align}
+          \hat{\boldsymbol{\beta}} = \arg \min_{\boldsymbol{\beta}} L(\lambda_1, \lambda_2, \boldsymbol{\beta})
+        \end{align}
+        We implemented the model using the \texttt{ElasticNetCV} method of Python's \texttt{sklearn.linear\_models} package.
+
+        As well as using the PCs, we also tried fitting the models using the raw video data reconstructed from the PCs and eigenvectors. These models performed worse than those using the PCs. We expected this because each representation contains the same amount of information, but the raw video representation spreads this information across many more components. This requires more parameter fitting, but given the same information. 
+
+        \subsubsection{Conditional covariance}
+        We used the law of total covariance
+
+        \subsubsection{Measures of conditional correlation}
+        Cite the Maugis paper.
+        
 
     \subsection{Information Theory}\label{sec:information_theory}
         \subsubsection{Entropy $H(X)$}

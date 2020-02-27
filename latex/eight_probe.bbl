@@ -73,4 +73,10 @@
   2837-2854, 
   (2010)
 
+  \bibitem{zou}
+  Hui Zou, Trevor Hastie,
+  \emph{Regularization and variable selection via the elastic net}.
+  Journal of the Royal Statistical Society: Series B (Statistical Methodology) 67, 
+  301-320,
+  (2005)
 \end{thebibliography}

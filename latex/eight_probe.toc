@@ -3,31 +3,37 @@
 \contentsline {subsection}{\numberline {1.2}Changing timescales}{2}{subsection.1.2}
 \contentsline {section}{\numberline {2}Data}{2}{section.2}
 \contentsline {subsection}{\numberline {2.1}Brain regions}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Video recordings}{3}{subsection.2.2}
 \contentsline {section}{\numberline {3}Methods}{3}{section.3}
 \contentsline {subsection}{\numberline {3.1}Binning data}{3}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Correlation coefficients}{3}{subsection.3.2}
 \contentsline {subsubsection}{\numberline {3.2.1}Spike Count Correlation, $r_{SC}$}{4}{subsubsection.3.2.1}
 \contentsline {subsubsection}{\numberline {3.2.2}Shuffled spike count correlations}{4}{subsubsection.3.2.2}
 \contentsline {subsubsection}{\numberline {3.2.3}Separating Correlations \& Anti-correlations}{4}{subsubsection.3.2.3}
-\contentsline {subsection}{\numberline {3.3}Information Theory}{4}{subsection.3.3}
-\contentsline {subsubsection}{\numberline {3.3.1}Entropy $H(X)$}{4}{subsubsection.3.3.1}
-\contentsline {subsubsection}{\numberline {3.3.2}Maximum entropy limit}{5}{subsubsection.3.3.2}
-\contentsline {subsubsection}{\numberline {3.3.3}Mutual Information $I(X;Y)$}{6}{subsubsection.3.3.3}
-\contentsline {subsubsection}{\numberline {3.3.4}Variation of Information $VI(X,Y)$}{7}{subsubsection.3.3.4}
-\contentsline {subsubsection}{\numberline {3.3.5}Measuring entropies \& mutual information}{7}{subsubsection.3.3.5}
-\contentsline {subsection}{\numberline {3.4}Network analysis}{7}{subsection.3.4}
-\contentsline {subsubsection}{\numberline {3.4.1}Correlation networks}{7}{subsubsection.3.4.1}
-\contentsline {subsubsection}{\numberline {3.4.2}Rectified correlations}{8}{subsubsection.3.4.2}
-\contentsline {subsubsection}{\numberline {3.4.3}Sparsifying data networks}{8}{subsubsection.3.4.3}
-\contentsline {subsubsection}{\numberline {3.4.4}Communities}{8}{subsubsection.3.4.4}
-\contentsline {subsubsection}{\numberline {3.4.5}Weighted configuration model}{8}{subsubsection.3.4.5}
-\contentsline {subsubsection}{\numberline {3.4.6}Sparse weighted configuration model}{8}{subsubsection.3.4.6}
-\contentsline {subsubsection}{\numberline {3.4.7}Spectral rejection}{9}{subsubsection.3.4.7}
-\contentsline {subsubsection}{\numberline {3.4.8}Node rejection}{9}{subsubsection.3.4.8}
-\contentsline {subsubsection}{\numberline {3.4.9}Community detection}{10}{subsubsection.3.4.9}
-\contentsline {subsection}{\numberline {3.5}Clustering Comparison}{10}{subsection.3.5}
-\contentsline {subsubsection}{\numberline {3.5.1}Adjusted Rand Index}{10}{subsubsection.3.5.1}
-\contentsline {subsubsection}{\numberline {3.5.2}Clusterings as random variables}{11}{subsubsection.3.5.2}
-\contentsline {subsubsection}{\numberline {3.5.3}Information based similarity measures}{11}{subsubsection.3.5.3}
-\contentsline {subsubsection}{\numberline {3.5.4}Information based metrics}{12}{subsubsection.3.5.4}
-\contentsline {subsubsection}{\numberline {3.5.5}Comparing detected communities and anatomical divisions}{12}{subsubsection.3.5.5}
+\contentsline {subsection}{\numberline {3.3}Conditioning on behavioural data}{4}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Linear regression}{5}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Elastic net regularisation}{5}{subsubsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.3}Conditional covariance}{6}{subsubsection.3.3.3}
+\contentsline {subsubsection}{\numberline {3.3.4}Measures of conditional correlation}{6}{subsubsection.3.3.4}
+\contentsline {subsection}{\numberline {3.4}Information Theory}{6}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}Entropy $H(X)$}{6}{subsubsection.3.4.1}
+\contentsline {subsubsection}{\numberline {3.4.2}Maximum entropy limit}{6}{subsubsection.3.4.2}
+\contentsline {subsubsection}{\numberline {3.4.3}Mutual Information $I(X;Y)$}{7}{subsubsection.3.4.3}
+\contentsline {subsubsection}{\numberline {3.4.4}Variation of Information $VI(X,Y)$}{8}{subsubsection.3.4.4}
+\contentsline {subsubsection}{\numberline {3.4.5}Measuring entropies \& mutual information}{9}{subsubsection.3.4.5}
+\contentsline {subsection}{\numberline {3.5}Network analysis}{9}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}Correlation networks}{9}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}Rectified correlations}{9}{subsubsection.3.5.2}
+\contentsline {subsubsection}{\numberline {3.5.3}Sparsifying data networks}{9}{subsubsection.3.5.3}
+\contentsline {subsubsection}{\numberline {3.5.4}Communities}{9}{subsubsection.3.5.4}
+\contentsline {subsubsection}{\numberline {3.5.5}Weighted configuration model}{10}{subsubsection.3.5.5}
+\contentsline {subsubsection}{\numberline {3.5.6}Sparse weighted configuration model}{10}{subsubsection.3.5.6}
+\contentsline {subsubsection}{\numberline {3.5.7}Spectral rejection}{10}{subsubsection.3.5.7}
+\contentsline {subsubsection}{\numberline {3.5.8}Node rejection}{11}{subsubsection.3.5.8}
+\contentsline {subsubsection}{\numberline {3.5.9}Community detection}{11}{subsubsection.3.5.9}
+\contentsline {subsection}{\numberline {3.6}Clustering Comparison}{12}{subsection.3.6}
+\contentsline {subsubsection}{\numberline {3.6.1}Adjusted Rand Index}{12}{subsubsection.3.6.1}
+\contentsline {subsubsection}{\numberline {3.6.2}Clusterings as random variables}{12}{subsubsection.3.6.2}
+\contentsline {subsubsection}{\numberline {3.6.3}Information based similarity measures}{13}{subsubsection.3.6.3}
+\contentsline {subsubsection}{\numberline {3.6.4}Information based metrics}{14}{subsubsection.3.6.4}
+\contentsline {subsubsection}{\numberline {3.6.5}Comparing detected communities and anatomical divisions}{14}{subsubsection.3.6.5}
