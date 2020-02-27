@@ -291,18 +291,21 @@ def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
     linear_model_frame.cell_id = linear_model_frame.cell_id.astype(int)
     return cond_exp_dict, linear_model_frame
 
-def getCondAnalysisFrame(cell_ids, exp_cond_cov):
+def getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations):
     """
     For creating a conditional analysis frame, analogous to the analysis frame.
-    Arguments:  cell_ids, list,
+    Arguments:  cond_exp_dict, dict => E[X|Z]
                 exp_cond_cov, numpy array (num_cells, num_cells), expectation of conditional covariances
-    Returns:    pandas Dataframe first_cell_id,second_cell_id,cond_corr_coef
+                cov_of_cond_expectations, numpy array (num_cells, num_cells), covariance of conditional expectations
+    Returns:    pandas Dataframe first_cell_id,second_cell_id,exp_cond_cov,cov_cond_exp,exp_cond_corr,signal_corr 
     """
-    cond_analysis_frame = pd.DataFrame(columns=['first_cell_id','second_cell_id','cond_corr_coef'])
+    cond_analysis_frame = pd.DataFrame(columns=['first_cell_id','second_cell_id','exp_cond_cov','cov_cond_exp','exp_cond_corr','signal_corr'])
+    cell_ids = list(cond_exp_dict.keys())
     num_cells = len(cell_ids)
     for i,(j,k) in enumerate(combinations(range(num_cells),2)):
-        cond_corr_coef = exp_cond_cov[j,k]/np.sqrt(exp_cond_cov[j,j] * exp_cond_cov[k,k])
-        cond_analysis_frame.loc[i] = (cell_ids[j], cell_ids[k], cond_corr_coef)
+        exp_cond_corr = exp_cond_cov[j,k]/np.sqrt(exp_cond_cov[j,j] * exp_cond_cov[k,k]) # this is a funny definition (Maugis 2016 'Event Conditional Correlation')
+        signal_corr = cov_of_cond_expectations[j,k]/np.sqrt(np.var(cond_exp_dict[cell_ids[j]]) * np.var(cond_exp_dict[cell_ids[k]]))
+        cond_analysis_frame.loc[i] = (cell_ids[j], cell_ids[k], exp_cond_cov[j,k], cov_of_cond_expectations[j,k], exp_cond_corr, signal_corr)
     cond_analysis_frame.first_cell_id = cond_analysis_frame.first_cell_id.astype(int)
     cond_analysis_frame.second_cell_id = cond_analysis_frame.second_cell_id.astype(int)
     return cond_analysis_frame
@@ -318,11 +321,11 @@ def getConditionalAnalysisFrame(mouse_face, spike_count_dict, time_bins):
     """
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
     cond_exp_dict, linear_model_frame = getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict)
-    cov_of_spike_counts = getCovarianceOfDictPairs(spike_count_dict)
-    cov_of_cond_expectations = getCovarianceOfDictPairs(cond_exp_dict)
+    cov_of_spike_counts = getCovarianceOfDictPairs(spike_count_dict) # save this in the conditional analysis frame
+    cov_of_cond_expectations = getCovarianceOfDictPairs(cond_exp_dict) # save this in the conditional analysis frame
     exp_cond_cov = cov_of_spike_counts - cov_of_cond_expectations
-    cond_analysis_frame = getCondAnalysisFrame(list(spike_count_dict.keys()), exp_cond_cov)
-    return cond_analysis_frame, linear_model_frame    
+    cond_analysis_frame = getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations)
+    return cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations
 
 def reduceAnalysisDicts(first_dict, second_dict):
     """
@@ -344,15 +347,19 @@ def saveAnalysisFrame(analysis_frame, chunk_num, save_file):
         analysis_frame.to_csv(save_file, mode='a', header=False, index=False)
     return None
 
-def saveCondFrames(cond_analysis_frame, linear_model_frame, mouse_name, bin_width):
+def saveCondFramesMatrices(cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations, mouse_name, bin_width):
     """
     For saving the data frames.
     Arguments:  The frames.
     """
-    cond_analysis_file = os.path.join(csv_dir, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'conditional_analysis.csv')
+    cond_analysis_file = os.path.join(csv_dir, 'conditional_analysis_frames', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'conditional_analysis.csv')
     cond_analysis_frame.to_csv(cond_analysis_file, index=False)
-    linear_model_frame_file = os.path.join(csv_dir, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'linear_models.csv')
+    linear_model_frame_file = os.path.join(csv_dir, 'linear_model_frames', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'linear_models.csv')
     linear_model_frame.to_csv(linear_model_frame_file, index=False)
+    exp_cond_cov_file = os.path.join(npy_dir, 'exp_cond_cov', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'exp_cond_cov.npy')
+    np.save(exp_cond_cov_file, exp_cond_cov)
+    cov_of_cond_expectations_file = os.path.join(npy_dir, 'cov_cond_exp', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'cov_cond_exp.npy')
+    np.save(cov_of_cond_expectations_file, cov_of_cond_expectations)
     return None
 
 if (not args.debug) & (__name__ == "__main__"):
@@ -386,8 +393,8 @@ if (not args.debug) & (__name__ == "__main__"):
             if args.save_conditional_correlations:
                 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing conditional correlations...')
                 mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
-                cond_analysis_frame, linear_model_frame = getConditionalAnalysisFrame(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
-                saveCondFrames(cond_analysis_frame, linear_model_frame, mouse_name, bin_width)
-                print(dt.datetime.now().isoformat() + ' INFO: Conditional analysis frames saved.')
+                cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations = getConditionalAnalysisFrame(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
+                saveCondFramesMatrices(cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations, mouse_name, bin_width)
+                print(dt.datetime.now().isoformat() + ' INFO: Conditional analysis frames and matrices saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
 
