@@ -13,6 +13,7 @@ from multiprocessing import Pool
 from itertools import combinations 
 
 parser = argparse.ArgumentParser(description='For detecting communities.')
+parser.add_argument(-'r', '--correlation_type', help='Correlation type. Either "total", "conditional", "signal".', default='total', choices=['total', 'conditional', 'signal'], type=str)
 parser.add_argument('-c', '--correction', help='Correction type. Either "absolute", "rectified", or "negative".', default='rectified', choices=['rectified', 'negative', 'absolute'], type=str)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
@@ -30,7 +31,35 @@ sys.path.append(os.environ['PROJ'])
 import Eight_Probe.py as ep
 import Network_Noise_Rejection_Python as nnr
 
-def getMeasureMatrix(analysis_frame, measure):
+def getAnalysisFrame(mouse_name, bin_width, csv_dir, correlation_type):
+    """
+    Get the analysis frame based on correlation type. If 'total' get the usual correlation frame, otherwise get the conditional.
+    Arguments:  mouse_name, str, the mouse's name.
+                bin_width, float,
+                csv_dir, str, the directory
+                correlation_type, str, total, conditional, or signal
+    Returns:    pandas DataFrame loaded from disc.
+    """
+    if correlation_type == 'total':
+        analysis_frame = ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir)
+    else:
+        analysis_frame = ep.loadConditionalAnalysisFrame(mouse_name, bin_width, csv_dir)
+    return analysis_frame
+
+def getMeasureMatrix(analysis_frame, correlation_type):
+    """
+    Arguments:  analysis_frame, the frame containing the measure.
+                correlation_type, str, total, conditional, or signal
+    Returns:    numpy array (float), (num cell ids, num cell ids) 
+    """
+    if correlation_type == 'total':
+        measure = 'corr_coef'
+    elif correlation_type == 'conditional':
+        measure = 'exp_cond_corr'
+    elif correlation_type == 'signal':
+        measure == 'signal_corr'
+    else:
+        sys.exit("unrecognised correlation type")
     cell_pairs = list(zip(analysis_frame.first_cell_id, analysis_frame.second_cell_id))
     cell_ids = pd.concat([analysis_frame.first_cell_id,analysis_frame.second_cell_id]).unique()
     measure_matrix = np.zeros([cell_ids.size, cell_ids.size])
@@ -81,10 +110,10 @@ if (not args.debug) & (__name__ == '__main__'):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
         for mouse_name in  ep.mouse_names:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse name ' + mouse_name + '...')
-            analysis_frame = ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir)
+            analysis_frame = getAnalysisFrame(mouse_name, bin_width, csv_dir, args.correlation_type)
             analysis_frame = ep.joinCellAnalysis(cell_info, analysis_frame)
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Calculating correlation matrix...')
-            corr_matrix, cell_ids = getMeasureMatrix(analysis_frame, 'corr_coef')
+            corr_matrix, cell_ids = getMeasureMatrix(analysis_frame, args.correlation_type)
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Sparsifying and rectifying...')
             sparsified_matrix = sparsifyMeasureMatrix(corr_matrix.copy(), analysis_frame, 95)
             corrected_sparse_corr_matrix = rectifyMatrix(sparsified_matrix.copy(), args.correction)
@@ -140,4 +169,4 @@ if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + csv_file_name + ' saved.')    
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')    
     
-# TODO  import regional plotting function and sorting functions.
+# TODO  Look at file names and places to save.
