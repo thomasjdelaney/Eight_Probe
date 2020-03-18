@@ -367,6 +367,7 @@ if (not args.debug) & (__name__ == "__main__"):
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
     for m,mouse_name in enumerate(ep.mouse_names):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
+        mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
         spon_start_time = ep.spon_start_times[m]
         cell_ids = cell_info[cell_info.mouse_name == mouse_name].index.values
         cell_ids = ep.getRegionallyDistributedCells(cell_info.loc[cell_info.mouse_name == mouse_name], args.number_of_cells)
@@ -392,7 +393,6 @@ if (not args.debug) & (__name__ == "__main__"):
                 print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
             if args.save_conditional_correlations:
                 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing conditional correlations...')
-                mouse_face = ep.loadVideoDataForMouse(mouse_name, mat_dir)
                 cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations = getConditionalAnalysisFrame(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
                 saveCondFramesMatrices(cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations, mouse_name, bin_width)
                 print(dt.datetime.now().isoformat() + ' INFO: Conditional analysis frames and matrices saved.')
