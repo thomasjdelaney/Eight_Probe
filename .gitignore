@@ -6,3 +6,4 @@ csv/analysis_frames/
 csv/conditional_analysis_frames/
 csv/linear_model_frames/
 __pycache__/
+logs/
