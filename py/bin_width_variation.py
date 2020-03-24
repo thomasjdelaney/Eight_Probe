@@ -224,12 +224,17 @@ def getCovarianceOfDictPairs(dictionary):
     cell_ids = list(dictionary.keys())
     num_cells = len(cell_ids)
     cov_of_dict_pairs = np.zeros((num_cells, num_cells), dtype=float)
+    shuffled_cov = np.zeros((num_cells, num_cells), dtype=float)
     for i,j in combinations(range(num_cells),2):
         cov_of_dict_pairs[i,j] = np.cov(dictionary[cell_ids[i]], dictionary[cell_ids[j]])[0,1]
+        shuffled_cov[i,j] = np.cov(dictionary[cell_ids[i]], np.random.permutation(dictionary[cell_ids[j]]))[0,1]
     cov_of_dict_pairs = cov_of_dict_pairs + cov_of_dict_pairs.T
+    shuffled_cov = shuffled_cov + shuffled_cov.T
     for i in range(num_cells):
-        cov_of_dict_pairs[i,i] = np.cov(dictionary[cell_ids[i]], dictionary[cell_ids[i]])[0,1]
-    return cov_of_dict_pairs
+        cell_variance = np.cov(dictionary[cell_ids[i]], dictionary[cell_ids[i]])[0,1]
+        cov_of_dict_pairs[i,i] = cell_variance
+        shuffled_cov[i,i] = cell_variance
+    return cov_of_dict_pairs, shuffled_cov
 
 def downSampleData(svd_times, svd_comps, time_bins, spike_count_dict):
     """
@@ -257,6 +262,26 @@ def downSampleData(svd_times, svd_comps, time_bins, spike_count_dict):
         new_spike_count_dict = dict(zip(spike_count_dict.keys(), new_spike_counts))
     return new_svd_times, new_svd_comps, new_time_bins, new_spike_count_dict
 
+def fitLinearModel(model, spike_counts, train_inds, test_inds, x_train, x_test):
+    """
+    For fitting the linear model by cell. Helpful for parallel processing.
+    Arguments:  model, the linear model itself, usually an ElasticNetCV,
+                spike_counts, the spike counts for the cell,
+                train_inds, the training indices,
+                test_inds, the test indices,
+                x_train, the training features,
+                x_test, the test features
+    Returns:    r2_score, 
+                durbin_watson_stat
+                fitted_model
+    """
+    y_train, y_test = spike_counts[train_inds], spike_counts[test_inds]
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    model_r2_score = r2_score(y_test, y_pred)
+    durbin_watson_stat = durbin_watson(y_test - y_pred)
+    return model_r2_score, durbin_watson_stat, model 
+
 def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
     """
     For downsampling, fitting, and returning E[X|Z_1,...,Z_m] for every cell X.
@@ -268,30 +293,30 @@ def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
                 linear_model_frame, a dataframe containing information about the linear models, r2 score, durbin-watson score
     """
     num_cells = len(spike_count_dict)
+    cell_ids = list(spike_time_dict.keys())
     down_svd_times, down_svd_comps, down_time_bins, down_spike_count_dict = downSampleData(svd_times, svd_comps, time_bins, spike_count_dict) # downsampling to avoid autocorrelation
     num_time_points = down_svd_comps.shape[0]
     train_inds = list(range(num_time_points//2))
     test_inds = list(range(num_time_points//2, num_time_points))
     x_train, x_test = down_svd_comps[train_inds,:], down_svd_comps[test_inds,:]
     alphas = [0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
-    elastic_cv_model = ElasticNetCV(l1_ratio=0.5, alphas=alphas, cv=10, n_jobs=-1)
+    elastic_cv_model = ElasticNetCV(l1_ratio=0.5, alphas=alphas, cv=10)
     linear_model_frame = pd.DataFrame(columns=['cell_id', 'r2_score', 'durbin_watson'])
     cond_exp_dict = {}
-    for i,(cell_id, spike_counts) in enumerate(down_spike_count_dict.items()):
-        y_train, y_test = spike_counts[train_inds], spike_counts[test_inds]
-        elastic_cv_model.fit(x_train, y_train)
-        elastic_cv_y_pred = elastic_cv_model.predict(x_test)
-        elastic_cv_r2_score = r2_score(y_test, elastic_cv_y_pred)
-        db_stat = durbin_watson(y_test - elastic_cv_y_pred)
-        linear_model_frame.loc[i] = (cell_id, elastic_cv_r2_score, db_stat)
-        cond_exp_dict[cell_id] = elastic_cv_model.predict(down_svd_comps)
+    with Pool() as pool:
+        model_futures = pool.starmap_async(fitLinearModel, zip(num_cells*[elastic_cv_model], list(down_spike_count_dict.values()), num_cells*[train_inds], num_cells*[test_inds], num_cells*[x_train], num_cells*[x_test]))
+        model_futures.wait()
+    for i, model_return in enumerate(model_futures.get()):
+        cell_id = cell_ids[i]
+        linear_model_frame.loc[i] = (cell_id, model_return[0], model_return[1])
+        cond_exp_dict[cell_id] = model_return[2].predict(down_svd_comps)
     linear_model_frame['num_svd_time_points'] = svd_times.size
     linear_model_frame['num_spike_count_time_points'] = time_bins.size-1
     linear_model_frame['num_time_points_used'] = num_time_points
     linear_model_frame.cell_id = linear_model_frame.cell_id.astype(int)
     return cond_exp_dict, linear_model_frame
 
-def getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations):
+def getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations, shuff_exp_cond_cov, shuff_cov_of_cond_expectations):
     """
     For creating a conditional analysis frame, analogous to the analysis frame.
     Arguments:  cond_exp_dict, dict => E[X|Z]
@@ -299,13 +324,15 @@ def getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations):
                 cov_of_cond_expectations, numpy array (num_cells, num_cells), covariance of conditional expectations
     Returns:    pandas Dataframe first_cell_id,second_cell_id,exp_cond_cov,cov_cond_exp,exp_cond_corr,signal_corr 
     """
-    cond_analysis_frame = pd.DataFrame(columns=['first_cell_id','second_cell_id','exp_cond_cov','cov_cond_exp','exp_cond_corr','signal_corr'])
+    cond_analysis_frame = pd.DataFrame(columns=['first_cell_id','second_cell_id','exp_cond_cov','cov_cond_exp','exp_cond_corr','signal_corr', 'shuff_exp_cond_cov', 'shuff_cov_cond_exp', 'shuff_exp_cond_corr', 'shuff_signal_corr'])
     cell_ids = list(cond_exp_dict.keys())
     num_cells = len(cell_ids)
     for i,(j,k) in enumerate(combinations(range(num_cells),2)):
         exp_cond_corr = exp_cond_cov[j,k]/np.sqrt(exp_cond_cov[j,j] * exp_cond_cov[k,k]) # this is a funny definition (Maugis 2016 'Event Conditional Correlation')
+        shuff_exp_cond_corr = shuff_exp_cond_cov[j,k]/np.sqrt(shuff_exp_cond_cov[j,j] * shuff_exp_cond_cov[k,k])
         signal_corr = cov_of_cond_expectations[j,k]/np.sqrt(np.var(cond_exp_dict[cell_ids[j]]) * np.var(cond_exp_dict[cell_ids[k]]))
-        cond_analysis_frame.loc[i] = (cell_ids[j], cell_ids[k], exp_cond_cov[j,k], cov_of_cond_expectations[j,k], exp_cond_corr, signal_corr)
+        shuff_signal_corr = shuff_cov_of_cond_expectations[j,k]/np.sqrt(np.var(cond_exp_dict[cell_ids[j]]) * np.var(cond_exp_dict[cell_ids[k]]))
+        cond_analysis_frame.loc[i] = (cell_ids[j], cell_ids[k], exp_cond_cov[j,k], cov_of_cond_expectations[j,k], exp_cond_corr, signal_corr, shuff_exp_cond_cov[j,k], shuff_cov_of_cond_expectations[j,k], shuff_exp_cond_corr, shuff_signal_corr)
     cond_analysis_frame.first_cell_id = cond_analysis_frame.first_cell_id.astype(int)
     cond_analysis_frame.second_cell_id = cond_analysis_frame.second_cell_id.astype(int)
     return cond_analysis_frame
@@ -321,10 +348,11 @@ def getConditionalAnalysisFrame(mouse_face, spike_count_dict, time_bins):
     """
     svd_times, svd_comps = ep.getRelevantMotionSVD(mouse_face, time_bins)
     cond_exp_dict, linear_model_frame = getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict)
-    cov_of_spike_counts = getCovarianceOfDictPairs(spike_count_dict) # save this in the conditional analysis frame
-    cov_of_cond_expectations = getCovarianceOfDictPairs(cond_exp_dict) # save this in the conditional analysis frame
+    cov_of_spike_counts, shuff_cov_of_spike_counts = getCovarianceOfDictPairs(spike_count_dict) # save this in the conditional analysis frame
+    cov_of_cond_expectations, shuff_cov_of_cond_expectations = getCovarianceOfDictPairs(cond_exp_dict) # save this in the conditional analysis frame
     exp_cond_cov = cov_of_spike_counts - cov_of_cond_expectations
-    cond_analysis_frame = getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations)
+    shuff_exp_cond_cov = shuff_cov_of_spike_counts - shuff_cov_of_cond_expectations
+    cond_analysis_frame = getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations, shuff_exp_cond_cov, shuff_cov_of_cond_expectations)
     return cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations
 
 def reduceAnalysisDicts(first_dict, second_dict):
