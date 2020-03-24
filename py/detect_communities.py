@@ -13,7 +13,7 @@ from multiprocessing import Pool
 from itertools import combinations 
 
 parser = argparse.ArgumentParser(description='For detecting communities.')
-parser.add_argument(-'r', '--correlation_type', help='Correlation type. Either "total", "conditional", "signal".', default='total', choices=['total', 'conditional', 'signal'], type=str)
+parser.add_argument('-r', '--correlation_type', help='Correlation type. Either "total", "conditional", "signal".', default='total', choices=['total', 'conditional', 'signal'], type=str)
 parser.add_argument('-c', '--correction', help='Correction type. Either "absolute", "rectified", or "negative".', default='rectified', choices=['rectified', 'negative', 'absolute'], type=str)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
