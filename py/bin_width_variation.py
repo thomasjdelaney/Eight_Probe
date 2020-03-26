@@ -300,16 +300,13 @@ def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
     test_inds = list(range(num_time_points//2, num_time_points))
     x_train, x_test = down_svd_comps[train_inds,:], down_svd_comps[test_inds,:]
     alphas = [0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
-    elastic_cv_model = ElasticNetCV(l1_ratio=0.5, alphas=alphas, cv=10)
+    elastic_cv_model = ElasticNetCV(l1_ratio=0.5, alphas=alphas, cv=10, n_jobs=-1)
     linear_model_frame = pd.DataFrame(columns=['cell_id', 'r2_score', 'durbin_watson'])
     cond_exp_dict = {}
-    with Pool() as pool:
-        model_futures = pool.starmap_async(fitLinearModel, zip(num_cells*[elastic_cv_model], list(down_spike_count_dict.values()), num_cells*[train_inds], num_cells*[test_inds], num_cells*[x_train], num_cells*[x_test]))
-        model_futures.wait()
-    for i, model_return in enumerate(model_futures.get()):
-        cell_id = cell_ids[i]
-        linear_model_frame.loc[i] = (cell_id, model_return[0], model_return[1])
-        cond_exp_dict[cell_id] = model_return[2].predict(down_svd_comps)
+    for i,(cell_id, spike_counts) in enumerate(down_spike_count_dict.items()):
+        model_r2_score, durbin_watson_stat, fitted_model = fitLinearModel(elastic_cv_model, spike_counts, train_inds, test_inds, x_train, x_test)
+        linear_model_frame.loc[i] = (cell_id, model_r2_score, durbin_watson_stat)
+        cond_exp_dict[cell_id] = fitted_model.predict(down_svd_comps)
     linear_model_frame['num_svd_time_points'] = svd_times.size
     linear_model_frame['num_spike_count_time_points'] = time_bins.size-1
     linear_model_frame['num_time_points_used'] = num_time_points
