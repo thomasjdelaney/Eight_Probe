@@ -44,7 +44,7 @@ def getAnalysisFrame(mouse_name, bin_width, csv_dir, correlation_type):
         analysis_frame = ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir)
     else:
         analysis_frame = ep.loadConditionalAnalysisFrame(mouse_name, bin_width, csv_dir)
-    return analysis_frame
+    return analysis_frame.fillna(0.0)
 
 def getMeasureMatrix(analysis_frame, correlation_type):
     """
