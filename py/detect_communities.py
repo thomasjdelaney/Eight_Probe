@@ -88,16 +88,25 @@ def rectifyMatrix(matrix, correction):
         sys.exit("unrecognised correction value.")
     return matrix
 
-def sparsifyMeasureMatrix(measure_matrix, analysis_frame, percentile=95):
+def sparsifyMeasureMatrix(measure_matrix, analysis_frame, correlation_type, percentile=95):
     """
     Finds the 5 and 95 percentile values from the shuffled correlation column of the analysis_frame. Zeros any measure values between those two values.
     The retionale is that those values are noise and therefore should not be regarded as connections in our correlation network.
     Arguments:  measure_matrix, 
                 analysis_frame,
+                correlation_type,
                 percentile
     Returns:    a sparser matrix
     """
-    thresholds = np.percentile(analysis_frame.shuff_corr, [100 - percentile, percentile])
+    if correlation_type == 'total':
+        shuff_corr_column = 'shuff_corr'
+    elif correlation_type == 'conditional':
+        shuff_corr_column = 'shuff_exp_cond_corr'
+    elif correlation_type == 'signal':
+        shuff_corr_column = 'shuff_signal_corr'
+    else:
+        exit('Unrecognised correlation type: ' + correlation_type)
+    thresholds = np.percentile(analysis_frame[shuff_corr_column], [100 - percentile, percentile])
     measure_matrix[(measure_matrix > thresholds[0]) & (measure_matrix < thresholds[1])] = 0
     return measure_matrix
 
@@ -115,7 +124,7 @@ if (not args.debug) & (__name__ == '__main__'):
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Calculating correlation matrix...')
             corr_matrix, cell_ids = getMeasureMatrix(analysis_frame, args.correlation_type)
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Sparsifying and rectifying...')
-            sparsified_matrix = sparsifyMeasureMatrix(corr_matrix.copy(), analysis_frame, 95)
+            sparsified_matrix = sparsifyMeasureMatrix(corr_matrix.copy(), analysis_frame, args.correlation_type, 95)
             corrected_sparse_corr_matrix = rectifyMatrix(sparsified_matrix.copy(), args.correction)
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Checking the data is symmetric...')
             corrected_sparse_corr_matrix = nnr.checkDirected(corrected_sparse_corr_matrix.copy())
