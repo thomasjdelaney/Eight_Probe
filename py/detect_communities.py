@@ -114,7 +114,7 @@ if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
-    summary_frame = pd.DataFrame(columns=['correction', 'bin_width', 'mouse_name', 'below_space_dims', 'exceeding_space_dims', 'max_modularity', 'consensus_modularity', 'consensus_iterations'])
+    summary_frame = pd.DataFrame(columns=['correction', 'bin_width', 'mouse_name', 'below_space_dims', 'exceeding_space_dims', 'max_modularity', 'consensus_modularity', 'consensus_iterations', 'is_converged'])
     for bin_width in ep.selected_bin_widths:
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
         for mouse_name in  ep.mouse_names:
@@ -162,8 +162,9 @@ if (not args.debug) & (__name__ == '__main__'):
 
                 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Detecting communities...')
                 signal_expected_wcm = expected_wcm[signal_final_inds][:, signal_final_inds]
-                max_mod_cluster, max_modularity, consensus_clustering, consensus_modularity, consensus_iterations = nnr.consensusCommunityDetect(final_weighted_adjacency_matrix, signal_expected_wcm, exceeding_space_dims+1, exceeding_space_dims+1)
+                max_mod_cluster, max_modularity, consensus_clustering, consensus_modularity, consensus_iterations, is_converged = nnr.consensusCommunityDetect(final_weighted_adjacency_matrix, signal_expected_wcm, exceeding_space_dims+1, exceeding_space_dims+1)
                 signal_final_cell_info['consensus_cluster'] = consensus_clustering
+                signal_final_cell_info['max_mod_cluster'] = max_mod_cluster
                 nnr.plotClusterMap(final_weighted_adjacency_matrix, consensus_clustering, is_sort=True)
                 plt.savefig(os.path.join(image_dir, 'community_detection', 'consensus_clusterings', args.correlation_type, args.correction, mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_cons_cluster_map.png'))
                 plt.close()
@@ -172,7 +173,7 @@ if (not args.debug) & (__name__ == '__main__'):
                 plt.close()
                 signal_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_' + args.correlation_type  + '_signal_final_cell_info.pkl'))
                 noise_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_' + args.correlation_type + '_noise_final_cell_info.pkl'))
-                summary_frame = summary_frame.append({'correction':args.correction, 'correlation_type':args.correlation_type, 'bin_width':bin_width, 'mouse_name':mouse_name, 'below_space_dims':below_space_dims, 'exceeding_space_dims':exceeding_space_dims, 'max_modularity':max_modularity, 'consensus_modularity':consensus_modularity, 'consensus_iterations':consensus_iterations}, ignore_index=True)
+                summary_frame = summary_frame.append({'correction':args.correction, 'correlation_type':args.correlation_type, 'bin_width':bin_width, 'mouse_name':mouse_name, 'below_space_dims':below_space_dims, 'exceeding_space_dims':exceeding_space_dims, 'max_modularity':max_modularity, 'consensus_modularity':consensus_modularity, 'consensus_iterations':consensus_iterations, 'is_converged':is_converged}, ignore_index=True)
     csv_file_name = os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '.csv')
     summary_frame.to_csv(csv_file_name, index=False)
     print(dt.datetime.now().isoformat() + ' INFO: ' + csv_file_name + ' saved.')    
