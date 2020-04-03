@@ -57,7 +57,7 @@ def getMeasureMatrix(analysis_frame, correlation_type):
     elif correlation_type == 'conditional':
         measure = 'exp_cond_corr'
     elif correlation_type == 'signal':
-        measure == 'signal_corr'
+        measure = 'signal_corr'
     else:
         sys.exit("unrecognised correlation type")
     cell_pairs = list(zip(analysis_frame.first_cell_id, analysis_frame.second_cell_id))
