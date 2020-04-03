@@ -13,6 +13,7 @@ from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 parser = argparse.ArgumentParser(description='For making plots of correlation communities sorted by region, with and without the correlations shown.')
+parser.add_argument('-r', '--correlation_type', help='Correlation type. Either "total", "conditional", "signal".', default='total', choices=['total', 'conditional', 'signal'], type=str)
 parser.add_argument('-c', '--correction', help='Correction type. Either "absolute", "rectified", or "negative".', default='rectified', choices=['rectified', 'negative', 'absolute'], type=str)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
@@ -68,9 +69,9 @@ if (not args.debug) & (__name__ == "__main__"):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
     for bin_width in ep.selected_bin_widths:
         for mouse_name in ep.mouse_names:
-            signal_final_cell_info = ep.loadCommunityInfo(mouse_name, bin_width, npy_dir, correction=args.correction)
+            signal_final_cell_info = ep.loadCommunityInfo(mouse_name, bin_width, npy_dir, correction=args.correction, correlation_type=args.correlation_type)
             plotRegionalClusterMap(signal_final_cell_info, mouse_name, bin_width)
-            fig_file_name = os.path.join(image_dir, 'community_detection', 'regional_cluster_maps', args.correction, mouse_name + '_' + str(bin_width).replace('.','p') +'_regional_cluster_map.png')
+            fig_file_name = os.path.join(image_dir, 'community_detection', 'regional_cluster_maps', args.correlation_type, args.correction, mouse_name + '_' + str(bin_width).replace('.','p') +'_regional_cluster_map.png')
             plt.savefig(fig_file_name)
             plt.close()
             print(dt.datetime.now().isoformat() + ' INFO: ' + fig_file_name + ' saved.')

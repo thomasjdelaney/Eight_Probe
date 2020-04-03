@@ -149,7 +149,7 @@ def loadMeasureStatFile(bin_width, csv_dir):
     """
     return pd.read_csv(os.path.join(csv_dir, 'measure_statistics_' + str(bin_width).replace('.', 'p') + '.csv'), index_col=0)
 
-def loadCommunityInfo(mouse_name, bin_width, npy_dir, correction='rectified', is_signal=True):
+def loadCommunityInfo(mouse_name, bin_width, npy_dir, correction='rectified', correlation_type='total', is_signal=True):
     """
     For loading in a cell_info frame with detected communities attached.
     Arguments:  mouse_name, string
@@ -160,7 +160,7 @@ def loadCommunityInfo(mouse_name, bin_width, npy_dir, correction='rectified', is
     Returns:    pandas DataFrame
     """
     sig_or_noise = '_signal' if is_signal else '_noise'
-    file_base_name = mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + correction + sig_or_noise + '_final_cell_info.pkl'
+    file_base_name = mouse_name + '_' + str(bin_width).replace('.', 'p') + '_' + correction + '_' + correlation_type  + sig_or_noise + '_final_cell_info.pkl'
     return pd.read_pickle(os.path.join(npy_dir, 'communities', file_base_name))
 
 def loadConditionalAnalysisFrame(mouse_name, bin_width, csv_dir):

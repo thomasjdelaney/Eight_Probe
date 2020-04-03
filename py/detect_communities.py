@@ -174,7 +174,7 @@ if (not args.debug) & (__name__ == '__main__'):
                 signal_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_' + args.correlation_type  + '_signal_final_cell_info.pkl'))
                 noise_final_cell_info.to_pickle(os.path.join(npy_dir, 'communities', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + args.correction + '_' + args.correlation_type + '_noise_final_cell_info.pkl'))
                 summary_frame = summary_frame.append({'correction':args.correction, 'correlation_type':args.correlation_type, 'bin_width':bin_width, 'mouse_name':mouse_name, 'below_space_dims':below_space_dims, 'exceeding_space_dims':exceeding_space_dims, 'max_modularity':max_modularity, 'consensus_modularity':consensus_modularity, 'consensus_iterations':consensus_iterations, 'is_converged':is_converged}, ignore_index=True)
-    csv_file_name = os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '.csv')
+    csv_file_name = os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '_' + args.correlation_type + '.csv')
     summary_frame.to_csv(csv_file_name, index=False)
     print(dt.datetime.now().isoformat() + ' INFO: ' + csv_file_name + ' saved.')    
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')    
