@@ -1,0 +1,7 @@
+correction,bin_width,mouse_name,below_space_dims,exceeding_space_dims,max_modularity,consensus_modularity,consensus_iterations,is_converged,correlation_type
+negative,0.005,Robbins,2,1,0.06082655938026044,0.06082655938026044,1,True,signal
+negative,0.01,Robbins,2,1,0.127605513092586,0.127605513092586,1,True,signal
+negative,0.05,Krebs,2,1,0.16688161200218976,0.16688161200218976,1,True,signal
+negative,0.05,Robbins,2,1,0.10660364115046965,0.10660364115046965,1,True,signal
+negative,0.1,Robbins,2,1,0.025849202811204116,0.025849202811204116,1,True,signal
+negative,1.0,Robbins,2,1,0.09780237276739834,0.09780237276739834,1,True,signal
