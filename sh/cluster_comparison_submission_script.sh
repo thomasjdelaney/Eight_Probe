@@ -16,23 +16,23 @@ done
 
 # run your program, timing it for good measure:
 # NB: Only using 50 cells here because of memory constraints
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r total -c rectified
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r total -c rectified
 echo `date +'%d-%m-%Y %T'`" INFO: Completed total rectified."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r conditional -c rectified
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r conditional -c rectified
 echo `date +'%d-%m-%Y %T'`" INFO: Completed conditional rectified."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r signal -c rectified 
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r signal -c rectified 
 echo `date +'%d-%m-%Y %T'`" INFO: Completed signal rectified."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r total -c negative
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r total -c negative
 echo `date +'%d-%m-%Y %T'`" INFO: Completed total negative."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r conditional -c negative
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r conditional -c negative
 echo `date +'%d-%m-%Y %T'`" INFO: Completed conditional negtive."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r signal -c negative
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r signal -c negative 
 echo `date +'%d-%m-%Y %T'`" INFO: Completed signal negative."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r total -c absolute 
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r total -c absolute 
 echo `date +'%d-%m-%Y %T'`" INFO: Completed total absolute."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r conditional -c absolute 
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r conditional -c absolute
 echo `date +'%d-%m-%Y %T'`" INFO: Completed conditional absolute."
-time python3 $HOME/Eight_Probe/py/plot_communities.py -r signal -c absolute 
+time python3 $HOME/Eight_Probe/py/cluster_comparison.py -r signal -c absolute 
 echo `date +'%d-%m-%Y %T'`" INFO: Completed signal absolute."
 echo `date +'%d-%m-%Y %T'`" INFO: Done."
 
