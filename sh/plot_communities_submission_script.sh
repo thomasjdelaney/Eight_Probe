@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # request resources:
-#PBS -l nodes=1:ppn=16,walltime=00:30:00
+#PBS -l nodes=1:ppn=16,walltime=01:0:00
 
 # on compute node, change directory to 'submission directory':
 
