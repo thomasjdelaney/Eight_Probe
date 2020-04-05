@@ -90,7 +90,7 @@ if (not args.debug) & (__name__ == "__main__"):
     file_name = os.path.join(csv_dir, 'clustering_comparison', 'clustering_comparison_' + args.correction + '_' + args.correlation_type + '.csv')
     cluster_comp_frame.to_csv(file_name, index=False)
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
-    for measure in cluster_comp_frame.columns[2:]:
+    for measure in cluster_comp_frame.columns[4:]:
         plotClusteringCompMeasure(cluster_comp_frame, measure, args.correction, args.correlation_type)
     plotClusteringCompMeasure(pd.read_csv(os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '_' + args.correlation_type + '.csv')), 'max_modularity', args.correction, args.correlation_type)
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
