@@ -48,8 +48,16 @@ def getClusteringJointDistnFromCellInfo(signal_final_cell_info):
 def buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, correction, correlation_type):
     """
     For building the dictionary with clustering comparison measures for a given mouse and bin width.
+    Returns:    dictionary,
+                is_loaded
     """
-    signal_final_cell_info = ep.loadCommunityInfo(mouse_name, bin_width, npy_dir, correction=correction, correlation_type=correlation_type)
+    try:
+        signal_final_cell_info = ep.loadCommunityInfo(mouse_name, bin_width, npy_dir, correction=correction, correlation_type=correlation_type)
+        is_loaded = True
+    except FileNotFoundError:
+        print(dt.datetime.now().isoformat() + ' WARN: ' + 'Could not load clustering...')
+        is_loaded = False
+        return {}, is_loaded 
     signal_final_cell_info['regional_cluster'] = [list(ep.regions).index(r) for r in signal_final_cell_info['cell_region']] # replacing region strings with integers for the metric functions
     region_clustering_rv = signal_final_cell_info['cell_region'].value_counts(normalize=True)
     consensus_clustering_rv = signal_final_cell_info['consensus_cluster'].value_counts(normalize=True)
@@ -62,7 +70,7 @@ def buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, correction, c
     norm_vi = 1 - (mi/joint_entropy) if joint_entropy != 0 else 0
     norm_id = 1 - norm_mi # information distance
     adj_rand_ind = adjusted_rand_score(signal_final_cell_info['regional_cluster'], signal_final_cell_info['consensus_cluster'])
-    return {'bin_width':bin_width, 'mouse_name':mouse_name, 'correction':correction, 'correlation_type':correlation_type, 'num_communities':signal_final_cell_info.consensus_cluster.max()+1, 'regional_clustering_entropy':entropy(region_clustering_rv.values), 'consensus_clustering_entropy':entropy(consensus_clustering_rv.values), 'joint_entropy':joint_entropy, 'mutual_information':mi, 'adjusted_mutual_information':adj_mi, 'normalised_mutual_information':norm_mi, 'variation_of_information':vi, 'normalised_variation_of_information':norm_vi, 'normalised_information_distance':norm_id, 'adjusted_rand_index':adj_rand_ind}
+    return {'bin_width':bin_width, 'mouse_name':mouse_name, 'correction':correction, 'correlation_type':correlation_type, 'num_communities':signal_final_cell_info.consensus_cluster.max()+1, 'regional_clustering_entropy':entropy(region_clustering_rv.values), 'consensus_clustering_entropy':entropy(consensus_clustering_rv.values), 'joint_entropy':joint_entropy, 'mutual_information':mi, 'adjusted_mutual_information':adj_mi, 'normalised_mutual_information':norm_mi, 'variation_of_information':vi, 'normalised_variation_of_information':norm_vi, 'normalised_information_distance':norm_id, 'adjusted_rand_index':adj_rand_ind}, is_loaded
 
 def plotClusteringCompMeasure(cluster_comp_frame, measure, correction, correlation_type):
     measure_to_ylabel = {'num_communities':'Num. Communities', 'regional_clustering_entropy':r'Regional clustering $H$ (bits)', 'consensus_clustering_entropy':r'Consensus clustering $H$ (bits)', 'joint_entropy':r'Joint $H$ (bits)', 'mutual_information':'Mutual Info. (bits)', 'adjusted_mutual_information':'Adj. Mutual Info.', 'normalised_mutual_information':'Norm. Mutual Info.', 'variation_of_information':'Var. of Info. (bits)', 'normalised_variation_of_information':'Norm. Var. of Info.', 'normalised_information_distance':'Norm. Info. Distance', 'adjusted_rand_index':'Adj. Rand Index', 'max_modularity':'Modularity'}
@@ -85,8 +93,8 @@ if (not args.debug) & (__name__ == "__main__"):
         print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
         for mouse_name in ep.mouse_names:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
-            measure_dict = buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, args.correction, args.correlation_type)
-            cluster_comp_frame = cluster_comp_frame.append(measure_dict, ignore_index=True)
+            measure_dict, is_loaded = buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, args.correction, args.correlation_type)
+            cluster_comp_frame = cluster_comp_frame.append(measure_dict, ignore_index=True) if is_loaded else cluster_comp_frame
     file_name = os.path.join(csv_dir, 'clustering_comparison', 'clustering_comparison_' + args.correction + '_' + args.correlation_type + '.csv')
     cluster_comp_frame.to_csv(file_name, index=False)
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
