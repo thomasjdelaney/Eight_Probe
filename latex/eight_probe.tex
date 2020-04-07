@@ -150,19 +150,38 @@
           |\boldsymbol{\beta}|_2 &= \sum_{j=1}^m \beta_j^2 \\
           |\boldsymbol{\beta}|_1 &= \sum_{j=1}^m |\beta_j|
         \end{align}
-        The na\"{i}ve elastic net estimator $\hat{\boldsymbol{\beta}}$ is the minimiser of the system of equations \ref{eq:elastic_net}
+        The na\"{i}ve elastic net estimator $\hat{\boldsymbol{\beta}}$ is the minimiser of the system of equations \ref{eq:elastic_net} \cite{zou}
         \begin{align}
           \hat{\boldsymbol{\beta}} = \arg \min_{\boldsymbol{\beta}} L(\lambda_1, \lambda_2, \boldsymbol{\beta})
         \end{align}
-        We implemented the model using the \texttt{ElasticNetCV} method of Python's \texttt{sklearn.linear\_models} package.
+        We implemented the model using the \texttt{ElasticNetCV} method of Python's \\ \texttt{sklearn.linear\_models} package.
 
         As well as using the PCs, we also tried fitting the models using the raw video data reconstructed from the PCs and eigenvectors. These models performed worse than those using the PCs. We expected this because each representation contains the same amount of information, but the raw video representation spreads this information across many more components. This requires more parameter fitting, but given the same information. 
 
         \subsubsection{Conditional covariance}
-        We used the law of total covariance
+        We calculated the expected value of the conditional covariance using the law of total covariance.
+        \begin{align}\label{eq:law_of_total_covariance}
+            \cov (X,Y) = E[ \cov(X,Y|Z)] + \cov(E[X|Z], E[Y|Z])
+        \end{align}
+        where these expected values are calculated with respect to the distribution of $Z$ as a random variable.
+
+        Using our linear model, we calculated $E[X|Z_1,\dots, Z_{500}]$ for each cell $X$. Then we proceeded to calculate
+        \begin{align}
+            E[\cov(X,Y|Z_1,\dots, Z_{500})] = \cov(X,Y) - \cov(E[X|Z_1,\dots, Z_{500}], E[Y|Z_1,\dots, Z_{500}])
+        \end{align}
 
         \subsubsection{Measures of conditional correlation}
-        Cite the Maugis paper.
+        As a measure of expected correlation, we measured the `event conditional correlation' \cite{maugis}
+        \begin{align}\label{eq:event_conditional_correlation}
+            \rho_{XY|Z} = \frac{E[\cov(X,Y|Z)]}{\sqrt{E[\var(X|Z)]E[\var(Y|Z)]}}
+        \end{align}
+        (I need to read more about this. This is not really a correlation)
+
+        For comparison, we also measured the `signal correlation'
+        \begin{align}\label{eq:signal_correlation}
+            \rho_{\text{signal}} = \frac{\cov(E[X|Z], E[Y|Z])}{\sqrt{\var(E[X|Z])\var(E[Y|Z])}}
+        \end{align}
+        this is an actual correlation, at least.
         
 
     \subsection{Information Theory}\label{sec:information_theory}
