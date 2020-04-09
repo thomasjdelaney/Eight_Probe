@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from itertools import product, combinations
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
-parser.add_argument('-b', '--bin_width', help='The bin width to use.', type=float, default=2.0)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -65,17 +64,21 @@ if (not args.debug) & (__name__ == '__main__'):
     measure_statistics = pd.DataFrame()
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
-    for m,mouse_name in enumerate(ep.mouse_names):
-        print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
-        analysis_frame = ep.loadAnalysisFrame(mouse_name, args.bin_width, csv_dir)
-        analysis_frame = ep.joinCellAnalysis(cell_info, analysis_frame)
-        mouse_regional_aggregation = pd.DataFrame()
-        for region_pair in getFullRegionPairList(analysis_frame):
-            region_pair_analysis_frame = ep.getRegionalAnalysisFrame(analysis_frame, region_pair)
-            mouse_regional_aggregation = mouse_regional_aggregation.append(getAnalysisAggregationDict(region_pair_analysis_frame), ignore_index=True)
-            plotHistogramsSave(region_pair_analysis_frame, region_pair, mouse_name, args.bin_width)
-        mouse_regional_aggregation['mouse_name'] = mouse_name
-        measure_statistics = measure_statistics.append(mouse_regional_aggregation, ignore_index=True)
-    print(dt.datetime.now().isoformat() + ' INFO: ' + 'Saving measure statistics...')
-    measure_statistics.to_csv(os.path.join(csv_dir, 'measure_statistics_' + str(args.bin_width).replace('.', 'p') + '.csv'))
+    for bin_width in ep.selected_bin_widths:
+        print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width = ' + str(bin_width))
+        for m,mouse_name in enumerate(ep.mouse_names):
+            print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
+            analysis_frame = ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir)
+            analysis_frame = ep.joinCellAnalysis(cell_info, analysis_frame)
+            conditional_analysis_frame = ep.loadConditionalAnalysisFrame(mouse_name, bin_width, csv_dir)
+            joined_analysis_frame = ep.joinAnalysisFrames(analysis_frame, conditional_analysis_frame)
+            mouse_regional_aggregation = pd.DataFrame()
+            for region_pair in getFullRegionPairList(analysis_frame):
+                region_pair_analysis_frame = ep.getRegionalAnalysisFrame(analysis_frame, region_pair)
+                mouse_regional_aggregation = mouse_regional_aggregation.append(getAnalysisAggregationDict(region_pair_analysis_frame), ignore_index=True)
+                plotHistogramsSave(region_pair_analysis_frame, region_pair, mouse_name, args.bin_width)
+            mouse_regional_aggregation['mouse_name'] = mouse_name
+            measure_statistics = measure_statistics.append(mouse_regional_aggregation, ignore_index=True)
+        print(dt.datetime.now().isoformat() + ' INFO: ' + 'Saving measure statistics...')
+        measure_statistics.to_csv(os.path.join(csv_dir, 'measure_statistics_' + str(bin_width).replace('.', 'p') + '.csv'))
 print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')

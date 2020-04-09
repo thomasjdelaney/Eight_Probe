@@ -327,6 +327,16 @@ def joinCellAnalysis(cell_info, analysis_frame):
     analysis_frame = analysis_frame.rename(columns={'cell_region':'second_cell_region'})
     return analysis_frame
 
+def joinAnalysisFrames(analysis_frame, conditional_analysis_frame):
+    """
+    For joining analysis and conditional analysis_frames.
+    Arguments:  analysis_frame, pandas DataFrame, corr_coef, corr_pv, first_cell_id, plugin_mi, plugin_shuff_mi, second_cell_id, shuff_corr, shuff_corr_pv
+                conditional_analysis_frame, pandas DataFrame, 
+    Returns:    pandas DataFrame
+    """
+    joined_analysis_frame = analysis_frame.merge(conditional_analysis_frame, how='inner', on=['first_cell_id', 'second_cell_id'])
+    return joined_analysis_frame
+
 def getRegionalMeasureAggFrame(measure_agg_frame, region_pair):
     """
     For selecting from the measure aggregation frame according to the given region pair
