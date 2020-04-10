@@ -147,7 +147,7 @@ def loadMeasureStatFile(bin_width, csv_dir):
                 csv_dir, string, directory
     Returns:    pandas DataFrame
     """
-    return pd.read_csv(os.path.join(csv_dir, 'measure_statistics_' + str(bin_width).replace('.', 'p') + '.csv'), index_col=0)
+    return pd.read_csv(os.path.join(csv_dir, 'measure_statistics', 'measure_statistics_' + str(bin_width).replace('.', 'p') + '.csv'), index_col=0)
 
 def loadCommunityInfo(mouse_name, bin_width, npy_dir, correction='rectified', correlation_type='total', is_signal=True):
     """

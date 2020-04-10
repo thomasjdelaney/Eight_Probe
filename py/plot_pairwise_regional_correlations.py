@@ -42,7 +42,7 @@ def plotMeasureMatrix(measure_matrix, tick_labels, xlabel, suffix, bin_width, **
     plt.close()
     return file_name
 
-def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False):
+def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False, measure='mean_corr', y_label='Mean Corr. Coef.', suffix='_corr_comp'):
     """
     For making a similar figure to figure 3, c from a recent paper that uses the 8 probe data.
     """
@@ -52,17 +52,17 @@ def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False):
     for first_region, second_region in zip(relevant_measure_frame.first_region, relevant_measure_frame.second_region):
         regional_measure_frame = ep.getRegionalMeasureAggFrame(relevant_measure_frame, (first_region, second_region))
         if first_region == second_region:
-            plt.scatter(list(regions).index(first_region) + 1, regional_measure_frame.iloc[0]['mean_corr'], color=ep.region_to_colour[first_region])
+            plt.scatter(list(regions).index(first_region) + 1, regional_measure_frame.iloc[0][measure], color=ep.region_to_colour[first_region])
         else:
             inds = list(regions).index(first_region) + 1, list(regions).index(second_region) + 1
-            plt.scatter(inds, np.repeat(regional_measure_frame.iloc[0]['mean_corr'],2), color='black')
+            plt.scatter(inds, np.repeat(regional_measure_frame.iloc[0][measure],2), color='black')
     plt.xticks(range(0,regions.size+2), np.hstack([[''], regions]), fontsize='x-large', rotation=30)
-    plt.ylabel('Mean Corr. Coef.', fontsize='x-large')
+    plt.ylabel(y_label, fontsize='x-large')
     plt.title(mouse_name + ', Bin width=' + str(bin_width), fontsize='x-large') if use_title else None
     y_lim = plt.ylim()[1]
     plt.text(6.5, y_lim - 0.1*y_lim, 'Bin width=' + str(bin_width) + 's', fontweight='extra bold', fontsize='x-large')
     plt.tight_layout()
-    file_name = os.path.join(image_dir, 'within_between_comparison', mouse_name + '_' + str(bin_width).replace('.','p') + '_corr_comp.png')
+    file_name = os.path.join(image_dir, 'within_between_comparison', mouse_name + '_' + str(bin_width).replace('.','p') + suffix + '.png')
     plt.savefig(file_name)
     plt.close() 
     return file_name
@@ -77,11 +77,21 @@ if (not args.debug) & (__name__ == '__main__'):
         for mouse_name in ep.mouse_names:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing mouse ' + mouse_name + '...')
             mean_corr_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_corr', mouse_name=mouse_name)
-            mean_corr_shuff_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_shuff_corr', mouse_name=mouse_name, regions=regions)
             file_name = plotMeasureMatrix(mean_corr_matrix, regions, 'Mean Corr. Coef', '_corr', bin_width)
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
-            file_name = plotMeasureMatrix(mean_corr_shuff_matrix, regions, 'Mean Corr. Coef (Shuffled)', '_corr_shuff', bin_width, vmin=mean_corr_matrix.min(), vmax=mean_corr_matrix.max())
+            mean_corr_shuff_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_shuff_corr', mouse_name=mouse_name, regions=regions)
+            file_name = plotMeasureMatrix(mean_corr_shuff_matrix, regions,'Mean Corr. Coef (Shuffled)', '_corr_shuff', bin_width, vmin=mean_corr_matrix.min(), vmax=mean_corr_matrix.max())
+            print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+            mean_exp_cond_corr_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_exp_cond_corr', mouse_name=mouse_name)
+            file_name = plotMeasureMatrix(mean_exp_cond_corr_matrix, regions, 'Mean Event Cond Corr.', '_exp_cond_corr', bin_width)
+            print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+            mean_signal_corr_matrix, regions = ep.getRegionalMeasureMatrix(measure_frame, 'mean_signal_corr', mouse_name=mouse_name)
+            file_name = plotMeasureMatrix(mean_signal_corr_matrix, regions, 'Mean Signal Corr.', '_signal_corr', bin_width)
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
             file_name = plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False)
+            print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+            file_name = plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, measure='mean_exp_cond_corr', y_label='Event Cond. Corr.', suffix='_exp_cond_corr')
+            print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+            file_name = plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, measure='mean_signal_corr', y_label='Signal Corr.', suffix='_signal_corr')
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
