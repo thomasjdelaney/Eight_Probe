@@ -1,39 +1,38 @@
 \contentsline {section}{\numberline {1}Motivation}{2}{section.1}
 \contentsline {subsection}{\numberline {1.1}Finding highly correlated networks including cells from different anatomical regions}{2}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}Changing timescales}{2}{subsection.1.2}
-\contentsline {section}{\numberline {2}Data}{2}{section.2}
-\contentsline {subsection}{\numberline {2.1}Brain regions}{2}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Video recordings}{3}{subsection.2.2}
-\contentsline {section}{\numberline {3}Methods}{3}{section.3}
-\contentsline {subsection}{\numberline {3.1}Binning data}{3}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Correlation coefficients}{3}{subsection.3.2}
+\contentsline {section}{\numberline {2}Data}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Brain regions}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Video recordings}{4}{subsection.2.2}
+\contentsline {section}{\numberline {3}Methods}{4}{section.3}
+\contentsline {subsection}{\numberline {3.1}Binning data}{4}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Correlation coefficients}{4}{subsection.3.2}
 \contentsline {subsubsection}{\numberline {3.2.1}Spike Count Correlation, $r_{SC}$}{4}{subsubsection.3.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2}Shuffled spike count correlations}{4}{subsubsection.3.2.2}
-\contentsline {subsubsection}{\numberline {3.2.3}Separating Correlations \& Anti-correlations}{4}{subsubsection.3.2.3}
-\contentsline {subsection}{\numberline {3.3}Conditioning on behavioural data}{4}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.2.2}Shuffled spike count correlations}{5}{subsubsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.3}Separating Correlations \& Anti-correlations}{5}{subsubsection.3.2.3}
+\contentsline {subsection}{\numberline {3.3}Conditioning on behavioural data}{5}{subsection.3.3}
 \contentsline {subsubsection}{\numberline {3.3.1}Linear regression}{5}{subsubsection.3.3.1}
-\contentsline {subsubsection}{\numberline {3.3.2}Elastic net regularisation}{5}{subsubsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.2}Elastic net regularisation}{6}{subsubsection.3.3.2}
 \contentsline {subsubsection}{\numberline {3.3.3}Conditional covariance}{6}{subsubsection.3.3.3}
 \contentsline {subsubsection}{\numberline {3.3.4}Measures of conditional correlation}{6}{subsubsection.3.3.4}
-\contentsline {subsection}{\numberline {3.4}Information Theory}{6}{subsection.3.4}
-\contentsline {subsubsection}{\numberline {3.4.1}Entropy $H(X)$}{6}{subsubsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4}Information Theory}{7}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}Entropy $H(X)$}{7}{subsubsection.3.4.1}
 \contentsline {subsubsection}{\numberline {3.4.2}Maximum entropy limit}{7}{subsubsection.3.4.2}
-\contentsline {subsubsection}{\numberline {3.4.3}Mutual Information $I(X;Y)$}{7}{subsubsection.3.4.3}
+\contentsline {subsubsection}{\numberline {3.4.3}Mutual Information $I(X;Y)$}{8}{subsubsection.3.4.3}
 \contentsline {subsubsection}{\numberline {3.4.4}Variation of Information $VI(X,Y)$}{9}{subsubsection.3.4.4}
-\contentsline {subsubsection}{\numberline {3.4.5}Measuring entropies \& mutual information}{9}{subsubsection.3.4.5}
-\contentsline {subsection}{\numberline {3.5}Network analysis}{9}{subsection.3.5}
-\contentsline {subsubsection}{\numberline {3.5.1}Correlation networks}{9}{subsubsection.3.5.1}
-\contentsline {subsubsection}{\numberline {3.5.2}Rectified correlations}{9}{subsubsection.3.5.2}
+\contentsline {subsubsection}{\numberline {3.4.5}Measuring entropies \& mutual information}{10}{subsubsection.3.4.5}
+\contentsline {subsection}{\numberline {3.5}Network analysis}{10}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}Correlation networks}{10}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}Rectified correlations}{10}{subsubsection.3.5.2}
 \contentsline {subsubsection}{\numberline {3.5.3}Sparsifying data networks}{10}{subsubsection.3.5.3}
 \contentsline {subsubsection}{\numberline {3.5.4}Communities}{10}{subsubsection.3.5.4}
-\contentsline {subsubsection}{\numberline {3.5.5}Weighted configuration model}{10}{subsubsection.3.5.5}
-\contentsline {subsubsection}{\numberline {3.5.6}Sparse weighted configuration model}{10}{subsubsection.3.5.6}
+\contentsline {subsubsection}{\numberline {3.5.5}Weighted configuration model}{11}{subsubsection.3.5.5}
+\contentsline {subsubsection}{\numberline {3.5.6}Sparse weighted configuration model}{11}{subsubsection.3.5.6}
 \contentsline {subsubsection}{\numberline {3.5.7}Spectral rejection}{11}{subsubsection.3.5.7}
-\contentsline {subsubsection}{\numberline {3.5.8}Node rejection}{11}{subsubsection.3.5.8}
+\contentsline {subsubsection}{\numberline {3.5.8}Node rejection}{12}{subsubsection.3.5.8}
 \contentsline {subsubsection}{\numberline {3.5.9}Community detection}{12}{subsubsection.3.5.9}
-\contentsline {subsection}{\numberline {3.6}Clustering Comparison}{12}{subsection.3.6}
-\contentsline {subsubsection}{\numberline {3.6.1}Adjusted Rand Index}{12}{subsubsection.3.6.1}
+\contentsline {subsection}{\numberline {3.6}Clustering Comparison}{13}{subsection.3.6}
+\contentsline {subsubsection}{\numberline {3.6.1}Adjusted Rand Index}{13}{subsubsection.3.6.1}
 \contentsline {subsubsection}{\numberline {3.6.2}Clusterings as random variables}{13}{subsubsection.3.6.2}
-\contentsline {subsubsection}{\numberline {3.6.3}Information based similarity measures}{13}{subsubsection.3.6.3}
-\contentsline {subsubsection}{\numberline {3.6.4}Information based metrics}{14}{subsubsection.3.6.4}
-\contentsline {subsubsection}{\numberline {3.6.5}Comparing detected communities and anatomical divisions}{14}{subsubsection.3.6.5}
+\contentsline {subsubsection}{\numberline {3.6.3}Information based similarity measures}{14}{subsubsection.3.6.3}
+\contentsline {subsubsection}{\numberline {3.6.4}Information based metrics}{15}{subsubsection.3.6.4}
+\contentsline {subsubsection}{\numberline {3.6.5}Comparing detected communities and anatomical divisions}{15}{subsubsection.3.6.5}

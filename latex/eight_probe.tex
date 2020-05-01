@@ -58,25 +58,27 @@
 
 \section{Motivation}
     \subsection{Finding highly correlated networks including cells from different anatomical regions}
-    Decades of research has established that these correlations play a crucial role in representing sensory information. For example, the onset of visual attention has been shown to have a greater affect on the correlations in the macaque V4 than on the firing rates in that region \cite{cohen1}. Recent findings show that spontaneous behaviours explain correlations in parts of the brain not associated with motor control \cite{stringer}. In order to understand the brain, we must understand the interactions between neurons. 
+    Decades of research has established that correlations play a crucial role in representing sensory information. For example, the onset of visual attention has been shown to have a greater affect on the correlations in the macaque V4 region than on the firing rates in that region \cite{cohen1}. Recent findings show that spontaneous behaviours explain correlations in parts of the brain not associated with motor control \cite{stringer}. In order to understand the brain, we must understand the interactions between neurons. 
 
     Because of limitations in recording technology almost all research has explored correlations between neurons within a given brain region. Relatively little is known about correlations between neurons in different brain regions. However, the recent development of `Neuropixels' probes \cite{jun} has allowed extracellular voltage measurements to be collected from multiple brain regions simultaneously routinely, and in much larger numbers than traditional methods. In this project we used a publicly-available Neuropixels dataset to analyse correlations between different brain regions \cite{stringer}.
 
-    We wanted to find highly correlated communities among larger ensembles of neurons, including neurons from different anatomical regions. In order to do this, we induced an undirected weighted network in the neural ensemble by measuring the spike count correlations between every pair of neurons. We then used a cutting edge community detection method \cite{humphries} on this network to find any highly correlated communities present in the ensemble. We also treated the anatomical regions and the detected communities as clusterings of cells, and used clustering comparison methods to measure how different these clusterings were.
+    A drawback associated with the improvement in recording technology is an increase in the difficulty of analysing these data. For example, analysing the $i$th order interactions of $N$ neurons generally requires estimation of $N^i$ parameters. A number that becomes astronomical for large $N$. New methods are required for analysing these new large datasets. We attempted to address this requirement in this piece of research by applying a cutting-edge network science community detection method to neural data.
 
-    \subsection{Changing timescales}
-    The time bin width used when binning spike trains into spike counts affects spike count correlation measures \cite{cohen2}. We explored the effect of changing time bin width on the correlations between neurons. In doing so, we noticed that \textit{within-region} correlations were affected differently to \textit{between-region} correlations. In order to quantify these differences, we measured the correlations and carried out the community detection, and the clustering comparison using different values for the time bin width. 
-    
-% we're getting into results here Need more motivation.
+    Another unexplored area of research is the changes in cell interactions at different timescales. Most studies focus on quantifying interactions at a given timescale. But neurons may interact differently, or may interact with different neurons, at different timescales. Here we explore correlated communities of neurons at different timescales.
+
+    In this work, we measured spike count correlations between neurons from nine different regions of the mouse brain. Using these correlation measurements, we created weighted undirected graphs or networks with each node representing a neuron. We used newly invented network methods to detect communities in these networks. We compared these detected communities to the anatomical division of the cells. We also measured the conditional correlation and signal correlation of between cell spike counts, conditioning on the subjects' behaviour. We repeated the network analysis using these measurements. We also repeated these analyses using different timescales for measuring the correlations. 
+
+\newpage
 
 \section{Data}
     \subsection{Brain regions}
-    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. The mice were awake and enganging in spontaneous behaviour. 
+    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. The mice were awake and engaging in spontaneous behaviour. 
     \begin{enumerate}
         \item male, wild type, P73. % Robbins
         \item female, TetO-GCaMP6s, Camk2a-tTa, P113 % Waksman
         \item male, Ai32, Pvalb-Cre, P99 % Krebs
     \end{enumerate}
+
     Eight probes were used to collect readings from 2296, 2668, and 1462 cells respectively. Data were collected from nine brain regions in each mouse:
     \begin{itemize}
         \item Caudate Putamen (CP)
@@ -89,10 +91,17 @@
         \item Thalamus (Th)
         \item Primary visual cortex (V1)
     \end{itemize}
-    Readings were continuous and lasted for about 1 hour \cite{stringer}.
+    Readings were continuous and lasted for about 1 hour \cite{stringer}. Locations of each of the probes can be seen in figure \ref{fig:probe_locations}.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=5cm,height=3.75cm]{figures/probe_locations_stringer.png}
+        \caption{\textbf{Probe Locations:} The locations of the probes in each of the three mouse brains\cite{stringer}.}
+        \label{fig:probe_locations}
+    \end{figure}
 
     \subsection{Video recordings}\label{sec:video_recordings}
-    Video recordings of the mouse's face were taken during the spontaneous behaviour. We had access to the top $500$ principle components and top $500$ eigenvectors of the processed video. The frequency of recording was slightly less than $40$Hz. Recordings were $327 \times 561$ pixels. These principal components were used as behavioural data. We controlled for these components when taking measurements conditional on behaviour. 
+    Video recordings of the mouse's face were taken during the spontaneous behaviour. We had access to the top $500$ principle components and top $500$ eigenvectors of the processed video. The frequency of recording was slightly less than $40$Hz. Recordings were $327 \times 561$ pixels. These principal components were used as behavioural data. We controlled for these components when taking measurements conditioned on behaviour. 
 
 \section{Methods}
     \subsection{Binning data}
