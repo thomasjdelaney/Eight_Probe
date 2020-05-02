@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.2.24)  1 MAY 2020 21:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.2.24)  2 MAY 2020 20:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -502,7 +502,16 @@ LaTeX Font Info:    Try loading font information for U+rsfs on input line 2.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-))
+)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
+
+])
 \tf@toc=\write4
 \openout4 = `eight_probe.toc'.
 
@@ -513,9 +522,7 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
-
-]
+[2]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 60.
 
@@ -530,18 +537,25 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 84.
+[3]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[4]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 96.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 84.
-<figures/probe_locations_stringer.png, id=221, 311.1625pt x 240.9pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 96.
+<figures/probe_locations_stringer.png, id=254, 311.1625pt x 240.9pt>
 File: figures/probe_locations_stringer.png Graphic file (type png)
 <use figures/probe_locations_stringer.png>
 Package pdftex.def Info: figures/probe_locations_stringer.png  used on input li
-ne 98.
+ne 110.
 (pdftex.def)             Requested size: 142.26286pt x 106.69472pt.
 
 
@@ -550,8 +564,8 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[3 <./figures/probe_locations_stringer.png>]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 124.
+[5 <./figures/probe_locations_stringer.png>]
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 138.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
@@ -559,30 +573,16 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 126.
+(hyperref)                removing `math shift' on input line 140.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 126.
+(hyperref)                removing `subscript' on input line 140.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 126.
+(hyperref)                removing `math shift' on input line 140.
 
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[4]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[5]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -591,12 +591,26 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [6]
 
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[7]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[8]
+
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 197.
+(hyperref)                removing `math shift' on input line 211.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 197.
+(hyperref)                removing `math shift' on input line 211.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -604,27 +618,27 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[7]
-Overfull \hbox (1.43636pt too wide) in paragraph at lines 225--227
+[9]
+Overfull \hbox (1.43636pt too wide) in paragraph at lines 239--241
 \OT1/ptm/m/n/12 Therefore, the max-i-mum en-tropy of the binned spike counts of
  a neu-ron is $[][] []$.
  []
 
-<figures/entropy_limit.png, id=287, 289.08pt x 216.81pt>
+<figures/entropy_limit.png, id=321, 289.08pt x 216.81pt>
 File: figures/entropy_limit.png Graphic file (type png)
 <use figures/entropy_limit.png>
-Package pdftex.def Info: figures/entropy_limit.png  used on input line 230.
+Package pdftex.def Info: figures/entropy_limit.png  used on input line 244.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 235.
+(hyperref)                removing `math shift' on input line 249.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 235.
+(hyperref)                removing `math shift' on input line 249.
 
 
-Overfull \hbox (0.58937pt too wide) in paragraph at lines 238--239
+Overfull \hbox (0.58937pt too wide) in paragraph at lines 252--253
 []\OT1/ptm/m/n/12 For two jointly dis-tributed ran-dom vari-ables $\OML/cmm/m/i
 t/12 X$ \OT1/ptm/m/n/12 and $\OML/cmm/m/it/12 Y$\OT1/ptm/m/n/12 , the mu-tual i
 n-for-ma-tion $\OML/cmm/m/it/12 I\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 X\OT1/cmr/m/
@@ -637,38 +651,18 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[8 <./figures/entropy_limit.png>]
+[10 <./figures/entropy_limit.png>]
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 265.
+(hyperref)                removing `math shift' on input line 279.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 265.
+(hyperref)                removing `math shift' on input line 279.
 
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[9]
-Overfull \hbox (133.04419pt too wide) in paragraph at lines 281--282
-\OT1/ptm/m/n/12 used the \OT1/pcr/m/n/12 mutual[]info[]score\OT1/ptm/m/n/12 , \
-OT1/pcr/m/n/12 adjusted[]mutual[]info[]score\OT1/ptm/m/n/12 , and \OT1/pcr/m/n/
-12 normalized[]mutual[]info[]score
- []
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[10]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -676,6 +670,11 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [11]
+Overfull \hbox (20.28545pt too wide) in paragraph at lines 306--307
+[]\OT1/ptm/m/n/12 Finally, we used the ab-so-lute value of the cor-re-la-tions 
+as the weights for the graph/network.
+ []
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -683,13 +682,6 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [12]
-Overfull \hbox (40.7394pt too wide) in paragraph at lines 334--336
-\OT1/ptm/m/n/12 If we con-sider two clus-ter-ings, $\OMS/cmsy/m/n/12 C$ \OT1/pt
-m/m/n/12 with clus-ters $\OML/cmm/m/it/12 C[]; C[]; [] ; C[]$ \OT1/ptm/m/n/12 a
-nd $\OMS/cmsy/m/n/12 C[]$ \OT1/ptm/m/n/12 with clus-ters $\OML/cmm/m/it/12 C[];
- C[]; [] ; C[]$\OT1/ptm/m/n/12 .
- []
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -710,12 +702,7 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[15] (./eight_probe.bbl
-(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
-File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-))
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 420.
-
+[15]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -723,23 +710,38 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [16]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 420.
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[17] (./eight_probe.bbl
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
+File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
+))
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 436.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[18]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 436.
  (./eight_probe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 420.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 420.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 436.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 436.
 Package rerunfilecheck Info: File `eight_probe.out' has not changed.
-(rerunfilecheck)             Checksum: 55BE00D7BAA26E35932620190A06CE4D;3071.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 420.
+(rerunfilecheck)             Checksum: 3D32C55BC7C41FC4077818722E0EC024;3550.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 436.
  ) 
 Here is how much of TeX's memory you used:
- 9845 strings out of 492701
- 146741 string characters out of 6134504
- 254214 words of memory out of 5000000
- 13441 multiletter control sequences out of 15000+600000
+ 9857 strings out of 492701
+ 146895 string characters out of 6134504
+ 253231 words of memory out of 5000000
+ 13446 multiletter control sequences out of 15000+600000
  23316 words of font info for 61 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
  42i,13n,43p,1006b,605s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -759,10 +761,10 @@ exlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
 ri8a.pfb>
-Output written on eight_probe.pdf (16 pages, 345667 bytes).
+Output written on eight_probe.pdf (18 pages, 348013 bytes).
 PDF statistics:
- 473 PDF objects out of 1000 (max. 8388607)
- 429 compressed objects within 5 object streams
- 119 named destinations out of 1000 (max. 500000)
- 315 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 508 PDF objects out of 1000 (max. 8388607)
+ 462 compressed objects within 5 object streams
+ 126 named destinations out of 1000 (max. 500000)
+ 355 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -70,9 +70,21 @@
 
 \newpage
 
+\section{Results}
+To be added.
+  \subsection{Average correlation size increases with increasing time bin width}
+
+  \subsection{Detecting communities in correlation based networks}
+
+  \subsection{Functional communities resemble anatomical division at short timescales}
+
+  \subsection{Conditional correlations \& signal correlations}
+
+\newpage
+
 \section{Data}
     \subsection{Brain regions}
-    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. The mice were awake and engaging in spontaneous behaviour. 
+    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. The mice were awake and engaging in spontaneous behaviour. The mice were of different sexes and different ages. One mouse was `wide-type', the others were mutants. Details are as follows: 
     \begin{enumerate}
         \item male, wild type, P73. % Robbins
         \item female, TetO-GCaMP6s, Camk2a-tTa, P113 % Waksman
@@ -101,11 +113,13 @@
     \end{figure}
 
     \subsection{Video recordings}\label{sec:video_recordings}
-    Video recordings of the mouse's face were taken during the spontaneous behaviour. We had access to the top $500$ principle components and top $500$ eigenvectors of the processed video. The frequency of recording was slightly less than $40$Hz. Recordings were $327 \times 561$ pixels. These principal components were used as behavioural data. We controlled for these components when taking measurements conditioned on behaviour. 
+    Video recordings of the mouse's face were taken during the spontaneous behaviour. We had access to the top $500$ principle components and top $500$ eigenvectors of the processed videos. The frequency of recording was slightly less than $40$Hz. Each frame contained $327 \times 561$ pixels. These principal components were used as behavioural data. We controlled for these components when taking measurements conditioned on behaviour. 
 
 \section{Methods}
     \subsection{Binning data}
-    The data were divided into time bins of various widths ranging from $0.01$s to $4$s. If the total length of the recording period was not an integer multiple of the time bin width, we cut off the remaining time at the end of the recording period. This period was at most $3.99$s. This is far less than the total recording time of around $1$ hour.
+    The data were divided into time bins of various widths ranging from $0.01$s to $4$s. 
+
+    If the total length of the recording period was not an integer multiple of the time bin width, we cut off the remaining time at the end of the recording period. This period was at most $3.99$s. This is far less than the total recording time of around $1$ hour. So, this detail would not affect our results.
 
     \subsection{Correlation coefficients}
     We calculated Pearson's correlation coefficient for pairs of neurons. For jointly distributed random variables $X$ and $Y$, Pearson's correlation coefficient is defined as:
@@ -184,13 +198,13 @@
         \begin{align}\label{eq:event_conditional_correlation}
             \rho_{XY|Z} = \frac{E[\cov(X,Y|Z)]}{\sqrt{E[\var(X|Z)]E[\var(Y|Z)]}}
         \end{align}
-        (I need to read more about this. This is not really a correlation)
+        Although this is not an actual correlation, it is an intuitive analogue to the correlation as a normalised version of the covariance.  
 
         For comparison, we also measured the `signal correlation'
         \begin{align}\label{eq:signal_correlation}
             \rho_{\text{signal}} = \frac{\cov(E[X|Z], E[Y|Z])}{\sqrt{\var(E[X|Z])\var(E[Y|Z])}}
         \end{align}
-        this is an actual correlation, at least.
+        this is an actual correlation. 
         
 
     \subsection{Information Theory}\label{sec:information_theory}
@@ -278,25 +292,27 @@
         \subsubsection{Measuring entropies \& mutual information}
         In practice, we measured the mutual information between spike counts using Python and the python package \texttt{pyitlib}. We used the PT-bias correction technique to estimate the bias of our measurements when measuring the mutual information between the spike counts of two cells \cite{treves}.
 
-        When measuring the mutual information between clusterings we used Python, but we used the \texttt{mutual\_info\_score}, \texttt{adjusted\_mutual\_info\_score}, and \texttt{normalized\_mutual\_info\_score} functions from the \texttt{sklearn.metrics} part of the \texttt{sklearn} package.
+        When measuring the mutual information between clusterings we used Python, but we used the \texttt{mutual\_info\_score}, \texttt{adjusted\_mutual\_info\_score}, and \\ \texttt{normalized\_mutual\_info\_score} functions from the \texttt{sklearn.metrics} part of the \texttt{sklearn} package.
 
     \subsection{Network analysis}
         \subsubsection{Correlation networks}
-        In order to analyse functional networks created by the neurons in our ensemble, we measured the spike count correlation between each pair of neurons. These measurements induced an undirected weighted network between the neurons. The weight of each connection was equal to the spike count correlation between each pair of neurons. 
+        In order to analyse functional networks created by the neurons in our ensemble, we measured the spike count correlation between each pair of neurons. These measurements induced an undirected weighted graph/network between the neurons. The weight of each connection was equal to the spike count correlation between each pair of neurons. 
 
         \subsubsection{Rectified correlations}
         At the time of writing, the community detection method outlined in \cite{humphries} could only be applied to networks with positively weighted connections. But many neuron pairs were negatively correlated. To apply the community detection method, we \textit{rectified} the network, by setting all the negative weights to zero.
 
         We also looked for structure in the network created by negative correlations by reversing the signs of the correlations, and rectifying these correlations before applying our network analysis.
 
+        Finally, we used the absolute value of the correlations as the weights for the graph/network. We hoped to identify both correlated and anti-correlated functional groups using these networks. 
+
         \subsubsection{Sparsifying data networks}\label{sec:sparsifying_data_networks}
-        When creating our correlation networks, we wanted to exclude any correlations that could be judged to exist `by chance'. To do this, we measured the $5$th and $95$th percentile of the shuffled correlations for the given mouse and time bin width. We then set all the data correlations between these two values to $0$. This excluded any `chance' correlations from our network, and created a sparser network. 
+        When creating our correlation networks, we wanted to exclude any correlations that could be judged to exist `by chance'. To do this, we measured the $5$th and $95$th percentile of the shuffled correlations for the given mouse and time bin width. We then set all the data correlations between these two values to $0$. This excluded any `chance' correlations from our network, and created a sparser network. This allowed us to make use of the `sparse weighted configuration model' as described in section \ref{sec:sparse_weighted_configuration_model}.
 
         \subsubsection{Communities}
-        Given some network represented by an adjacency matrix $\mathbf{A}$, a community within that network is defined as a collection of nodes where the number of connections within these nodes is higher than the expected number of connections between these nodes. In order to quantify the `expected' number of connections, we need a model of a community-less network. In the context of community detection, a community-less model is a network null model. We test the hypothesis that our data model departs from the community-less null model to a statistically significant degree. For undirected unweigted networks, the canonical model of a community-less network is the configuration model \cite{fosdick}. Since we are working with weighted sparse networks, we used more suitable null models, described below.
+        Given some network represented by an adjacency matrix $\mathbf{A}$, a community within that network is defined as a collection of nodes where the number of connections within these nodes is higher than the expected number of connections between these nodes. In order to quantify the `expected' number of connections, we need a model of expected networks. This is analogous to a `null model' in traditional hypothesis testing. We test the hypothesis that our data network departs from the null network model to a statistically significant degree. For undirected unweighted networks, the canonical model of a null network is the configuration model \cite{fosdick}. Since we are working with weighted sparse networks, we used more suitable null models, described below.
 
         \subsubsection{Weighted configuration model}\label{sec:weight_configuration_model}
-        The \textit{weighted configuration model} is a canonical null network model for weighted networks. Given some data network, the weighted configuration model null network will preserve the degree sequence and weight sequence of each node in the data network. But the edges will be distributed randomly \cite{fosdick}. Any structure in the data network beyond its degree sequence and weight sequence will be removed in the weighted configuration model. So, this model can be used in testing the hypothesis that this extra structure exists. 
+        The \textit{weighted configuration model} is a canonical null network model for weighted networks. Given some data network, the weighted configuration model null network will preserve the degree sequence and weight sequence of each node in the data network. But the edges will be distributed randomly \cite{fosdick}. Any structure in the data network beyond its degree sequence and weight sequence will not be captured in the weighted configuration model. So, this model can be used in testing the hypothesis that this extra structure exists. 
 
         \subsubsection{Sparse weighted configuration model}\label{sec:sparse_weighted_configuration_model}
         The \textit{sparse weighted configuration model} is another null network model. Similar in nature to the weighted configuration model (see section \ref{sec:weight_configuration_model}), but the sparsity of the data network is preserved in the null network. This is achieved by sampling from a probability distributon for the creation or non-creation of each possible connection, then distributing the weight of the data network randomly in this sparse network \cite{humphries}. This is the null network that we used when searching for additional strcuture in our data networks.
@@ -319,7 +335,7 @@
         \subsubsection{Node rejection}
         If there are $d$ data eigenvalues lying outside of the null network eigenspectrum, the $d$ eigenvectors corresponding to these eigenvalues will form a vector space. If we project the nodes of our network into this vector space, by projecting either rows or colmns of the data matrix, we can see how strongly each node contributes to the vector space. Nodes that contribute strongly to the additional structure will project far away from the origin, nodes that do not contribute to the additional structure will project close to the origin. We want to use this information to discard those nodes that do not contribute.
 
-        We can test whether a node projects \textit{far} away from the origin or \textit{close} to the origin using the eigenvalues and eigenvectors of $B_1, \dots, B_N$. The $j$th eigenvector and eigenvalue of $B_i$ gives a value for a null network's projection into the $j$th dimension of the additional structure vector space. The matrices $B_1, \dots, B_N$ give $N$ projections into that dimension. These projections are a distribution of null networks' projections. If the data node's projection exceeds that of the null network projections this node is judged to project \textit{far} from the origin, and therefore contribute to the additional structure. Otherwise, the node is judged to project \textit{close} to the origin, and is therefore rejected \cite{humphries}.
+        We can test whether a node projects \textit{far} away from the origin or \textit{close} to the origin using the eigenvalues and eigenvectors of $B_1, \dots, B_N$. The $j$th eigenvector and eigenvalue of $B_i$ gives a value for a null network's projection into the $j$th dimension of the additional structure vector space. The matrices $B_1, \dots, B_N$ give $N$ projections into that dimension. These projections are a distribution of the null networks' projections. If the data node's projection exceeds that of the null network projections this node is judged to project \textit{far} from the origin, and therefore contribute to the additional structure. Otherwise, the node is judged to project \textit{close} to the origin, and is therefore rejected \cite{humphries}.
 
         \subsubsection{Community detection}
         Another application for this $d$ dimensional space is community detection. We first project all of the nodes into this $d$-dimensional space, then perform the clustering in this space. The clustering and community detection procedure is described in \cite{humphries2}. 
@@ -332,7 +348,7 @@
         C_k \cap C_l &= \emptyset \\
         \bigcup_{k=1}^K C_k &= D
     \end{align}
-    If we consider two clusterings, $\mathcal{C}$ with clusters $C_1, C_2, \dots, C_K$ and $\mathcal{C}^{\prime}$ with clusters $C_1^{\prime}, C_2^{\prime}, \dots, C_K^{\prime}$. There are a number of measurements we can use to compare $\mathcal{C}$ and $\mathcal{C}^{\prime}$. In the following, the number of elements in $D$ is denoted by $n$, and the number of elements in cluster $C_k$ is $n_k$.
+    If we consider two clusterings, $\mathcal{C}$ with clusters $C_1, C_2, \dots, C_K$ and $\mathcal{C}^{\prime}$ with clusters \\ $C_1^{\prime}, C_2^{\prime}, \dots, C_K^{\prime}$. There are a number of measurements we can use to compare $\mathcal{C}$ and $\mathcal{C}^{\prime}$. In the following, the number of elements in $D$ is denoted by $n$, and the number of elements in cluster $C_k$ is $n_k$.
 
       \subsubsection{Adjusted Rand Index}
       The \textit{adjusted Rand Index} is a normalised similarity measure for clusterings based on pair counting.
