@@ -15,11 +15,10 @@
 \usepackage{subcaption}
 \usepackage{mathtools}
 
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{Thomas Delaney}
-\rhead{Communities in correlation based networks}
-\cfoot{\thepage}
+\usepackage{lineno}
+\linenumbers
+\renewcommand{\baselinestretch}{1.5}
+\usepackage{authblk}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}[section]
@@ -47,28 +46,32 @@
 \newcommand{\mb}{\mathbf} %to be used in mathmode
 \newcommand{\bs}{\boldsymbol} %to be used in mathmode
 % Title Page
-\title{Communities in correlation based networks}
-\author{Thomas Delaney}
+\title{Comparing communities in correlation based networks to anatomical divisions across timescales}
+\date{}
+
+\author[1]{Thomas Delaney}
+\author[1]{Cian O'Donnell}
+\affil[1]{School of Computer Science, Electrical and Electronic Engineering, and Engineering Mathematics, University of Bristol, Bristol, United Kingdom.}
+\renewcommand\Affilfont{\itshape\small}
 
 \begin{document}
 
-\tableofcontents
+\maketitle
 
-\newpage
+%\tableofcontents
 
-\section{Motivation}
-    \subsection{Finding highly correlated networks including cells from different anatomical regions}
-    Decades of research has established that correlations play a crucial role in representing sensory information. For example, the onset of visual attention has been shown to have a greater affect on the correlations in the macaque V4 region than on the firing rates in that region \cite{cohen1}. Recent findings show that spontaneous behaviours explain correlations in parts of the brain not associated with motor control \cite{stringer}. In order to understand the brain, we must understand the interactions between neurons. 
+\abstract{Decades of research has established that correlations play a crucial role in representing sensory information. One drawback associated with the recent improvement in recording technology and consequent large datasets is the difficulty in analysing higher order correlations in large neuronal ensembles. One benefit of these datasets that has not yet been explored is the opportunity to compare correlations within anatomical regions to correlations across anatomical regions. In this work, we measured correlations between neurons residing in nine different brains regions in three awake and behaving mice. Using the these correlation measurements, we created weighted undirected graph networks and applied network science methods to detect functional communities in our neural ensembles. We compared these functional communities to their anatomical distribution. We repeated the analysis, using different timescales for our correlation measurements, and found that functional communities were more likely to be dominated by neurons from a single brain region at shorter timescales ($< 100$ms).}
 
-    Because of limitations in recording technology almost all research has explored correlations between neurons within a given brain region. Relatively little is known about correlations between neurons in different brain regions. However, the recent development of `Neuropixels' probes \cite{jun} has allowed extracellular voltage measurements to be collected from multiple brain regions simultaneously routinely, and in much larger numbers than traditional methods. In this project we used a publicly-available Neuropixels dataset to analyse correlations between different brain regions \cite{stringer}.
+\section{Introduction}
+Decades of research has established that correlations play a crucial role in representing sensory information. For example, the onset of visual attention has been shown to have a greater affect on the correlations in the macaque V4 region than on the firing rates in that region \cite{cohen1}. Recent findings show that spontaneous behaviours explain correlations in parts of the brain not associated with motor control \cite{stringer}. In order to understand the brain, we must understand the interactions between neurons. 
 
-    A drawback associated with the improvement in recording technology is an increase in the difficulty of analysing these data. For example, analysing the $i$th order interactions of $N$ neurons generally requires estimation of $N^i$ parameters. A number that becomes astronomical for large $N$. New methods are required for analysing these new large datasets. We attempted to address this requirement in this piece of research by applying a cutting-edge network science community detection method to neural data.
+Because of limitations in recording technology almost all research has explored correlations between neurons within a given brain region. Relatively little is known about correlations between neurons in different brain regions. However, the recent development of `Neuropixels' probes \cite{jun} has allowed extracellular voltage measurements to be collected from multiple brain regions simultaneously routinely, and in much larger numbers than traditional methods. In this project we used a publicly-available Neuropixels dataset to analyse correlations between different brain regions \cite{stringer}.
 
-    Another unexplored area of research is the changes in cell interactions at different timescales. Most studies focus on quantifying interactions at a given timescale. But neurons may interact differently, or may interact with different neurons, at different timescales. Here we explore correlated communities of neurons at different timescales.
+A drawback associated with the improvement in recording technology is an increase in the difficulty of analysing these data. For example, analysing the $i$th order interactions of $N$ neurons generally requires estimation of $N^i$ parameters. A number that becomes astronomical for large $N$. New methods are required for analysing these new large datasets. We attempted to address this requirement in this piece of research by applying a cutting-edge network science community detection method to neural data.
 
-    In this work, we measured spike count correlations between neurons from nine different regions of the mouse brain. Using these correlation measurements, we created weighted undirected graphs or networks with each node representing a neuron. We used newly invented network methods to detect communities in these networks. We compared these detected communities to the anatomical division of the cells. We also measured the conditional correlation and signal correlation of between cell spike counts, conditioning on the subjects' behaviour. We repeated the network analysis using these measurements. We also repeated these analyses using different timescales for measuring the correlations. 
+Another unexplored area of research is the changes in cell interactions at different timescales. Most studies focus on quantifying interactions at a given timescale. But neurons may interact differently, or may interact with different neurons, at different timescales. Here we explore correlated communities of neurons at different timescales.
 
-\newpage
+In this work, we measured spike count correlations between neurons from nine different regions of the mouse brain. Using these correlation measurements, we created weighted undirected graphs or networks with each node representing a neuron. We used newly invented network methods to detect communities in these networks. We compared these detected communities to the anatomical division of the cells. We also measured the conditional correlation and signal correlation of between cell spike counts, conditioning on the subjects' behaviour. We repeated the network analysis using these measurements. We also repeated these analyses using different timescales for measuring the correlations. 
 
 \section{Results}
 To be added.
@@ -80,7 +83,8 @@ To be added.
 
   \subsection{Conditional correlations \& signal correlations}
 
-\newpage
+\section{Discussion}
+To be added.
 
 \section{Data}
     \subsection{Brain regions}

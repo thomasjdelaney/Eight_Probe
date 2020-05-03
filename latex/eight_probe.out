@@ -1,43 +1,43 @@
-\BOOKMARK [1][-]{section.1}{Motivation}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Finding highly correlated networks including cells from different anatomical regions}{section.1}% 2
-\BOOKMARK [1][-]{section.2}{Results}{}% 3
-\BOOKMARK [2][-]{subsection.2.1}{Average correlation size increases with increasing time bin width}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.2}{Detecting communities in correlation based networks}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.3}{Functional communities resemble anatomical division at short timescales}{section.2}% 6
-\BOOKMARK [2][-]{subsection.2.4}{Conditional correlations \046 signal correlations}{section.2}% 7
-\BOOKMARK [1][-]{section.3}{Data}{}% 8
-\BOOKMARK [2][-]{subsection.3.1}{Brain regions}{section.3}% 9
-\BOOKMARK [2][-]{subsection.3.2}{Video recordings}{section.3}% 10
-\BOOKMARK [1][-]{section.4}{Methods}{}% 11
-\BOOKMARK [2][-]{subsection.4.1}{Binning data}{section.4}% 12
-\BOOKMARK [2][-]{subsection.4.2}{Correlation coefficients}{section.4}% 13
-\BOOKMARK [3][-]{subsubsection.4.2.1}{Spike Count Correlation, rSC}{subsection.4.2}% 14
-\BOOKMARK [3][-]{subsubsection.4.2.2}{Shuffled spike count correlations}{subsection.4.2}% 15
-\BOOKMARK [3][-]{subsubsection.4.2.3}{Separating Correlations \046 Anti-correlations}{subsection.4.2}% 16
-\BOOKMARK [2][-]{subsection.4.3}{Conditioning on behavioural data}{section.4}% 17
-\BOOKMARK [3][-]{subsubsection.4.3.1}{Linear regression}{subsection.4.3}% 18
-\BOOKMARK [3][-]{subsubsection.4.3.2}{Elastic net regularisation}{subsection.4.3}% 19
-\BOOKMARK [3][-]{subsubsection.4.3.3}{Conditional covariance}{subsection.4.3}% 20
-\BOOKMARK [3][-]{subsubsection.4.3.4}{Measures of conditional correlation}{subsection.4.3}% 21
-\BOOKMARK [2][-]{subsection.4.4}{Information Theory}{section.4}% 22
-\BOOKMARK [3][-]{subsubsection.4.4.1}{Entropy H\(X\)}{subsection.4.4}% 23
-\BOOKMARK [3][-]{subsubsection.4.4.2}{Maximum entropy limit}{subsection.4.4}% 24
-\BOOKMARK [3][-]{subsubsection.4.4.3}{Mutual Information I\(X;Y\)}{subsection.4.4}% 25
-\BOOKMARK [3][-]{subsubsection.4.4.4}{Variation of Information VI\(X,Y\)}{subsection.4.4}% 26
-\BOOKMARK [3][-]{subsubsection.4.4.5}{Measuring entropies \046 mutual information}{subsection.4.4}% 27
-\BOOKMARK [2][-]{subsection.4.5}{Network analysis}{section.4}% 28
-\BOOKMARK [3][-]{subsubsection.4.5.1}{Correlation networks}{subsection.4.5}% 29
-\BOOKMARK [3][-]{subsubsection.4.5.2}{Rectified correlations}{subsection.4.5}% 30
-\BOOKMARK [3][-]{subsubsection.4.5.3}{Sparsifying data networks}{subsection.4.5}% 31
-\BOOKMARK [3][-]{subsubsection.4.5.4}{Communities}{subsection.4.5}% 32
-\BOOKMARK [3][-]{subsubsection.4.5.5}{Weighted configuration model}{subsection.4.5}% 33
-\BOOKMARK [3][-]{subsubsection.4.5.6}{Sparse weighted configuration model}{subsection.4.5}% 34
-\BOOKMARK [3][-]{subsubsection.4.5.7}{Spectral rejection}{subsection.4.5}% 35
-\BOOKMARK [3][-]{subsubsection.4.5.8}{Node rejection}{subsection.4.5}% 36
-\BOOKMARK [3][-]{subsubsection.4.5.9}{Community detection}{subsection.4.5}% 37
-\BOOKMARK [2][-]{subsection.4.6}{Clustering Comparison}{section.4}% 38
-\BOOKMARK [3][-]{subsubsection.4.6.1}{Adjusted Rand Index}{subsection.4.6}% 39
-\BOOKMARK [3][-]{subsubsection.4.6.2}{Clusterings as random variables}{subsection.4.6}% 40
-\BOOKMARK [3][-]{subsubsection.4.6.3}{Information based similarity measures}{subsection.4.6}% 41
-\BOOKMARK [3][-]{subsubsection.4.6.4}{Information based metrics}{subsection.4.6}% 42
-\BOOKMARK [3][-]{subsubsection.4.6.5}{Comparing detected communities and anatomical divisions}{subsection.4.6}% 43
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Results}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Average correlation size increases with increasing time bin width}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Detecting communities in correlation based networks}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Functional communities resemble anatomical division at short timescales}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Conditional correlations \046 signal correlations}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Discussion}{}% 7
+\BOOKMARK [1][-]{section.4}{Data}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{Brain regions}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Video recordings}{section.4}% 10
+\BOOKMARK [1][-]{section.5}{Methods}{}% 11
+\BOOKMARK [2][-]{subsection.5.1}{Binning data}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.2}{Correlation coefficients}{section.5}% 13
+\BOOKMARK [3][-]{subsubsection.5.2.1}{Spike Count Correlation, rSC}{subsection.5.2}% 14
+\BOOKMARK [3][-]{subsubsection.5.2.2}{Shuffled spike count correlations}{subsection.5.2}% 15
+\BOOKMARK [3][-]{subsubsection.5.2.3}{Separating Correlations \046 Anti-correlations}{subsection.5.2}% 16
+\BOOKMARK [2][-]{subsection.5.3}{Conditioning on behavioural data}{section.5}% 17
+\BOOKMARK [3][-]{subsubsection.5.3.1}{Linear regression}{subsection.5.3}% 18
+\BOOKMARK [3][-]{subsubsection.5.3.2}{Elastic net regularisation}{subsection.5.3}% 19
+\BOOKMARK [3][-]{subsubsection.5.3.3}{Conditional covariance}{subsection.5.3}% 20
+\BOOKMARK [3][-]{subsubsection.5.3.4}{Measures of conditional correlation}{subsection.5.3}% 21
+\BOOKMARK [2][-]{subsection.5.4}{Information Theory}{section.5}% 22
+\BOOKMARK [3][-]{subsubsection.5.4.1}{Entropy H\(X\)}{subsection.5.4}% 23
+\BOOKMARK [3][-]{subsubsection.5.4.2}{Maximum entropy limit}{subsection.5.4}% 24
+\BOOKMARK [3][-]{subsubsection.5.4.3}{Mutual Information I\(X;Y\)}{subsection.5.4}% 25
+\BOOKMARK [3][-]{subsubsection.5.4.4}{Variation of Information VI\(X,Y\)}{subsection.5.4}% 26
+\BOOKMARK [3][-]{subsubsection.5.4.5}{Measuring entropies \046 mutual information}{subsection.5.4}% 27
+\BOOKMARK [2][-]{subsection.5.5}{Network analysis}{section.5}% 28
+\BOOKMARK [3][-]{subsubsection.5.5.1}{Correlation networks}{subsection.5.5}% 29
+\BOOKMARK [3][-]{subsubsection.5.5.2}{Rectified correlations}{subsection.5.5}% 30
+\BOOKMARK [3][-]{subsubsection.5.5.3}{Sparsifying data networks}{subsection.5.5}% 31
+\BOOKMARK [3][-]{subsubsection.5.5.4}{Communities}{subsection.5.5}% 32
+\BOOKMARK [3][-]{subsubsection.5.5.5}{Weighted configuration model}{subsection.5.5}% 33
+\BOOKMARK [3][-]{subsubsection.5.5.6}{Sparse weighted configuration model}{subsection.5.5}% 34
+\BOOKMARK [3][-]{subsubsection.5.5.7}{Spectral rejection}{subsection.5.5}% 35
+\BOOKMARK [3][-]{subsubsection.5.5.8}{Node rejection}{subsection.5.5}% 36
+\BOOKMARK [3][-]{subsubsection.5.5.9}{Community detection}{subsection.5.5}% 37
+\BOOKMARK [2][-]{subsection.5.6}{Clustering Comparison}{section.5}% 38
+\BOOKMARK [3][-]{subsubsection.5.6.1}{Adjusted Rand Index}{subsection.5.6}% 39
+\BOOKMARK [3][-]{subsubsection.5.6.2}{Clusterings as random variables}{subsection.5.6}% 40
+\BOOKMARK [3][-]{subsubsection.5.6.3}{Information based similarity measures}{subsection.5.6}% 41
+\BOOKMARK [3][-]{subsubsection.5.6.4}{Information based metrics}{subsection.5.6}% 42
+\BOOKMARK [3][-]{subsubsection.5.6.5}{Comparing detected communities and anatomical divisions}{subsection.5.6}% 43
