@@ -63,7 +63,7 @@
 \abstract{Decades of research has established that correlations play a crucial role in representing sensory information. One drawback associated with the recent improvement in recording technology and consequent large datasets is the difficulty in analysing higher order correlations in large neuronal ensembles. One benefit of these datasets that has not yet been explored is the opportunity to compare correlations within anatomical regions to correlations across anatomical regions. In this work, we measured correlations between neurons residing in nine different brains regions in three awake and behaving mice. Using the these correlation measurements, we created weighted undirected graph networks and applied network science methods to detect functional communities in our neural ensembles. We compared these functional communities to their anatomical distribution. We repeated the analysis, using different timescales for our correlation measurements, and found that functional communities were more likely to be dominated by neurons from a single brain region at shorter timescales ($< 100$ms).}
 
 \section{Introduction}
-Decades of research has established that correlations play a crucial role in representing sensory information. For example, the onset of visual attention has been shown to have a greater affect on the correlations in the macaque V4 region than on the firing rates in that region \cite{cohen1}. Recent findings show that spontaneous behaviours explain correlations in parts of the brain not associated with motor control \cite{stringer}. In order to understand the brain, we must understand the interactions between neurons. 
+Decades of research has established that correlations play a crucial role in representing sensory information. For example, the onset of visual attention has been shown to have a greater affect on the correlations in the macaque V4 region than on the firing rates in that region \cite{cohen1}. Recent findings show that spontaneous behaviours explain correlations in parts of the brain not associated with motor control \cite{stringer}. In order to understand the brain, we must understand the interactions between neurons.
 
 Because of limitations in recording technology almost all research has explored correlations between neurons within a given brain region. Relatively little is known about correlations between neurons in different brain regions. However, the recent development of `Neuropixels' probes \cite{jun} has allowed extracellular voltage measurements to be collected from multiple brain regions simultaneously routinely, and in much larger numbers than traditional methods. In this project we used a publicly-available Neuropixels dataset to analyse correlations between different brain regions \cite{stringer}.
 
@@ -71,10 +71,33 @@ A drawback associated with the improvement in recording technology is an increas
 
 Another unexplored area of research is the changes in cell interactions at different timescales. Most studies focus on quantifying interactions at a given timescale. But neurons may interact differently, or may interact with different neurons, at different timescales. Here we explore correlated communities of neurons at different timescales.
 
-In this work, we measured spike count correlations between neurons from nine different regions of the mouse brain. Using these correlation measurements, we created weighted undirected graphs or networks with each node representing a neuron. We used newly invented network methods to detect communities in these networks. We compared these detected communities to the anatomical division of the cells. We also measured the conditional correlation and signal correlation of between cell spike counts, conditioning on the subjects' behaviour. We repeated the network analysis using these measurements. We also repeated these analyses using different timescales for measuring the correlations. 
+In this work, we measured spike count correlations between neurons from nine different regions of the mouse brain. Using these correlation measurements, we created weighted undirected graphs or networks with each node representing a neuron. We used newly invented network methods to detect communities in these networks. We compared these detected communities to the anatomical division of the cells. We also measured the conditional correlation and signal correlation of between cell spike counts, conditioning on the subjects' behaviour. We repeated the network analysis using these measurements. We also repeated these analyses using different timescales for measuring the correlations.
 
 \section{Results}
+
+% Fig 1. Correlations increase with bin width
+% - 2 time series plots of a pair of neurons, one small bin width one big bin widt
+% - mean pairwise correlation vs bin width
+% - for both positive corr and negative corr pairs
+%
+% Fig 2: Differences between inter- and intra- regional correlations decreases across bin width.
+% - coloured dots
+% - mean inter and intra- region correlations vs bin width
+% - correlation matrix at short vs long time bins (decide whether all cells or mean per region).
+% 
+% Fig 3. Community detection, main results
+% - Schematic diagram of community detection algorithm steps.
+% - Matrices sorted by communities, region, correlations, one for short and one for long time bins.
+% - Plot of Variation of Information vs time bin size.
+%
+% Figure 4: Conditional correlations
+% - Covariance matrices = conditional cov + signal cov
+% - Bar plot or similar comparing mean correlations for all three: total, conditional and signal.
+% - Corresponding plots for communities, one for conditional, one for signal, for both a short and long time bin
+% - VI measure vs time bins size for both types of correlation
+
 To be added.
+
   \subsection{Average correlation size increases with increasing time bin width}
 
   \subsection{Detecting communities in correlation based networks}
@@ -87,8 +110,11 @@ To be added.
 To be added.
 
 \section{Data}
+
+    The data that we used in this project were collected by Nick Steinmetz and his lab members\cite{stringer}.
+
     \subsection{Brain regions}
-    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. The mice were awake and engaging in spontaneous behaviour. The mice were of different sexes and different ages. One mouse was `wide-type', the others were mutants. Details are as follows: 
+    Neuropixels probes were used to collect extracellular recordings \cite{jun} from three different mice. The mice were awake, headfixed, and engaging in spontaneous behaviour. The mice were of different sexes and different ages. One mouse was `wild-type', the others were mutants. Details as follows:
     \begin{enumerate}
         \item male, wild type, P73. % Robbins
         \item female, TetO-GCaMP6s, Camk2a-tTa, P113 % Waksman
@@ -117,16 +143,16 @@ To be added.
     \end{figure}
 
     \subsection{Video recordings}\label{sec:video_recordings}
-    Video recordings of the mouse's face were taken during the spontaneous behaviour. We had access to the top $500$ principle components and top $500$ eigenvectors of the processed videos. The frequency of recording was slightly less than $40$Hz. Each frame contained $327 \times 561$ pixels. These principal components were used as behavioural data. We controlled for these components when taking measurements conditioned on behaviour. 
+    Video recordings of the mouse's face were taken during the spontaneous behaviour. We had access to the top $500$ principle components and top $500$ eigenvectors of the processed videos. The frequency of recording was slightly less than $40$Hz. Each frame contained $327 \times 561$ pixels. These principal components were used as behavioural data. We controlled for these components when taking measurements conditioned on behaviour.
 
 \section{Methods}
     \subsection{Binning data}
-    The data were divided into time bins of various widths ranging from $0.01$s to $4$s. 
+    We transoformed the spike timing data into binned spike count data by dividing the experimental period into time bins and counting the spikes fired by each cell within the time period covered by each of those bins. The data were divided into time bins of various widths ranging from $0.01$s to $4$s.
 
     If the total length of the recording period was not an integer multiple of the time bin width, we cut off the remaining time at the end of the recording period. This period was at most $3.99$s. This is far less than the total recording time of around $1$ hour. So, this detail would not affect our results.
 
     \subsection{Correlation coefficients}
-    We calculated Pearson's correlation coefficient for pairs of neurons. For jointly distributed random variables $X$ and $Y$, Pearson's correlation coefficient is defined as:
+    We calculated Pearson's correlation coefficient for pairs of spike counts from pairs of neurons. For jointly distributed random variables $X$ and $Y$, Pearson's correlation coefficient is defined as:
     \begin{align}\label{eq:dist_pearsons_corr}
         \rho_{XY} =& \frac{\cov(X,Y)}{\sigma_X \sigma_Y} \\
                   =& \frac{E[(X - \mu_X)(Y - \mu_Y)]}{\sigma_X \sigma_Y}
@@ -144,10 +170,10 @@ To be added.
         \subsubsection{Spike Count Correlation, $r_{SC}$}\label{sec:spike_count_correlation}
         The spike count correlation ($r_{SC}$) of two cells is the correlation between the spike counts of those cells in response to a given stimulus condition. In this study, there was only one stimulus condition, that of no stimulus. The subjects engaged in spontaneous behaviour during recording.
 
-        \subsubsection{Shuffled spike count correlations}
-        We measured the shuffled spike count correlations between two neurons by randomly permuting one of the neuron's spike counts and measuring the spike count correlations. These shuffled correlations were useful when measuring the effect of time bin width on correlations, and when deciding which correlations should be preserved when creating correlation networks (see section \ref{sec:sparsifying_data_networks}). 
+        \subsubsection{Shuffled spike count correlations}\label{sec:shuffled_correlations}
+        We measured the shuffled spike count correlations between two neurons by randomly permuting one of the neuron's spike counts and measuring the spike count correlations. These shuffled correlations were useful when measuring the effect of time bin width on correlations, and when deciding which correlations should be preserved when creating correlation networks (see section \ref{sec:sparsifying_data_networks}).
 
-        \subsubsection{Separating Correlations \& Anti-correlations}\label{sec:corr_anti_corr} 
+        \subsubsection{Separating Correlations \& Anti-correlations}\label{sec:corr_anti_corr}
         In order to compare the effect of bin width on measures of negative $r_{SC}$ (anti-correlation) and positive $r_{SC}$ separately, we had to separate correlated and anti-correlated pairs. To do this, we simply measured the mean $r_{SC}$, taking the mean across all the bin widths. If this quantity was positive or zero we regarded the pair as positively correlated. If this quantity was negative we regarded the pair as anti-correlated.
 
     \subsection{Conditioning on behavioural data}
@@ -159,7 +185,7 @@ To be added.
     Given the $500$ components, a na\"{i}ve estimation of $P(Z_1,\dots,Z_{500})$ or $P(X, Z_1,\dots,Z_{500})$ by histogramming was impossible. Therefore we modelled $X$ as a linear combination of the PCs.
 
         \subsubsection{Linear regression}
-        We modelled the spike count of a given cell, $X$, as a linear combination of the PCs of the video of the mouse's face, $\mathbf{Z} = Z_1,\dots,Z_{500}$. We tried three different types of regularization 
+        We modelled the spike count of a given cell, $X$, as a linear combination of the PCs of the video of the mouse's face, $\mathbf{Z} = Z_1,\dots,Z_{500}$. We tried three different types of regularization
         \begin{itemize}
             \item $L1$ or `Lasso'
             \item $L2$ or `Ridge regression'
@@ -183,7 +209,7 @@ To be added.
         \end{align}
         We implemented the model using the \texttt{ElasticNetCV} method of Python's \\ \texttt{sklearn.linear\_models} package.
 
-        As well as using the PCs, we also tried fitting the models using the raw video data reconstructed from the PCs and eigenvectors. These models performed worse than those using the PCs. We expected this because each representation contains the same amount of information, but the raw video representation spreads this information across many more components. This requires more parameter fitting, but given the same information. 
+        As well as using the PCs, we also tried fitting the models using the raw video data reconstructed from the PCs and eigenvectors. These models performed worse than those using the PCs. We expected this because each representation contains the same amount of information, but the raw video representation spreads this information across many more components. This requires more parameter fitting, but given the same information.
 
         \subsubsection{Conditional covariance}
         We calculated the expected value of the conditional covariance using the law of total covariance.
@@ -194,22 +220,22 @@ To be added.
 
         Using our linear model, we calculated $E[X|Z_1,\dots, Z_{500}]$ for each cell $X$. Then we proceeded to calculate
         \begin{align}
-            E[\cov(X,Y|Z_1,\dots, Z_{500})] = \cov(X,Y) - \cov(E[X|Z_1,\dots, Z_{500}], E[Y|Z_1,\dots, Z_{500}])
+            E[\cov(X,Y|Z_1,\dots, Z_{500})] = & \cov(X,Y) - \\
+              & \cov(E[X|Z_1,\dots, Z_{500}], E[Y|Z_1,\dots, Z_{500}])
         \end{align}
 
-        \subsubsection{Measures of conditional correlation}
+        \subsubsection{Measures of conditional correlation}\label{sec:cond_corr}
         As a measure of expected correlation, we measured the `event conditional correlation' \cite{maugis}
         \begin{align}\label{eq:event_conditional_correlation}
             \rho_{XY|Z} = \frac{E[\cov(X,Y|Z)]}{\sqrt{E[\var(X|Z)]E[\var(Y|Z)]}}
         \end{align}
-        Although this is not an actual correlation, it is an intuitive analogue to the correlation as a normalised version of the covariance.  
+        Although this is not an actual correlation, it is an intuitive analogue to the correlation as a normalised version of the covariance.
 
         For comparison, we also measured the `signal correlation'
         \begin{align}\label{eq:signal_correlation}
             \rho_{\text{signal}} = \frac{\cov(E[X|Z], E[Y|Z])}{\sqrt{\var(E[X|Z])\var(E[Y|Z])}}
         \end{align}
-        this is an actual correlation. 
-        
+        this is an actual correlation.
 
     \subsection{Information Theory}\label{sec:information_theory}
         \subsubsection{Entropy $H(X)$}
@@ -241,12 +267,12 @@ To be added.
                 &= - \log_2 \left( \frac{1}{n_{\max} + 1} \right) \\
                 &= \log_2 \left( n_{\max} + 1 \right)
         \end{align*}
-        Therefore, the maximum entropy of the binned spike counts of a neuron is $\log _2 \left( n_{\max} + 1 \right)$. Of course, it would be very unusual for a neuron to fire in accordance with the discrete uniform distribution. Most measures of entropy taken on binned spiking data will be much lower than the maximum. See figure \ref{fig:entropy_limit} to see the maximum entropy as a function of the maximum observed spike count.
+        Therefore, the maximum entropy of the binned spike counts of a neuron is $\log _2 \left( n_{\max} + 1 \right)$. Of course, it would be very unusual for a neuron to fire in accordance with the discrete uniform distribution. Most measurements of entropy taken on binned spiking data will be much lower than the maximum. See figure \ref{fig:entropy_limit} to see the maximum entropy as a function of the maximum observed spike count.
 
         \begin{figure}[h]
           \centering
           \includegraphics[width=0.5\textwidth]{figures/entropy_limit.png}
-          \caption{\textbf{Entropy Limit:} The uppper limit on entropy of binned spike count data as a function of the maximum observed spike count. The orange line is the analytical maximum. The blue line is the entropy of samples with $N=1000$ data points taken from the discrete uniform distribution.}
+          \caption{\textbf{Entropy Limit:} The upper limit on entropy of binned spike count data as a function of the maximum observed spike count. The orange line is the analytical maximum. The blue line is the entropy of samples with $N=1000$ data points taken from the discrete uniform distribution.}
           \label{fig:entropy_limit}
         \end{figure}
 
@@ -255,24 +281,24 @@ To be added.
 
         For two jointly distributed random variables $X$ and $Y$, the mutual information $I(X;Y)$ is defined as
         \begin{align}\label{eq:mutual_info_intuitive}
-        I(X;Y)  =& H(Y) - H(Y|X) \\
-                =& H(X) - H(X|Y)
+            I(X;Y)  =& H(Y) - H(Y|X) \\
+                    =& H(X) - H(X|Y)
         \end{align}
         Equation \ref{eq:mutual_info_intuitive} fits with the following intuition: The mutual information between $X$ and $Y$ is the reduction in uncertainty about $X$ gained by knowing $Y$, or vice versa. We could also say the mutual information is the amount of information gained about $X$ by knowing $Y$, or vice versa.
 
         Another useful entropy based definition for the mutual information is
         \begin{align}\label{eq:mutual_info_useful}
-        I(X;Y)  =& H(X) + H(Y) - H(X,Y)
+            I(X;Y)  =& H(X) + H(Y) - H(X,Y)
         \end{align}
-        This definition is useful because it does not require the calculation of conditional probabilities. This was the form we used when performing calculations.
+        This definition is useful because it does not require the calculation of conditional probabilities.
 
         The mutual information can also be defined in terms of marginal, joint, and conditional distributions. For example,
         \begin{align}\label{eq:mutual_info_log}
-        I(X;Y)  =& -\sum_{n=1}^N \sum_{m=1}^M P(X=x_n, Y=y_m) \log _2 \frac{P(X=x_n, Y=y_m)}{P(X=x_n) P(Y=y_m)}
+            I(X;Y)  =& -\sum_{n=1}^N \sum_{m=1}^M P(X=x_n, Y=y_m) \log _2 \frac{P(X=x_n, Y=y_m)}{P(X=x_n) P(Y=y_m)}
         \end{align}
         Notice that this can be rewritten as a Kullback–Leibler divergence.
         \begin{align}
-        I(X;Y)  =& D_{KL}(P(X,Y)|| P(X)P(Y))
+            I(X;Y)  =& D_{KL}(P(X,Y)|| P(X)P(Y))
         \end{align}
         So, we can also think of the mutual information as a measure of the difference between the joint distribution of $X$ and $Y$, and the product of their marginal distributions. Since the product of the marginal distributions is the joint distribution for independent variables, we can think of the mutual information as a measure of the variables' dependence on one another.
 
@@ -300,41 +326,43 @@ To be added.
 
     \subsection{Network analysis}
         \subsubsection{Correlation networks}
-        In order to analyse functional networks created by the neurons in our ensemble, we measured the spike count correlation between each pair of neurons. These measurements induced an undirected weighted graph/network between the neurons. The weight of each connection was equal to the spike count correlation between each pair of neurons. 
+        In order to analyse functional networks created by the neurons in our ensemble, we measured the spike count correlation between each pair of neurons. These measurements induced an undirected weighted graph/network between the neurons. The weight of each connection was equal to the spike count correlation between each pair of neurons.
+
+        We followed the same procedure for spike count correlations \ref{sec:spike_count_correlation}, conditional correlations, and signal correlations \ref{sec:cond_corr}.
 
         \subsubsection{Rectified correlations}
         At the time of writing, the community detection method outlined in \cite{humphries} could only be applied to networks with positively weighted connections. But many neuron pairs were negatively correlated. To apply the community detection method, we \textit{rectified} the network, by setting all the negative weights to zero.
 
         We also looked for structure in the network created by negative correlations by reversing the signs of the correlations, and rectifying these correlations before applying our network analysis.
 
-        Finally, we used the absolute value of the correlations as the weights for the graph/network. We hoped to identify both correlated and anti-correlated functional groups using these networks. 
+        Finally, we used the absolute value of the correlations as the weights for the graph/network. By doing this, we hoped to identify both correlated and anti-correlated functional communities of neurons.
 
         \subsubsection{Sparsifying data networks}\label{sec:sparsifying_data_networks}
-        When creating our correlation networks, we wanted to exclude any correlations that could be judged to exist `by chance'. To do this, we measured the $5$th and $95$th percentile of the shuffled correlations for the given mouse and time bin width. We then set all the data correlations between these two values to $0$. This excluded any `chance' correlations from our network, and created a sparser network. This allowed us to make use of the `sparse weighted configuration model' as described in section \ref{sec:sparse_weighted_configuration_model}.
+        When creating our correlation networks, we wanted to exclude any correlations that could be judged to exist `by chance'. To do this, we measured the $5$th and $95$th percentile of the shuffled correlations (see section \ref{sec:shuffled_correlations}) for the given mouse and time bin width. We then set all the data correlations between these two values to $0$. This excluded any `chance' correlations from our network, and created a sparser network. This allowed us to make use of the `sparse weighted configuration model' as described in section \ref{sec:sparse_weighted_configuration_model}.
 
         \subsubsection{Communities}
         Given some network represented by an adjacency matrix $\mathbf{A}$, a community within that network is defined as a collection of nodes where the number of connections within these nodes is higher than the expected number of connections between these nodes. In order to quantify the `expected' number of connections, we need a model of expected networks. This is analogous to a `null model' in traditional hypothesis testing. We test the hypothesis that our data network departs from the null network model to a statistically significant degree. For undirected unweighted networks, the canonical model of a null network is the configuration model \cite{fosdick}. Since we are working with weighted sparse networks, we used more suitable null models, described below.
 
         \subsubsection{Weighted configuration model}\label{sec:weight_configuration_model}
-        The \textit{weighted configuration model} is a canonical null network model for weighted networks. Given some data network, the weighted configuration model null network will preserve the degree sequence and weight sequence of each node in the data network. But the edges will be distributed randomly \cite{fosdick}. Any structure in the data network beyond its degree sequence and weight sequence will not be captured in the weighted configuration model. So, this model can be used in testing the hypothesis that this extra structure exists. 
+        The \textit{weighted configuration model} is a canonical null network model for weighted networks. Given some data network, the weighted configuration model null network will preserve the degree sequence and weight sequence of each node in the data network. But the edges will be distributed randomly \cite{fosdick}. Any structure in the data network beyond its degree sequence and weight sequence will not be captured in the weighted configuration model. So, this model can be used in testing the hypothesis that this extra structure exists.
 
         \subsubsection{Sparse weighted configuration model}\label{sec:sparse_weighted_configuration_model}
         The \textit{sparse weighted configuration model} is another null network model. Similar in nature to the weighted configuration model (see section \ref{sec:weight_configuration_model}), but the sparsity of the data network is preserved in the null network. This is achieved by sampling from a probability distributon for the creation or non-creation of each possible connection, then distributing the weight of the data network randomly in this sparse network \cite{humphries}. This is the null network that we used when searching for additional strcuture in our data networks.
 
         \subsubsection{Spectral rejection}\label{sec:spectral_rejection}
-        We made use of the spectral rejection algorithm as outlined in \cite{humphries}. The spectral rejection algorithm is a method for finding structure in a network not captured by a supposed null model, if such structure exists. 
-        
+        We made use of the spectral rejection algorithm as outlined in \cite{humphries}. The spectral rejection algorithm is a method for finding structure in a network not captured by a supposed null model, if such structure exists.
+
         To describe the method, we denote our data network matrix $\mathbf{W}$, we denote the expected network of our null network model as $\left\langle \mathbf{P} \right\rangle$. Then the departure of our data network from the null network can be described by the matrix
         \begin{align}
           \mathbf{B} = \mathbf{W} - \left\langle \mathbf{P} \right\rangle
         \end{align}
-        a common choice for $\left\langle \mathbf{P} \right\rangle$ in community detection is the `configuration model' \cite{fosdick, humphries2}. The matrix $\mathbf{B}$ is often called the configuration matrix, in this context we will use the term `deviation matrix' as it captures the deviation of $\mathbf{W}$ from the null model. 
+        a common choice for $\left\langle \mathbf{P} \right\rangle$ in community detection is the `configuration model' \cite{fosdick, humphries2}. The matrix $\mathbf{B}$ is often called the configuration matrix, in this context we will use the term `deviation matrix' as it captures the deviation of $\mathbf{W}$ from the null model.
 
-        To test for structure in the network represented by $\mathbf{W}$, we examine the eigenspectrum of $\mathbf{B}$ and compare it to the eigenspectrum of our null model. Firstly, note that since our data model doesn't allow self loops, and is not directed, the matrix representing the network will be symmetric and positive semi-definite, and will therefore be invertible with real eigenvalues. We selected a null model with the same characteristics. 
-        
-        To find the eigenspectrum of the null model, we generated $N$ samples from our null model $P_1, \dots, P_N$, and we measured their deviation matrices $B_1, \dots, B_N$. We then calculated the eigenspectrum of each of those samples. We calculated the upper bound of the null model eigenspectrum by taking the mean of the largest eigenvalues of $B_1, \dots, B_N$. We calculated a lower bound on the null model eigenspectrum by taking the mean of the smallest eigenvalues of $B_1, \dots, B_N$. 
+        To test for structure in the network represented by $\mathbf{W}$, we examine the eigenspectrum of $\mathbf{B}$ and compare it to the eigenspectrum of our null model. Firstly, note that since our data model doesn't allow self loops, and is not directed, the matrix representing the network will be symmetric and positive semi-definite, and will therefore be invertible with real eigenvalues. We selected a null model with the same characteristics.
 
-        We then calculated the eigenspectrum of $\mathbf{B}$, our data network deviation matrix. If any of those eigenvalues lay outside of the upper or lower bounds of the null model eigenspectrum, this is evidence of additional structure not captured by the null model. If we chose the sparse weighted configuration model (seec section \ref{sec:sparse_weighted_configuration_model}) as our null network model, then eigenvalues lying below the lower bound indicate $n$-partite structure in the network. For example, if one eigenvalue lay below the lower bound, this would indicate some bipartite structure in the data network. If any eigenvalues lay above the upper bound of the null model eigenspectrum, this is evidence of community structure in the data network. For example, one eigenvalue of $\mathbf{B}$ lying above the upper bound of the null model eigenspectrum indicates the presence of two communities in the network \cite{humphries2}.
+        To find the eigenspectrum of the null model, we generated $N$ samples from our null model $P_1, \dots, P_N$, and we measured their deviation matrices $B_1, \dots, B_N$. We then calculated the eigenspectrum of each of those samples. We calculated the upper bound of the null model eigenspectrum by taking the mean of the largest eigenvalues of $B_1, \dots, B_N$. We calculated a lower bound on the null model eigenspectrum by taking the mean of the smallest eigenvalues of $B_1, \dots, B_N$.
+
+        We then calculated the eigenspectrum of $\mathbf{B}$, our data network deviation matrix. If any of those eigenvalues lay outside of the upper or lower bounds of the null model eigenspectrum, this is evidence of additional structure not captured by the null model. If we chose the sparse weighted configuration model (see section \ref{sec:sparse_weighted_configuration_model}) as our null network model, then eigenvalues lying below the lower bound indicate $n$-partite structure in the network. For example, if one eigenvalue lay below the lower bound, this would indicate some bipartite structure in the data network. If any eigenvalues lay above the upper bound of the null model eigenspectrum, this is evidence of community structure in the data network. For example, one eigenvalue of $\mathbf{B}$ lying above the upper bound of the null model eigenspectrum indicates the presence of two communities in the network \cite{humphries2}.
 
         \subsubsection{Node rejection}
         If there are $d$ data eigenvalues lying outside of the null network eigenspectrum, the $d$ eigenvectors corresponding to these eigenvalues will form a vector space. If we project the nodes of our network into this vector space, by projecting either rows or colmns of the data matrix, we can see how strongly each node contributes to the vector space. Nodes that contribute strongly to the additional structure will project far away from the origin, nodes that do not contribute to the additional structure will project close to the origin. We want to use this information to discard those nodes that do not contribute.
@@ -342,7 +370,7 @@ To be added.
         We can test whether a node projects \textit{far} away from the origin or \textit{close} to the origin using the eigenvalues and eigenvectors of $B_1, \dots, B_N$. The $j$th eigenvector and eigenvalue of $B_i$ gives a value for a null network's projection into the $j$th dimension of the additional structure vector space. The matrices $B_1, \dots, B_N$ give $N$ projections into that dimension. These projections are a distribution of the null networks' projections. If the data node's projection exceeds that of the null network projections this node is judged to project \textit{far} from the origin, and therefore contribute to the additional structure. Otherwise, the node is judged to project \textit{close} to the origin, and is therefore rejected \cite{humphries}.
 
         \subsubsection{Community detection}
-        Another application for this $d$ dimensional space is community detection. We first project all of the nodes into this $d$-dimensional space, then perform the clustering in this space. The clustering and community detection procedure is described in \cite{humphries2}. 
+        Another application for this $d$ dimensional space is community detection. We first project all of the nodes into this $d$-dimensional space, then perform the clustering in this space. The clustering and community detection procedure is described in \cite{humphries2}.
 
         In practice, the procedure is carried out $n$ times (we chose $n=100$ times), this returns $n$ clusterings. We resolve these $n$ clusterings to one final clustering using \textit{consensus clustering}. We used the consensus clustering method that uses an explicit null model for the consensus matrix, as outlined in \cite{humphries}.
 
@@ -364,26 +392,26 @@ To be added.
         \item the number of pairs in the same cluster in $\mathcal{C}$ and different clusters in $\mathcal{C}^{\prime}$ by $N_{10}$
         \item the number of pairs in different clusters in $\mathcal{C}$ and the same cluster in $\mathcal{C}^{\prime}$ by $N_{01}$
       \end{itemize}
-      then the \textit{Rand Index} is defined as 
+      then the \textit{Rand Index} is defined as
       \begin{align}
           RI = \frac{N_{11} + N_{00}}{N_{11} + N_{00} + N_{10} + N_{01}} = \frac{N_{11} + N_{00}}{\binom{n}{2}}
       \end{align}
       The Rand Index is $1$ when the clusterings are identical, and $0$ when the clusterings are completely different.
 
-      The \textit{adjusted Rand Index} intends on correcting the Rand Index for chance matching pairs. This is defined as 
+      The \textit{adjusted Rand Index} intends on correcting the Rand Index for chance matching pairs. This is defined as
       \begin{align}
           ARI = \frac{2\left( N_{00}N_{11} - N_{01}N_{10} \right)}{\left( N_{00} + N_{01} \right)\left( N_{01} + N_{11} \right) + \left( N_{00} + N_{10} \right)\left( N_{10} + N_{11} \right)}
       \end{align}
       The adjusted Rand Index is $1$ when the clusterings are identical, and $0$ when the Rand Index is equal to its expected value.
 
       \subsubsection{Clusterings as random variables}
-      If we take any random element of $D$, the probability that this element is in cluster $C_k$ of clustering $\mathcal{C}$ is 
+      If we take any random element of $D$, the probability that this element is in cluster $C_k$ of clustering $\mathcal{C}$ is
       \begin{align}
           P(K=k) = \frac{n_k}{n}
       \end{align}
-      this defines a probability distribution, which makes the clustering a random variable. Any clustering can be considered as a random variable this way. 
+      this defines a probability distribution, which makes the clustering a random variable. Any clustering can be considered as a random variable this way.
 
-      This means that we can measure any of the information theoretic quantities defined in section \ref{sec:information_theory} with respect to clusterings. For example, the entropy of a clustering is 
+      This means that we can measure any of the information theoretic quantities defined in section \ref{sec:information_theory} with respect to clusterings. For example, the entropy of a clustering is
       \begin{align}
           H(\mathcal{C}) = - \sum_{k=1}^K \frac{n_k}{n} \log \frac{n_k}{n}
       \end{align}
@@ -402,14 +430,14 @@ To be added.
           NMI_{sqrt} &= \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{\sqrt{H(\mathcal{C}) H(\mathcal{C}^{\prime}) }} \\
           NMI_{min} &= \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{\min \lbrace H(\mathcal{C}), H(\mathcal{C}^{\prime}) \rbrace}
       \end{align}
-      We can control for chance similarities between the two clusterings by measuring the \textit{adjusted mutual information} between the clusterings. This is defined as 
+      We can control for chance similarities between the two clusterings by measuring the \textit{adjusted mutual information} between the clusterings. This is defined as
       \begin{align}
         AMI_{sum} = \frac{I(\mathcal{C};\mathcal{C}^{\prime}) - E \lbrace I(\mathcal{C};\mathcal{C}^{\prime}) \rbrace}{\frac{1}{2}\left[ H(\mathcal{C}) + H(\mathcal{C}^{\prime})\right] - E \lbrace I(\mathcal{C};\mathcal{C}^{\prime})  \rbrace}
       \end{align}
       The first term in the demoniator, taking the average of the marginal entropies, can be replaced by taking the maximum, minimum, or the geometric mean \cite{vinh}.
 
       \subsubsection{Information based metrics}\label{sec:information_metrics}
-      The variation of information between two clusterings $VI(\mathcal{C};\mathcal{C}^{\prime})$ (see section \ref{sec:variation_of_information}) is a metric on the space of clusterings \cite{meila}. That is, 
+      The variation of information between two clusterings $VI(\mathcal{C};\mathcal{C}^{\prime})$ (see section \ref{sec:variation_of_information}) is a metric on the space of clusterings \cite{meila}. That is,
       \begin{align}
           VI(\mathcal{C};\mathcal{C}^{\prime}) &\geq 0 \\
           VI(\mathcal{C};\mathcal{C}^{\prime}) &= 0 \iff \mathcal{C} = \mathcal{C}^{\prime} \\
@@ -422,12 +450,12 @@ To be added.
           D_{max} = \max \lbrace H(\mathcal{C}), H(\mathcal{C}^{\prime}) \rbrace - I(\mathcal{C};\mathcal{C}^{\prime})
       \end{align}
 
-      Both of these can be normalised 
+      Both of these can be normalised
       \begin{align}
           NVI(\mathcal{C};\mathcal{C}^{\prime}) & = 1 - \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{H(\mathcal{C}, \mathcal{C}^{\prime})} \\
           d_{max} & = 1 - \frac{I(\mathcal{C};\mathcal{C}^{\prime})}{\max \lbrace H(\mathcal{C}), H(\mathcal{C}^{\prime}) \rbrace}
       \end{align}
-     
+
       \subsubsection{Comparing detected communities and anatomical divisions}
       In order to quantify the difference or similarity between the communities detected in our correlation network and the anatomical classification of the cells in that network, we considered the communities and the anatomical regions as clusters in two different clusterings, $\mathcal{C}_{comm}$ and $\mathcal{C}_{anat}$, respectively. We then measured the similarity between the clusterings using the mutual information, the adjusted mutual information, and the normalised mutual information. We measured the difference between, or the distance between, the clusterings using the variation of information, the normalised variation of information, and the normalised information distance. We also measured the difference between the clusterings using the adjusted Rand Index, just to use a non-information based measure.
 

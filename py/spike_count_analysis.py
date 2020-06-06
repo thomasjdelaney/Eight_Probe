@@ -84,13 +84,15 @@ def plotChiSquaredStats(bin_width_agg_frame):
         rate_frame = agg[['bin_width', 'poiss_chi_squared_stat', 'gaussian_chi_squared_stat']].groupby('bin_width').agg(['mean', 'std'])
         rate_frame.reset_index(inplace=True)
         rate_frame.columns = ['bin_width', 'poiss_chi_squared_stat_mean', 'poiss_chi_squared_stat_std', 'gaussian_chi_squared_stat_mean', 'gaussian_chi_squared_stat_std']
+        plt.figure(figsize=(4,3))
         plt.plot(rate_frame.bin_width, rate_frame.poiss_chi_squared_stat_mean, color='blue', label='Poisson chi squared stat')
         plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.poiss_chi_squared_stat_mean - rate_frame.poiss_chi_squared_stat_std, y2=rate_frame.poiss_chi_squared_stat_mean + rate_frame.poiss_chi_squared_stat_std, color='blue', alpha=0.25)
         plt.plot(rate_frame.bin_width, rate_frame.gaussian_chi_squared_stat_mean, color='orange', label='Gaussian chi squared stat')
         plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.gaussian_chi_squared_stat_mean - rate_frame.gaussian_chi_squared_stat_std, y2=rate_frame.gaussian_chi_squared_stat_mean + rate_frame.gaussian_chi_squared_stat_std, color='orange', alpha=0.25)
-        plt.xlabel('Bin width (s)', fontsize='large')
-        plt.ylabel(r'$\log _{10} \chi$ Squared Stat', fontsize='large')
+        plt.xlabel('Bin width (s)', fontsize='x-large')
+        plt.ylabel(r'$\log _{10} \chi$ Squared Stat', fontsize='x-large')
         plt.legend(fontsize='large')
+        plt.xticks(fontsize='large');plt.yticks(fontsize='large');
         plt.savefig(os.path.join(image_dir, 'bin_width_analysis', mouse_name + '_stats_by_bin_width.png'))
         plt.close()
 
