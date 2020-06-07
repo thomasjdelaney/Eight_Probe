@@ -75,6 +75,33 @@ In this work, we measured spike count correlations between neurons from nine dif
 
 \section{Results}
 
+    \subsection{Spike count correlations increase in amplitude with increasing time bin width}
+
+    \newpage
+
+    \begin{figure}[h]
+        \centering
+        \begin{subfigure}[h]{0.5\linewidth}
+          \includegraphics[width=\linewidth]{figures/Krebs_corr_all_pairs.png}
+          \caption{All pairs, positive and negative.}
+          \label{fig:correlations_all_pairs}
+        \end{subfigure}
+        \begin{subfigure}[h]{0.5\linewidth}
+          \includegraphics[width=\linewidth]{figures/Krebs_corr_pos_pairs.png}
+          \caption{All positively correlated pairs.}
+          \label{fig:correlations_pos_pairs}
+        \end{subfigure}
+        \begin{subfigure}[h]{0.5\linewidth}
+          \includegraphics[width=\linewidth]{figures/Krebs_corr_pos_pairs.png}
+          \caption{All negatively correlated pairs.}
+          \label{fig:correlations_neg_pairs}
+        \end{subfigure}
+        \caption{(a) correlated pairs (b) positively correlated pairs (c) negatively correlated pairs}
+        \label{fig:correlations_vs_bin_widths}
+    \end{figure}
+
+    \newpage
+
 % Fig 1. Correlations increase with bin width
 % - 2 time series plots of a pair of neurons, one small bin width one big bin widt
 % - mean pairwise correlation vs bin width
@@ -84,7 +111,7 @@ In this work, we measured spike count correlations between neurons from nine dif
 % - coloured dots
 % - mean inter and intra- region correlations vs bin width
 % - correlation matrix at short vs long time bins (decide whether all cells or mean per region).
-% 
+%
 % Fig 3. Community detection, main results
 % - Schematic diagram of community detection algorithm steps.
 % - Matrices sorted by communities, region, correlations, one for short and one for long time bins.

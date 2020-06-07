@@ -85,14 +85,15 @@ def plotChiSquaredStats(bin_width_agg_frame):
         rate_frame.reset_index(inplace=True)
         rate_frame.columns = ['bin_width', 'poiss_chi_squared_stat_mean', 'poiss_chi_squared_stat_std', 'gaussian_chi_squared_stat_mean', 'gaussian_chi_squared_stat_std']
         plt.figure(figsize=(4,3))
-        plt.plot(rate_frame.bin_width, rate_frame.poiss_chi_squared_stat_mean, color='blue', label='Poisson chi squared stat')
-        plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.poiss_chi_squared_stat_mean - rate_frame.poiss_chi_squared_stat_std, y2=rate_frame.poiss_chi_squared_stat_mean + rate_frame.poiss_chi_squared_stat_std, color='blue', alpha=0.25)
-        plt.plot(rate_frame.bin_width, rate_frame.gaussian_chi_squared_stat_mean, color='orange', label='Gaussian chi squared stat')
-        plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.gaussian_chi_squared_stat_mean - rate_frame.gaussian_chi_squared_stat_std, y2=rate_frame.gaussian_chi_squared_stat_mean + rate_frame.gaussian_chi_squared_stat_std, color='orange', alpha=0.25)
+        plt.plot(rate_frame.bin_width, rate_frame.poiss_chi_squared_stat_mean, color='blue', label=r'mean Poiss. $\chi^2$ stat.')
+        plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.poiss_chi_squared_stat_mean - rate_frame.poiss_chi_squared_stat_std, y2=rate_frame.poiss_chi_squared_stat_mean + rate_frame.poiss_chi_squared_stat_std, color='blue', alpha=0.25, label='std. Poiss. $\chi^2$ stat')
+        plt.plot(rate_frame.bin_width, rate_frame.gaussian_chi_squared_stat_mean, color='orange', label='mean Gauss. $\chi^2$ stat.')
+        plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.gaussian_chi_squared_stat_mean - rate_frame.gaussian_chi_squared_stat_std, y2=rate_frame.gaussian_chi_squared_stat_mean + rate_frame.gaussian_chi_squared_stat_std, color='orange', alpha=0.25, label='std. Gauss. $\chi^2$ stat.')
         plt.xlabel('Bin width (s)', fontsize='x-large')
-        plt.ylabel(r'$\log _{10} \chi$ Squared Stat', fontsize='x-large')
+        plt.ylabel(r'$\log _{10} \chi^2$ Stat.', fontsize='x-large')
         plt.legend(fontsize='large')
         plt.xticks(fontsize='large');plt.yticks(fontsize='large');
+        plt.tight_layout()
         plt.savefig(os.path.join(image_dir, 'bin_width_analysis', mouse_name + '_stats_by_bin_width.png'))
         plt.close()
 
@@ -100,7 +101,7 @@ def loadBinWidthAggregate(npy_dir):
     column_names = ['bin_width', 'cell_id', 'spike_count_mean', 'spike_count_std', 'mouse_name', 'firing_rate', 'firing_std', 'poiss_chi_squared_stat', 'gaussian_chi_squared_stat']
     bin_width_agg_frame = pd.DataFrame(columns=column_names)
     for mouse_name in ep.mouse_names:
-        for bin_width in ep.bin_widths:
+        for bin_width in ep.selected_bin_widths:
             spike_count_frame = ep.loadSpikeCountFrame(mouse_name, bin_width, npy_dir)
             agg_frame = spike_count_frame[['cell_id', 'spike_count', 'bin_width']].groupby(['bin_width', 'cell_id']).agg(['mean', 'std'])
             agg_frame = agg_frame.reset_index()
@@ -121,5 +122,6 @@ def loadBinWidthAggregate(npy_dir):
             bin_width_agg_frame = bin_width_agg_frame.append(agg_frame, ignore_index=True)
     return bin_width_agg_frame
 
-agg = loadBinWidthAggregate(npy_dir)
-plotChiSquaredStats(agg)
+if not args.debug:
+    agg = loadBinWidthAggregate(npy_dir)
+    plotChiSquaredStats(agg)
