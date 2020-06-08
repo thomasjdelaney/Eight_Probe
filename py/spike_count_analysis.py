@@ -101,7 +101,7 @@ def loadBinWidthAggregate(npy_dir):
     column_names = ['bin_width', 'cell_id', 'spike_count_mean', 'spike_count_std', 'mouse_name', 'firing_rate', 'firing_std', 'poiss_chi_squared_stat', 'gaussian_chi_squared_stat']
     bin_width_agg_frame = pd.DataFrame(columns=column_names)
     for mouse_name in ep.mouse_names:
-        for bin_width in ep.selected_bin_widths:
+        for bin_width in ep.bin_widths:
             spike_count_frame = ep.loadSpikeCountFrame(mouse_name, bin_width, npy_dir)
             agg_frame = spike_count_frame[['cell_id', 'spike_count', 'bin_width']].groupby(['bin_width', 'cell_id']).agg(['mean', 'std'])
             agg_frame = agg_frame.reset_index()
