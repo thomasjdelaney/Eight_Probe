@@ -1,11 +1,11 @@
 # Fdb version 3
-["bibtex eight_probe"] 1591553441 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1591553443
-  "eight_probe.aux" 1591553442 12308 84a28134038384c6ed05209ece8ecd72 "pdflatex"
+["bibtex eight_probe"] 1591619435 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1591619436
+  "eight_probe.aux" 1591619436 12503 51e43275ac97e90fb9debf28b76e7fe1 "pdflatex"
   "eight_probe.bbl.bib" 0 -1 0 ""
   (generated)
   "eight_probe.bbl"
   "eight_probe.blg"
-["pdflatex"] 1591553441 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1591553443
+["pdflatex"] 1591619435 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1591619436
   "/home/thomas/.texlive2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1589722506 3704429 0303ff8f3ada1c5655ff4477b651b125 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1580927601 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
@@ -139,16 +139,17 @@
   "/usr/share/texlive/texmf-dist/tex/latex/ucs/utf8x.def" 1368571634 8036 21f7ac37aafb6cfeddbb196b8bfd6280 ""
   "/usr/share/texlive/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1580927610 35594 9aef19174c178978f61d14961262af5d ""
-  "eight_probe.aux" 1591553442 12308 84a28134038384c6ed05209ece8ecd72 "pdflatex"
+  "eight_probe.aux" 1591619436 12503 51e43275ac97e90fb9debf28b76e7fe1 "pdflatex"
   "eight_probe.bbl" 1586453880 2510 647ec1eeb01363104c6c596d2d7b17a7 "bibtex eight_probe"
-  "eight_probe.out" 1591553442 3591 21305be92b2fced99edf829f5140a924 "pdflatex"
-  "eight_probe.tex" 1591553439 44215 e4e1e951be41cb24eb6a38ffb784c0d9 ""
+  "eight_probe.out" 1591619436 3591 21305be92b2fced99edf829f5140a924 "pdflatex"
+  "eight_probe.tex" 1591619432 45577 ffef8d51eebd64da1852ff7247232cd3 ""
   "figures/Krebs_corr_all_pairs.png" 1576759577 23870 9df8533d7e0a9d11bebe41667425d3cb ""
+  "figures/Krebs_corr_neg_pairs.png" 1576759577 26004 484e31e81601fa769cda5d92ac8f127b ""
   "figures/Krebs_corr_pos_pairs.png" 1576759577 25373 5b4c0e8bb2772df3ba33f18522fb82d7 ""
   "figures/entropy_limit.png" 1575299183 21103 b4604124c027707bd072226d40a0ddad ""
   "figures/probe_locations_stringer.png" 1588365316 122597 324d3f57635ea509be7fbf6aabcfeeed ""
   (generated)
-  "eight_probe.log"
   "eight_probe.aux"
   "eight_probe.out"
+  "eight_probe.log"
   "eight_probe.pdf"

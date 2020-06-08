@@ -76,31 +76,33 @@ In this work, we measured spike count correlations between neurons from nine dif
 \section{Results}
 
     \subsection{Spike count correlations increase in amplitude with increasing time bin width}
+    First we inspected the affect of time bin width on spike count correlations. We know that using short time bins results in artificially small correlation measurements\cite{cohen}, so we expected to see an increase in correlation amplitude with increasing time bin width. That is exactly what we observed. Taking $50$ cells at random, we calculated the spike count correlation between every possible pair of these cells, using different time bin widths ranging from $0.005$s to $3$s. We found that the longer the time bin width, the greater the correlations (see figure \ref{fig:correlations_all_pairs}).
+
+    We also separated the positively correlated pairs from the negatively correlated pairs using the mean correlation of each pair across all bin widths (see section \ref{sec:corr_anti_corr}). We found that the positively correlated pairs become more positively correlated with increasing time bin width, and the negatively correlated pairs become more negatively correlated with increasing time bin width (see figures \ref{fig:correlations_pos_pairs} and \ref{fig:correlations_neg_pairs}).
+
+    When taking the mean across all pairs, the positively correlated pairs dominate in terms of both number of pairs, and amplitude of correlations. Therefore the mean across all pairs is positive.
 
     \newpage
 
     \begin{figure}[h]
-        \centering
         \begin{subfigure}[h]{0.5\linewidth}
-          \includegraphics[width=\linewidth]{figures/Krebs_corr_all_pairs.png}
-          \caption{All pairs, positive and negative.}
-          \label{fig:correlations_all_pairs}
+            \includegraphics[width=\linewidth]{figures/Krebs_corr_all_pairs.png}
+            \caption{All pairs, positive and negative.}
+            \label{fig:correlations_all_pairs}
         \end{subfigure}
         \begin{subfigure}[h]{0.5\linewidth}
-          \includegraphics[width=\linewidth]{figures/Krebs_corr_pos_pairs.png}
-          \caption{All positively correlated pairs.}
-          \label{fig:correlations_pos_pairs}
+            \includegraphics[width=\linewidth]{figures/Krebs_corr_pos_pairs.png}
+            \caption{All positively correlated pairs.}
+            \label{fig:correlations_pos_pairs}
         \end{subfigure}
         \begin{subfigure}[h]{0.5\linewidth}
-          \includegraphics[width=\linewidth]{figures/Krebs_corr_pos_pairs.png}
-          \caption{All negatively correlated pairs.}
-          \label{fig:correlations_neg_pairs}
+            \includegraphics[width=\linewidth]{figures/Krebs_corr_neg_pairs.png}
+            \caption{All negatively correlated pairs.}
+            \label{fig:correlations_neg_pairs}
         \end{subfigure}
-        \caption{(a) correlated pairs (b) positively correlated pairs (c) negatively correlated pairs}
+        \caption{Mean correlation coefficients measured from pairs of $50$ randomly chosen neurons. (a) All possible pairs, (b) positively correlated pairs, and (c) negatively correlated pairs}
         \label{fig:correlations_vs_bin_widths}
     \end{figure}
-
-    \newpage
 
 % Fig 1. Correlations increase with bin width
 % - 2 time series plots of a pair of neurons, one small bin width one big bin widt
@@ -123,7 +125,6 @@ In this work, we measured spike count correlations between neurons from nine dif
 % - Corresponding plots for communities, one for conditional, one for signal, for both a short and long time bin
 % - VI measure vs time bins size for both types of correlation
 
-To be added.
 
   \subsection{Average correlation size increases with increasing time bin width}
 

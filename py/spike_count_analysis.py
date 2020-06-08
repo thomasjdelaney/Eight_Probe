@@ -81,10 +81,10 @@ def plotChiSquaredStats(bin_width_agg_frame):
     bin_width_agg_frame['gaussian_chi_squared_stat'] = np.log10(bin_width_agg_frame['gaussian_chi_squared_stat'])
     for mouse_name in ep.mouse_names:
         agg = bin_width_agg_frame.loc[bin_width_agg_frame.mouse_name == mouse_name]
-        rate_frame = agg[['bin_width', 'poiss_chi_squared_stat', 'gaussian_chi_squared_stat']].groupby('bin_width').agg(['mean', 'std'])
+        rate_frame = agg[['bin_width', 'poiss_chi_squared_stat', 'gaussian_chi_squared_stat']].groupby('bin_width').agg(['mean', 'std', 'count'])
         rate_frame.reset_index(inplace=True)
-        rate_frame.columns = ['bin_width', 'poiss_chi_squared_stat_mean', 'poiss_chi_squared_stat_std', 'gaussian_chi_squared_stat_mean', 'gaussian_chi_squared_stat_std']
-        plt.figure(figsize=(4,3))
+        rate_frame.columns = ['bin_width', 'poiss_chi_squared_stat_mean', 'poiss_chi_squared_stat_std', 'num_samples', 'gaussian_chi_squared_stat_mean', 'gaussian_chi_squared_stat_std', 'ns']
+        plt.figure(figsize=(6,4))
         plt.plot(rate_frame.bin_width, rate_frame.poiss_chi_squared_stat_mean, color='blue', label=r'mean Poiss. $\chi^2$ stat.')
         plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.poiss_chi_squared_stat_mean - rate_frame.poiss_chi_squared_stat_std, y2=rate_frame.poiss_chi_squared_stat_mean + rate_frame.poiss_chi_squared_stat_std, color='blue', alpha=0.25, label='std. Poiss. $\chi^2$ stat')
         plt.plot(rate_frame.bin_width, rate_frame.gaussian_chi_squared_stat_mean, color='orange', label='mean Gauss. $\chi^2$ stat.')

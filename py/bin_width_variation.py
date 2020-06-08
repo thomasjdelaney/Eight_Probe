@@ -24,6 +24,7 @@ parser.add_argument('-n', '--number_of_cells', help='Number of cells to process.
 parser.add_argument('-f', '--save_firing_rate_frame', help='Flag to indicate whether or not firing rates should be saved.', default=False, action='store_true')
 parser.add_argument('-a', '--save_analysis_frame', help='Flag to indicate whether or not analysis should be performed and saved.', default=False, action='store_true')
 parser.add_argument('-z', '--save_conditional_correlations', help='Flag to indicate whether or not to calculate and save conditional correlations.', default=False, action='store_true')
+parser.add_argument('-s', '--save_spike_count_frame', help='Flag to indicate wether or not save the spike count frames.', default=False, action='store_true')
 parser.add_argument('-c', '--num_chunks', help='Number of chunks to split the pairs into before processing.', default=10, type=int)
 parser.add_argument('-p', '--num_components', help='Number of principle components to condition upon.', default=1, type=int)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
@@ -57,10 +58,10 @@ def constructMapFuncArgs(pairs, spike_count_dict):
 
 def constructMapFuncArgsOld(pairs, spike_count_frame):
     """
-    For constructing a list of dictionaries to be passed into a mapping function for scoop.futures.mapReduce. 
+    For constructing a list of dictionaries to be passed into a mapping function for scoop.futures.mapReduce.
     In this context the mapping function can only take one argument.
     Arguments:  pairs, numpy.array, all the possible pairs.
-                spike_count_frame, DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time 
+                spike_count_frame, DataFrame, cell_id, spike_count, bin_start_time, bin_stop_time
     """
     return [{pair[0]:spike_count_frame.loc[spike_count_frame.cell_id == pair[0], 'spike_count'].values, pair[1]:spike_count_frame.loc[spike_count_frame.cell_id == pair[1], 'spike_count'].values} for pair in pairs]
 
@@ -102,17 +103,17 @@ def getConditionalExpectation(spike_count_dict, time_bins, svd_comp, svd_times, 
     svd_counts, svd_bins = np.histogram(svd_comp, bins=num_bins_svd)
     svd_marginal_distn = svd_counts / svd_counts.sum()
     svd_value_bins = np.digitize(svd_comp, svd_bins, right=True)-1
-    svd_value_bins[svd_value_bins == svd_value_bins.min()] = 0 
+    svd_value_bins[svd_value_bins == svd_value_bins.min()] = 0
     conditional_expectation_dict = {}
     for cell_id, spike_counts in spike_count_dict.items():
         spike_count_list = list(range(spike_counts.min(), spike_counts.max()+1)) # list for faster indexing
-        joint_distn = np.zeros((len(spike_count_list), num_bins_svd), dtype=float) 
+        joint_distn = np.zeros((len(spike_count_list), num_bins_svd), dtype=float)
         for i in range(svd_counts.size):
             svd_bin_value_times = svd_times[np.nonzero(svd_value_bins == i)[0]]
             if svd_bin_value_times.size > 0:
                 svd_bin_value_time_bin_inds = np.digitize(svd_bin_value_times, time_bins, right=True)
                 svd_bin_value_spike_count_values, svd_bin_value_spike_count_counts = np.unique(spike_counts[svd_bin_value_time_bin_inds-1], return_counts=True)
-                joint_distn[[spike_count_list.index(spikes) for spikes in svd_bin_value_spike_count_values], i] += svd_bin_value_spike_count_counts 
+                joint_distn[[spike_count_list.index(spikes) for spikes in svd_bin_value_spike_count_values], i] += svd_bin_value_spike_count_counts
         joint_distn = joint_distn / joint_distn.sum()
         with np.errstate(divide='ignore', invalid='ignore'): # avoiding warning messages
             cond_distn = joint_distn / svd_marginal_distn
@@ -127,7 +128,7 @@ def getCompExpCondCov(svd_comps, svd_times, spike_count_dict, time_bins, num_bin
                 svd_times, time stamps for component measures
                 spike_count_dict, Dict, cell_id => spike counts
                 time_bins, the spike count time bin borders,
-    Returns:    comp_expected_cond_cov, 
+    Returns:    comp_expected_cond_cov,
     """
     num_comps = svd_comps.shape[1]
     num_cells = len(spike_count_dict)
@@ -271,7 +272,7 @@ def fitLinearModel(model, spike_counts, train_inds, test_inds, x_train, x_test):
                 test_inds, the test indices,
                 x_train, the training features,
                 x_test, the test features
-    Returns:    r2_score, 
+    Returns:    r2_score,
                 durbin_watson_stat
                 fitted_model
     """
@@ -280,7 +281,7 @@ def fitLinearModel(model, spike_counts, train_inds, test_inds, x_train, x_test):
     y_pred = model.predict(x_test)
     model_r2_score = r2_score(y_test, y_pred)
     durbin_watson_stat = durbin_watson(y_test - y_pred)
-    return model_r2_score, durbin_watson_stat, model 
+    return model_r2_score, durbin_watson_stat, model
 
 def getExpCondSpikeCounts(svd_times, svd_comps, time_bins, spike_count_dict):
     """
@@ -319,7 +320,7 @@ def getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations, 
     Arguments:  cond_exp_dict, dict => E[X|Z]
                 exp_cond_cov, numpy array (num_cells, num_cells), expectation of conditional covariances
                 cov_of_cond_expectations, numpy array (num_cells, num_cells), covariance of conditional expectations
-    Returns:    pandas Dataframe first_cell_id,second_cell_id,exp_cond_cov,cov_cond_exp,exp_cond_corr,signal_corr 
+    Returns:    pandas Dataframe first_cell_id,second_cell_id,exp_cond_cov,cov_cond_exp,exp_cond_corr,signal_corr
     """
     cond_analysis_frame = pd.DataFrame(columns=['first_cell_id','second_cell_id','exp_cond_cov','cov_cond_exp','exp_cond_corr','signal_corr', 'shuff_exp_cond_cov', 'shuff_cov_cond_exp', 'shuff_exp_cond_corr', 'shuff_signal_corr'])
     cell_ids = list(cond_exp_dict.keys())
@@ -336,7 +337,7 @@ def getCondAnalysisFrame(cond_exp_dict, exp_cond_cov, cov_of_cond_expectations, 
 
 def getConditionalAnalysisFrame(mouse_face, spike_count_dict, time_bins):
     """
-    For getting a conditional analysis frame containing the conditional correlations between spike counts of different cells, 
+    For getting a conditional analysis frame containing the conditional correlations between spike counts of different cells,
         and getting information on the linear models used to calculate the conditional spike counts.
     Arguments:  mouse_face, dict, contains all info about the mouse films,
                 spike_count_dict, Dict, cell_id => spike counts
@@ -363,7 +364,7 @@ def reduceAnalysisDicts(first_dict, second_dict):
 
 def saveAnalysisFrame(analysis_frame, chunk_num, save_file):
     """
-    Saves the analysis_frame to save_file as a csv with or without a header according to chunk_num. 
+    Saves the analysis_frame to save_file as a csv with or without a header according to chunk_num.
     If chunk_num == 0, save with header, else append.
     """
     if chunk_num == 0:
@@ -421,5 +422,7 @@ if (not args.debug) & (__name__ == "__main__"):
                 cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations = getConditionalAnalysisFrame(mouse_face, spike_count_dict, ep.getBinsForSpikeCounts(spike_time_dict, bin_width, spon_start_time))
                 saveCondFramesMatrices(cond_analysis_frame, linear_model_frame, exp_cond_cov, cov_of_cond_expectations, mouse_name, bin_width)
                 print(dt.datetime.now().isoformat() + ' INFO: Conditional analysis frames and matrices saved.')
+            if args.save_spike_count_frame:
+                save_file, spike_count_frame = saveSpikeCountFrame(cell_ids, bin_width, spike_time_dict, spon_start_time, mouse_name)
+                print(dt.datetime.now().isoformat() + ' INFO: ' + save_file + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
-
