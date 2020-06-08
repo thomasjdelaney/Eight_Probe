@@ -401,7 +401,7 @@ if (not args.debug) & (__name__ == "__main__"):
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
         pairs = np.array(list(combinations(cell_ids, 2)))
         chunked_pairs = np.array_split(pairs, args.num_chunks)
-        bin_widths = ep.selected_bin_widths if bin_width_type == 'selected' else ep.bin_widths
+        bin_widths = ep.selected_bin_widths if args.bin_width_type == 'selected' else ep.bin_widths
         for bin_width in bin_widths:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
             spike_count_dict = ep.getSpikeCountDict(spike_time_dict, bin_width, spon_start_time)
