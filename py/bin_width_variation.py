@@ -27,6 +27,7 @@ parser.add_argument('-z', '--save_conditional_correlations', help='Flag to indic
 parser.add_argument('-s', '--save_spike_count_frame', help='Flag to indicate wether or not save the spike count frames.', default=False, action='store_true')
 parser.add_argument('-c', '--num_chunks', help='Number of chunks to split the pairs into before processing.', default=10, type=int)
 parser.add_argument('-p', '--num_components', help='Number of principle components to condition upon.', default=1, type=int)
+parser.add_argument('-b', '--bin_width_type', help='Use selected bin widths, or all.', default='selected', choices=['selected', 'all'], type=str)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -400,7 +401,8 @@ if (not args.debug) & (__name__ == "__main__"):
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, cell_ids, cell_info, mat_dir)
         pairs = np.array(list(combinations(cell_ids, 2)))
         chunked_pairs = np.array_split(pairs, args.num_chunks)
-        for bin_width in ep.selected_bin_widths:
+        bin_widths = ep.selected_bin_widths if bin_width_type == 'selected' else ep.bin_widths
+        for bin_width in bin_widths:
             print(dt.datetime.now().isoformat() + ' INFO: ' + 'Processing bin width ' + str(bin_width) + '...')
             spike_count_dict = ep.getSpikeCountDict(spike_time_dict, bin_width, spon_start_time)
             if args.save_firing_rate_frame:
