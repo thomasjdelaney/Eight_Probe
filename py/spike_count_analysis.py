@@ -96,6 +96,7 @@ def plotChiSquaredStats(bin_width_agg_frame):
         plt.ylabel(r'$\log _{10} \chi^2$ Stat.', fontsize='x-large')
         plt.legend(fontsize='large')
         plt.xticks(fontsize='large');plt.yticks(fontsize='large');
+        plt.xlim([rate_frame.bin_width[0], rate_frame.bin_width[-1]])
         plt.tight_layout()
         plt.savefig(os.path.join(image_dir, 'bin_width_analysis', mouse_name + '_stats_by_bin_width.png'))
         plt.close()
