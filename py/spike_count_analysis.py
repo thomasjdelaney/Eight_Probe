@@ -119,8 +119,8 @@ def loadBinWidthAggregate(npy_dir):
                 spike_counts = spike_count_frame.loc[spike_count_frame.cell_id == cell_id, 'spike_count'].values
                 spike_bins = np.arange(0, spike_counts.max()+2)
                 spike_count_hist = np.histogram(spike_counts, bins=spike_bins, density=True)
-                poiss_dist = poisson(spike_counts.mean() / bin_width)
-                gaussian_dist = norm(spike_counts.mean() / bin_width, spike_counts.std() / bin_width)
+                poiss_dist = poisson(spike_counts.mean())
+                gaussian_dist = norm(spike_counts.mean(), spike_counts.std())
                 poiss_chi_squared_test = chisquare(spike_count_hist[0], f_exp=poiss_dist.pmf(spike_bins[:-1]))
                 gaussian_chi_squared_test = chisquare(spike_count_hist[0], f_exp=gaussian_dist.pdf(spike_bins[:-1]))
                 agg_frame.loc[agg_frame.cell_id == cell_id, 'poiss_chi_squared_stat'] = poiss_chi_squared_test.statistic
