@@ -12,6 +12,7 @@ from itertools import product, combinations
 from scipy.stats import poisson, norm, chisquare
 
 parser = argparse.ArgumentParser(description='For varying the bin width used from 0.005 to 4 seconds, and taking measurements using these bin widths.')
+parser.add_argument('-n', '--num_cells', help='Choose a number of cells to use for stat tests.', default=100, type=int)
 parser.add_argument('-d', '--debug', help='Enter debug mode.', default=False, action='store_true')
 args = parser.parse_args()
 
@@ -105,6 +106,8 @@ def loadBinWidthAggregate(npy_dir):
     for mouse_name in ep.mouse_names:
         for bin_width in ep.bin_widths:
             spike_count_frame = ep.loadSpikeCountFrame(mouse_name, bin_width, npy_dir)
+            cell_ids = np.random.choice(spike_count_frame.cell_id.unique(),args.num_cells)
+            spike_count_frame = spike_count_frame.loc[spike_count_frame.cell_id.isin(cell_ids)]
             agg_frame = spike_count_frame[['cell_id', 'spike_count', 'bin_width']].groupby(['bin_width', 'cell_id']).agg(['mean', 'std'])
             agg_frame = agg_frame.reset_index()
             agg_frame.columns = column_names[:-5]
@@ -121,6 +124,7 @@ def loadBinWidthAggregate(npy_dir):
                 gaussian_chi_squared_test = chisquare(spike_count_hist[0], f_exp=gaussian_dist.pdf(spike_bins[:-1]))
                 agg_frame.loc[agg_frame.cell_id == cell_id, 'poiss_chi_squared_stat'] = poiss_chi_squared_test.statistic
                 agg_frame.loc[agg_frame.cell_id == cell_id, 'gaussian_chi_squared_stat'] = gaussian_chi_squared_test.statistic
+            agg_frame = agg_frame.loc[(agg_frame.gaussian_chi_squared_stat < np.finfo(dtype=float).max)&(agg_frame.poiss_chi_squared_stat < np.finfo(dtype=float).max)]
             bin_width_agg_frame = bin_width_agg_frame.append(agg_frame, ignore_index=True)
     return bin_width_agg_frame
 
