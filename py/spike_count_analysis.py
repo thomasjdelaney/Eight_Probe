@@ -87,7 +87,7 @@ def plotChiSquaredStats(bin_width_agg_frame):
         rate_frame.columns = ['bin_width', 'poiss_chi_squared_stat_mean', 'poiss_chi_squared_stat_std', 'num_samples', 'gaussian_chi_squared_stat_mean', 'gaussian_chi_squared_stat_std', 'ns']
         rate_frame['poiss_chi_squared_std_err'] = rate_frame.poiss_chi_squared_stat_std/np.sqrt(rate_frame.num_samples)
         rate_frame['gaussian_chi_squared_std_err'] = rate_frame.gaussian_chi_squared_stat_std/np.sqrt(rate_frame.num_samples)
-        plt.figure(figsize=(6,4))
+        plt.figure(figsize=(5,4))
         plt.plot(rate_frame.bin_width, rate_frame.poiss_chi_squared_stat_mean, color='blue', label=r'mean Poiss. $\chi^2$ stat.')
         plt.fill_between(x=rate_frame.bin_width, y1=rate_frame.poiss_chi_squared_stat_mean - rate_frame.poiss_chi_squared_std_err, y2=rate_frame.poiss_chi_squared_stat_mean + rate_frame.poiss_chi_squared_std_err, color='blue', alpha=0.25, label='std. err. Poiss. $\chi^2$ stat')
         plt.plot(rate_frame.bin_width, rate_frame.gaussian_chi_squared_stat_mean, color='orange', label='mean Gauss. $\chi^2$ stat.')

@@ -224,6 +224,9 @@ INPUT ./figures/Krebs_corr_pos_pairs.png
 INPUT figures/Krebs_corr_neg_pairs.png
 INPUT ./figures/Krebs_corr_neg_pairs.png
 INPUT ./figures/Krebs_corr_neg_pairs.png
+INPUT figures/Krebs_stats_by_bin_width.png
+INPUT ./figures/Krebs_stats_by_bin_width.png
+INPUT ./figures/Krebs_stats_by_bin_width.png
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 INPUT figures/probe_locations_stringer.png
