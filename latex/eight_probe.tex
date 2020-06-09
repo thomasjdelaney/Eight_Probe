@@ -75,7 +75,7 @@ In this work, we measured spike count correlations between neurons from nine dif
 
 \section{Results}
 
-    \subsection{Spike count correlations increase in amplitude with increasing time bin width}
+    \subsection{Average correlation size increases with increasing time bin width}
     First we inspected the affect of time bin width on spike count correlations. We know that using short time bins results in artificially small correlation measurements\cite{cohen}, so we expected to see an increase in correlation amplitude with increasing time bin width. That is exactly what we observed. Taking $50$ cells at random, we calculated the spike count correlation between every possible pair of these cells, using different time bin widths ranging from $0.005$s to $3$s. We found that the longer the time bin width, the greater the correlations (see figure \ref{fig:correlations_all_pairs}).
 
     We also separated the positively correlated pairs from the negatively correlated pairs using the mean correlation of each pair across all bin widths (see section \ref{sec:corr_anti_corr}). We found that the positively correlated pairs become more positively correlated with increasing time bin width, and the negatively correlated pairs become more negatively correlated with increasing time bin width (see figures \ref{fig:correlations_pos_pairs} and \ref{fig:correlations_neg_pairs}).
@@ -84,7 +84,7 @@ In this work, we measured spike count correlations between neurons from nine dif
 
     These results were observed in each of the three mouse subjects from which we had data.
 
-    \subsection{Goodness-of-fit for different time bin widths}
+    \subsection{Goodness-of-fit for Poisson and Gaussian distributions across increasing time bin widths}
     We wanted to investigate if the width of the time bin used to bin spike times into spike counts had an effect on the distributon of spike counts.  We used the $\chi^2$ statistic as a goodness-of-fit measure for Poisson and Gaussian (normal) distributons to the spike count of $100$ randomly chosen neurons for a number of bin widths ranging from $0.01$s to $4$s. For the $\chi^2$ statistic, the higher the value, the worse the fit. As you might expect, we found that that a Poisson distributon is the best fit for shorter time bins less than $0.7$s in length. Then a Gaussian distribution is a better fit for time bins greater than $0.7$s in length (see figure \ref{fig:chi_squared_fits}).
 
     A Poisson distributon was very likely to be a better fit for shorter time bin widths because spike counts must be non-negative, therefore any distributon of spike counts with mass distributed at or close to $0$ will be skewed.
@@ -116,13 +116,6 @@ In this work, we measured spike count correlations between neurons from nine dif
 
 % Fig 1. Correlations increase with bin width
 % - 2 time series plots of a pair of neurons, one small bin width one big bin widt
-% - mean pairwise correlation vs bin width
-% - for both positive corr and negative corr pairs
-%
-% Fig 2: Differences between inter- and intra- regional correlations decreases across bin width.
-% - coloured dots
-% - mean inter and intra- region correlations vs bin width
-% - correlation matrix at short vs long time bins (decide whether all cells or mean per region).
 %
 % Fig 3. Community detection, main results
 % - Schematic diagram of community detection algorithm steps.
@@ -135,8 +128,30 @@ In this work, we measured spike count correlations between neurons from nine dif
 % - Corresponding plots for communities, one for conditional, one for signal, for both a short and long time bin
 % - VI measure vs time bins size for both types of correlation
 
+  \subsection{Differences between and inter- and intra- regional correlations decrease with increasing bin width}
+  We investigated the differences in distribution between inter-regional correlations, i.e. correlations between neurons in different brain regions, and intra-regional correlations, i.e. correlations between neurons in the same brain region. Firstly, we noted that the mean intra-regional correlations for a given region tended to be higher than the mean inter-regional correlations involving cells from that region. Secondly, we noted that the difference between the mean intra-regional correlations and mean inter-regional correlations reduced as we incresed the time bin width (see figures \ref{fig:short_bin_corr_comp} and \ref{fig:long_bin_corr_comp}).
 
-  \subsection{Average correlation size increases with increasing time bin width}
+  \begin{figure}[h]
+    \begin{subfigure}[h]{\linewidth}
+      \centering
+      \includegraphics[width=0.7\linewidth]{figures/Krebs_0p005_corr_comp.png}
+      \caption{Mean inter-regional and intra-regional correlations using a time bin width of 5ms.}
+      \label{fig:short_bin_corr_comp}
+    \end{subfigure}
+    \begin{subfigure}[h]{\linewidth}
+      \centering
+      \includegraphics[width=0.7\linewidth]{figures/Krebs_1p0_corr_comp.png}
+      \caption{Mean inter-regional and intra-regional correlations using a time bin width of 1s.}
+      \label{fig:long_bin_corr_comp}
+    \end{subfigure}
+    \caption{The mean intra-regional correlations (coloured dots) and mean inter-regional correlations (black dots) for a given region, indicated on the x-axis, for different time bin widths. Each black dot represents the mean inter-regional correalations between the region indicated on the x-axis and one other region. (a) shows these measurements when we used a time bin width of 5ms. (b) shows these measurements when we used a time bin width of 1s. Note that the difference between the mean inter-regional correlations and mean intra-regional correlations is smaller for 1s bins.}
+    \label{fig:corr_comps}
+  \end{figure}
+
+% Fig 2: Differences between inter- and intra- regional correlations decreases across bin width.
+% - coloured dots
+% - mean inter and intra- region correlations vs bin width
+% - correlation matrix at short vs long time bins (decide whether all cells or mean per region).
 
   \subsection{Detecting communities in correlation based networks}
 

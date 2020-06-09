@@ -1,8 +1,8 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Results}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Spike count correlations increase in amplitude with increasing time bin width}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Goodness-of-fit for different time bin widths}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Average correlation size increases with increasing time bin width}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.1}{Average correlation size increases with increasing time bin width}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Goodness-of-fit for Poisson and Gaussian distributions across increasing time bin widths}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Differences between and inter- and intra- regional correlations decrease with increasing bin width}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.4}{Detecting communities in correlation based networks}{section.2}% 6
 \BOOKMARK [2][-]{subsection.2.5}{Functional communities resemble anatomical division at short timescales}{section.2}% 7
 \BOOKMARK [2][-]{subsection.2.6}{Conditional correlations \046 signal correlations}{section.2}% 8

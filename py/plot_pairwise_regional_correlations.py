@@ -46,16 +46,20 @@ def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False, 
     """
     For making a similar figure to figure 3, c from a recent paper that uses the 8 probe data.
     """
+    std_measure = measure.replace('mean','std')
     relevant_measure_frame = measure_frame.loc[measure_frame.mouse_name == mouse_name]
     regions = relevant_measure_frame.first_region.unique()
     fig = plt.figure(figsize=(7,4))
     for first_region, second_region in zip(relevant_measure_frame.first_region, relevant_measure_frame.second_region):
         regional_measure_frame = ep.getRegionalMeasureAggFrame(relevant_measure_frame, (first_region, second_region))
+        x_position = list(regions).index(first_region) + 1
+        mean_measure = regional_measure_frame.iloc[0][measure]
+        std_err_measure = regional_measure_frame.iloc[0][std_measure]/np.sqrt(regional_measure_frame.iloc[0]['num_pairs'])
         if first_region == second_region:
-            plt.scatter(list(regions).index(first_region) + 1, regional_measure_frame.iloc[0][measure], color=ep.region_to_colour[first_region])
+            plt.errorbar(x_position, mean_measure, yerr=std_err_measure, color=ep.region_to_colour[first_region], fmt='o', capsize=3, capthick=1)
         else:
             inds = list(regions).index(first_region) + 1, list(regions).index(second_region) + 1
-            plt.scatter(inds, np.repeat(regional_measure_frame.iloc[0][measure],2), color='black')
+            plt.errorbar(inds, np.repeat(mean_measure,2), yerr=std_err_measure, color='black', fmt='o', capsize=3, capthick=1)
     plt.xticks(range(0,regions.size+2), np.hstack([[''], regions]), fontsize='x-large', rotation=30)
     plt.ylabel(y_label, fontsize='x-large')
     plt.title(mouse_name + ', Bin width=' + str(bin_width), fontsize='x-large') if use_title else None
@@ -64,7 +68,7 @@ def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False, 
     plt.tight_layout()
     file_name = os.path.join(image_dir, 'within_between_comparison', mouse_name + '_' + str(bin_width).replace('.','p') + suffix + '.png')
     plt.savefig(file_name)
-    plt.close() 
+    plt.close()
     return file_name
 
 if (not args.debug) & (__name__ == '__main__'):
