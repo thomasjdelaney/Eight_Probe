@@ -129,7 +129,20 @@ In this work, we measured spike count correlations between neurons from nine dif
 % - VI measure vs time bins size for both types of correlation
 
   \subsection{Differences between and inter- and intra- regional correlations decrease with increasing bin width}
-  We investigated the differences in distribution between inter-regional correlations, i.e. correlations between neurons in different brain regions, and intra-regional correlations, i.e. correlations between neurons in the same brain region. Firstly, we noted that the mean intra-regional correlations for a given region tended to be higher than the mean inter-regional correlations involving cells from that region. Secondly, we noted that the difference between the mean intra-regional correlations and mean inter-regional correlations reduced as we incresed the time bin width (see figures \ref{fig:short_bin_corr_comp} and \ref{fig:long_bin_corr_comp}).
+  We investigated the differences in distribution between inter-regional correlations, i.e. correlations between neurons in different brain regions, and intra-regional correlations, i.e. correlations between neurons in the same brain region.
+
+  Firstly, we investigated these quantities for all possible pairs of $\sim 500$ neurons taken from across all the $9$ brain regions from which we had data. We distributed these neurons as evenly as possible across all of the regions, so that cell from one region would not dominate our data. We observed that the mean intra-regional correlations were always higher than the mean inter-regional correlations for every value of time bin width used. We also observed that as the time bin width increased these mean correlations increased and the difference between the mean inter-regional and intra-regional correlations grew (see figure \ref{fig:all_pairs_inter_intra_corr}). Stringer et al. (2019) had a similar finding using the same data. They used only one value for the time bin width, $1.2$s. Using this time bin width to bin spike times and measure spike count correlations, they found that the mean `within-region' correlations were always greater than the `out-of-region' correlations \cite{stringer}.
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/Krebs_inter_intra_regional_correlations.png}
+    \caption{The mean intra-region and inter-region correlations using all possible pairs of $\sim 500$ neurons, spread across $9$ different brain regions.}
+    \label{fig:all_pairs_inter_intra_corr}
+  \end{figure}
+
+  Secondly, we separated those pairs into theire respective pairs, be they intra-regional, or inter-regional.  We noted that the mean intra-regional correlations for a given region tended to be higher than the mean inter-regional correlations involving cells from that region. However, in contrast with our previous result, we noted that the difference between the mean intra-regional correlations and most mean inter-regional correlations of the most correlated regional pairs reduced as we increased the time bin width (see figures \ref{fig:short_bin_corr_comp} and \ref{fig:long_bin_corr_comp}).
+
+  \newpage
 
   \begin{figure}[h]
     \begin{subfigure}[h]{\linewidth}
@@ -147,6 +160,27 @@ In this work, we measured spike count correlations between neurons from nine dif
     \caption{The mean intra-regional correlations (coloured dots) and mean inter-regional correlations (black dots) for a given region, indicated on the x-axis, for different time bin widths. Each black dot represents the mean inter-regional correalations between the region indicated on the x-axis and one other region. (a) shows these measurements when we used a time bin width of 5ms. (b) shows these measurements when we used a time bin width of 1s. Note that the difference between the mean inter-regional correlations and mean intra-regional correlations is smaller for 1s bins.}
     \label{fig:corr_comps}
   \end{figure}
+
+  Finally, to see these regional mean correlations in a bit more detail, we displayed these data using mean correlation matrix figures (see figure \ref{fig:corr_matrices}), showing the mean intra-regional correlations on the main diagonal, and the mean inter-regional correlations off diagonal. Comparing a version of this figure created using a short time bin width of $5$ms (figure \ref{fig:short_bin_corr_matrix}) and a version using a longer time bin width of $1$s (figure \ref{fig:long_bin_corr_matrix}) we observed that the mean intra-regional correlations are the highest for both bin widths, but the mean correlations in some inter-regional pairs is relatively much higher when using the longer time bin width.
+
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/Krebs_0p005_corr_matrix.png}
+      \caption{Time bin width 0.005s.}
+      \label{fig:short_bin_corr_matrix}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/Krebs_1p0_corr_matrix.png}
+      \caption{Time bin width 1s.}
+      \label{fig:long_bin_corr_matrix}
+    \end{subfigure}
+    \caption{Mean inter-regional (main diagonal) and intra-regional (off diagonal) correlation coefficients. (a) Shows these measurements when spike times were binned using $5$ms time bins. (b) Shows the same, using $1$s time bins. Note that the matrices are ordered according to the main diagonal values, therefore the ordering is different in each subfigure.}
+    \label{fig:corr_matrices}
+  \end{figure}
+
+  These results were consistent across the three mouse subjects. But, the relative maginitudes of the mean intra-regional and inter-regional correlations were not consistent. For example, the region with the highest mean intra-regional correlations when using $1$s bin widths for subject one is the superior colliculus (SC), but for subject two it is the midbrain (MB).
 
 % Fig 2: Differences between inter- and intra- regional correlations decreases across bin width.
 % - coloured dots

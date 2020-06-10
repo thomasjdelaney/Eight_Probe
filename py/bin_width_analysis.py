@@ -72,7 +72,35 @@ def plotMIVsBinWidth(analysis_frame, mi_lims, colours=['blue', 'orange', 'green'
     plt.title(title, fontsize='large') if title != '' else None
     plt.tight_layout()
 
+def plotIntraInterCorr(cell_info, analysis_frame):
+    """
+    For plotting mean inter-regional correlations vs mean intra-regional corrections.
+    Arguments:  cell_info, pandas DataFrame
+                analysis_frame, pandas DataFrame, contains the value for the correlation coefficient for each pair, for each bin width.
+    Returns:    file_name, string
+    """
+    analysis_frame = ep.joinCellAnalysis(cell_info, analysis_frame)
+    intra_regional = analysis_frame.loc[analysis_frame.first_cell_region == analysis_frame.second_cell_region]
+    inter_regional = analysis_frame.loc[analysis_frame.first_cell_region != analysis_frame.second_cell_region]
+    grouped_intra = intra_regional[['corr_coef','bin_width']].groupby(['bin_width']).agg(['mean','std','count'])
+    grouped_inter = inter_regional[['corr_coef','bin_width']].groupby(['bin_width']).agg(['mean','std','count'])
+    grouped_intra['corr_coef','std_err'] = grouped_intra['corr_coef']['std']/np.sqrt(grouped_intra['corr_coef']['count'])
+    grouped_inter['corr_coef','std_err'] = grouped_inter['corr_coef']['std']/np.sqrt(grouped_inter['corr_coef']['count'])
+    grouped_intra['corr_coef'].plot(y='mean', yerr='std_err', label='Intra-regional Corr.', fontsize='large')
+    grouped_inter['corr_coef'].plot(y='mean', yerr='std_err', label='Inter-regional Corr.', fontsize='large')
+    plt.figure(figsize=(5,4))
+    plt.plot(grouped_intra.index.values, grouped_intra['corr_coef','mean'].values, label='Intra-regional Corr.', color='blue')
+    plt.fill_between(grouped_intra.index.values, y1=grouped_intra['corr_coef','mean'].values - grouped_intra['corr_coef','std_err'].values, y2=grouped_intra['corr_coef','mean'].values + grouped_intra['corr_coef','std_err'].values, color='blue', alpha=0.25, label='Intra std. err.')
+    plt.plot(grouped_inter.index.values, grouped_inter['corr_coef','mean'].values, label='Inter-regional Corr.', color='orange')
+    plt.fill_between(grouped_inter.index.values, y1=grouped_inter['corr_coef','mean'].values - grouped_inter['corr_coef','std_err'].values, y2=grouped_inter['corr_coef','mean'].values + grouped_inter['corr_coef','std_err'].values, color='orange', alpha=0.25, label='Inter std. err.')
+    plt.legend(fontsize='large')
+    plt.xlabel('Time bin width (s)', fontsize='x-large'); plt.xticks(fontsize='large');
+    plt.ylabel('Mean Corr. Coef.', fontsize='x-large'); plt.yticks(fontsize='large');
+    plt.xlim([grouped_intra.index.values[0],grouped_intra.index.values[-1]])
+    plt.tight_layout()
+
 def saveBinWidthAnalysisFigs(mouse_name):
+    cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
     analysis_frame = pd.concat([ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir) for bin_width in ep.selected_bin_widths], ignore_index=True)
     mi_lims = [-0.05, np.ceil(analysis_frame['plugin_mi'].max())]
     pos_frame, neg_frame = getPositiveNegativeAnalysisFrames(analysis_frame)
@@ -80,22 +108,26 @@ def saveBinWidthAnalysisFigs(mouse_name):
     plt.figure(figsize=(5,4))
     plotMeanCorrelationsVsBinWidth(analysis_frame, ['corr_coef', 'shuff_corr'], 'Corr.', 'Corr. Coef.', [-0.05, 1.0], title='all pairs')
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_corr_all_pairs.png')
-    plt.savefig(file_name)
+    plt.savefig(file_name);plt.close();
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     plt.figure(figsize=(5,4))
     plotMeanCorrelationsVsBinWidth(pos_frame, ['corr_coef', 'shuff_corr'], 'Corr.', 'Corr. Coef.', [-0.05, 1.0], colours=['blue', 'lightsteelblue'], title='+ve corr pairs')
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_corr_pos_pairs.png')
-    plt.savefig(file_name)
+    plt.savefig(file_name);plt.close();
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     plt.figure(figsize=(5,4))
     plotMeanCorrelationsVsBinWidth(neg_frame, ['corr_coef', 'shuff_corr'], 'Corr.', 'Corr. Coef.', [-1.0, 0.05],  colours=['green', 'lime'], title='-ve corr pairs')
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_corr_neg_pairs.png')
-    plt.savefig(file_name)
+    plt.savefig(file_name);plt.close();
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     plt.figure(figsize=(5,4))
     plotMIVsBinWidth(analysis_frame, mi_lims, title='all pairs MI')
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_info_all_pairs.png')
-    plt.savefig(file_name)
+    plt.savefig(file_name);plt.close();
+    print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+    plotIntraInterCorr(cell_info, analysis_frame)
+    file_name = os.path.join(bin_width_figures_dir, mouse_name + '_inter_intra_regional_correlations.png')
+    plt.savefig(file_name);plt.close();
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
 
 if (not(args.debug)) & (__name__ == '__main__'):
