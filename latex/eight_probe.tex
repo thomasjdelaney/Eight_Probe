@@ -76,7 +76,7 @@ In this work, we measured spike count correlations between neurons from nine dif
 \section{Results}
 
     \subsection{Average correlation size increases with increasing time bin width}
-    First we inspected the affect of time bin width on spike count correlations. We know that using short time bins results in artificially small correlation measurements\cite{cohen}, so we expected to see an increase in correlation amplitude with increasing time bin width. That is exactly what we observed. Taking $50$ cells at random, we calculated the spike count correlation between every possible pair of these cells, using different time bin widths ranging from $0.005$s to $3$s. We found that the longer the time bin width, the greater the correlations (see figure \ref{fig:correlations_all_pairs}).
+    First we inspected the affect of time bin width on spike count correlations. We know that using short time bins results in artificially small correlation measurements\cite{cohen1}, so we expected to see an increase in correlation amplitude with increasing time bin width. That is exactly what we observed. Taking $50$ cells at random, we calculated the spike count correlation between every possible pair of these cells, using different time bin widths ranging from $0.005$s to $3$s. We found that the longer the time bin width, the greater the correlations (see figure \ref{fig:correlations_all_pairs}).
 
     We also separated the positively correlated pairs from the negatively correlated pairs using the mean correlation of each pair across all bin widths (see section \ref{sec:corr_anti_corr}). We found that the positively correlated pairs become more positively correlated with increasing time bin width, and the negatively correlated pairs become more negatively correlated with increasing time bin width (see figures \ref{fig:correlations_pos_pairs} and \ref{fig:correlations_neg_pairs}).
 
@@ -177,7 +177,63 @@ In this work, we measured spike count correlations between neurons from nine dif
 
   These results were consistent across the three mouse subjects. But, the relative maginitudes of the mean intra-regional and inter-regional correlations were not consistent. For example, the region with the highest mean intra-regional correlations when using $1$s bin widths for subject one is the superior colliculus (SC), but for subject two it is the midbrain (MB).
 
+  \subsection{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}\label{sec:dims_result}
+  We used the correlation measurements to create weighted undirected graphs/networks where each node represents a neuron, and the weight of each edge is the pairwise correlation between those neurons represented by the nodes at either end of that edge. We aimed to find communities of neurons within these networks, and compare the structure of these communities to the anatomical division of those neurons. The first step of this process involved applying the `spectral rejection' technique developed by Humphries et al (2019)\cite{humphries}. This technique compares our data network to a chosen null network model, and finds any additional structure in the data network beyond that which is captured in the null network model (if there is any such structure). By comparing the eigenspectrum of the data network to the eigenspectrum of many samples from the null network model, this technique allows us to estimate the dimensionality of the additional structure in the data network, and gives us a basis for that vector space. The technique also finds which nodes contribute to this additional structure, and divides our data network into signal and noise networks. The details of spectral rejection and node rejection can be found in sections \ref{sec:spectral_rejection} and \ref{sec:node_rejection} respectively, and a full overview can be found in \cite{humphries}.
+
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/Krebs_rectified_total_structure_dims.png}
+      \label{fig:Krebs_rectified_total_structure_dims}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/Waksman_rectified_total_structure_dims.png}
+      \label{fig:Waksman_rectified_total_structure_dims}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/Robbins_rectified_total_structure_dims.png}
+      \label{fig:Robbins_rectified_total_structure_dims}
+    \end{subfigure}
+    \caption{The number of dimensions in the $k$-partite and connected structure in the correlation based networks beyond the structure captured by a sparse weighted configuration null network model (see section \ref{sec:sparse_weighted_configuration_model}), shown for different time bin widths. Note that the $k$-partite structure disappears for time bin width greater than $200$ms for all three subjects. The dimension of the connect structure reduces with increasing bin width for $2$ of the $3$ subjects (top row).}
+    \label{fig:structure_dims}
+  \end{figure}
+
+  We chose the sparse weighted configuration model (see section \ref{sec:sparse_weighted_configuration_model}) as our null network model. This model matches the sparsity and the total weight of the original network but distributes the weight at random across the sparse network.
+
+  We applied the spectral rejection method to our networks based on spike count correlations using different values for the time bin width. We observed that for smaller time bin widths, our data networks had both $k$-partite structure, and community structure. As the width of the time bin increased, we found that the $k$-partite structure disappeared from our data networks, and the dimension of the community strcuture reduced in two of the three mice from which we had data (see figure \ref{fig:structure_dims}).
+
   \subsection{Detecting communities in correlation based networks}
+  We applied the community detection procedure described in section \ref{sec:community_detection} to our signal networks for our various time bin widths. As might be expected from the results described above in section \ref{sec:dims_result}, we detected a greater number of smaller communities at shorter time bin widths, and a smaller number of larger communities for longer time bin widths (see figure \ref{fig:consensus_clusterings_with_regions}).
+
+  \begin{figure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Krebs_0p005_rectified_cons_cluster_map.png}
+      \caption{5ms}
+      \label{fig:consensus_cluster_5ms}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Krebs_0p005_regional_cluster_map.png}
+      \caption{5ms}
+      \label{fig:regional_cluster_map_5ms}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Krebs_1p0_rectified_cons_cluster_map.png}
+      \caption{1s}
+      \label{fig:consensus_cluster_1s}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Krebs_1p0_regional_cluster_map.png}
+      \caption{1s}
+      \label{fig:regional_cluster_map_1s}
+    \end{subfigure}
+    \caption{Test caption}
+    \label{fig:consensus_clusterings_with_regions}
+  \end{figure}
+
+  We also noticed that at short time bin widths the communities detected tended to be dominated by cells from one region. Whereas communities existing in networks created using wider time bin widths tended to contain cells from many different brain regions. More on this in the next section.
+
 
   % Fig 3. Community detection, main results
   % - Schematic diagram of community detection algorithm steps.
@@ -446,14 +502,14 @@ To be added.
 
         To find the eigenspectrum of the null model, we generated $N$ samples from our null model $P_1, \dots, P_N$, and we measured their deviation matrices $B_1, \dots, B_N$. We then calculated the eigenspectrum of each of those samples. We calculated the upper bound of the null model eigenspectrum by taking the mean of the largest eigenvalues of $B_1, \dots, B_N$. We calculated a lower bound on the null model eigenspectrum by taking the mean of the smallest eigenvalues of $B_1, \dots, B_N$.
 
-        We then calculated the eigenspectrum of $\mathbf{B}$, our data network deviation matrix. If any of those eigenvalues lay outside of the upper or lower bounds of the null model eigenspectrum, this is evidence of additional structure not captured by the null model. If we chose the sparse weighted configuration model (see section \ref{sec:sparse_weighted_configuration_model}) as our null network model, then eigenvalues lying below the lower bound indicate $n$-partite structure in the network. For example, if one eigenvalue lay below the lower bound, this would indicate some bipartite structure in the data network. If any eigenvalues lay above the upper bound of the null model eigenspectrum, this is evidence of community structure in the data network. For example, one eigenvalue of $\mathbf{B}$ lying above the upper bound of the null model eigenspectrum indicates the presence of two communities in the network \cite{humphries2}.
+        We then calculated the eigenspectrum of $\mathbf{B}$, our data network deviation matrix. If any of those eigenvalues lay outside of the upper or lower bounds of the null model eigenspectrum, this is evidence of additional structure not captured by the null model. If we chose the sparse weighted configuration model (see section \ref{sec:sparse_weighted_configuration_model}) as our null network model, then eigenvalues lying below the lower bound indicate $k$-partite structure in the network. For example, if one eigenvalue lay below the lower bound, this would indicate some bipartite structure in the data network. If any eigenvalues lay above the upper bound of the null model eigenspectrum, this is evidence of community structure in the data network. For example, one eigenvalue of $\mathbf{B}$ lying above the upper bound of the null model eigenspectrum indicates the presence of two communities in the network \cite{humphries2}.
 
-        \subsubsection{Node rejection}
+        \subsubsection{Node rejection}\label{sec:node_rejection}
         If there are $d$ data eigenvalues lying outside of the null network eigenspectrum, the $d$ eigenvectors corresponding to these eigenvalues will form a vector space. If we project the nodes of our network into this vector space, by projecting either rows or colmns of the data matrix, we can see how strongly each node contributes to the vector space. Nodes that contribute strongly to the additional structure will project far away from the origin, nodes that do not contribute to the additional structure will project close to the origin. We want to use this information to discard those nodes that do not contribute.
 
         We can test whether a node projects \textit{far} away from the origin or \textit{close} to the origin using the eigenvalues and eigenvectors of $B_1, \dots, B_N$. The $j$th eigenvector and eigenvalue of $B_i$ gives a value for a null network's projection into the $j$th dimension of the additional structure vector space. The matrices $B_1, \dots, B_N$ give $N$ projections into that dimension. These projections are a distribution of the null networks' projections. If the data node's projection exceeds that of the null network projections this node is judged to project \textit{far} from the origin, and therefore contribute to the additional structure. Otherwise, the node is judged to project \textit{close} to the origin, and is therefore rejected \cite{humphries}.
 
-        \subsubsection{Community detection}
+        \subsubsection{Community detection}\label{sec:community_detection}
         Another application for this $d$ dimensional space is community detection. We first project all of the nodes into this $d$-dimensional space, then perform the clustering in this space. The clustering and community detection procedure is described in \cite{humphries2}.
 
         In practice, the procedure is carried out $n$ times (we chose $n=100$ times), this returns $n$ clusterings. We resolve these $n$ clusterings to one final clustering using \textit{consensus clustering}. We used the consensus clustering method that uses an explicit null model for the consensus matrix, as outlined in \cite{humphries}.

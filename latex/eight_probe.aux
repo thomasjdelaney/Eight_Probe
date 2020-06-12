@@ -21,7 +21,7 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \citation{jun}
 \citation{stringer}
-\citation{cohen}
+\citation{cohen1}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Results}{3}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Average correlation size increases with increasing time bin width}{3}{subsection.2.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Goodness-of-fit for Poisson and Gaussian distributions across increasing time bin widths}{3}{subsection.2.2}\protected@file@percent }
@@ -46,106 +46,130 @@
 \newlabel{sub@fig:long_bin_corr_comp}{{b}{6}{Mean inter-regional and intra-regional correlations using a time bin width of 1s.\relax }{figure.caption.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The mean intra-regional correlations (coloured dots) and mean inter-regional correlations (black dots) for a given region, indicated on the x-axis, for different time bin widths. Each black dot represents the mean inter-regional correalations between the region indicated on the x-axis and one other region. (a) shows these measurements when we used a time bin width of 5ms. (b) shows these measurements when we used a time bin width of 1s. Note that the difference between the mean inter-regional correlations and mean intra-regional correlations is smaller for 1s bins.\relax }}{6}{figure.caption.3}\protected@file@percent }
 \newlabel{fig:corr_comps}{{3}{6}{The mean intra-regional correlations (coloured dots) and mean inter-regional correlations (black dots) for a given region, indicated on the x-axis, for different time bin widths. Each black dot represents the mean inter-regional correalations between the region indicated on the x-axis and one other region. (a) shows these measurements when we used a time bin width of 5ms. (b) shows these measurements when we used a time bin width of 1s. Note that the difference between the mean inter-regional correlations and mean intra-regional correlations is smaller for 1s bins.\relax }{figure.caption.3}{}}
-\citation{stringer}
+\citation{humphries}
+\citation{humphries}
 \newlabel{fig:short_bin_corr_matrix}{{4a}{7}{Time bin width 0.005s.\relax }{figure.caption.4}{}}
 \newlabel{sub@fig:short_bin_corr_matrix}{{a}{7}{Time bin width 0.005s.\relax }{figure.caption.4}{}}
 \newlabel{fig:long_bin_corr_matrix}{{4b}{7}{Time bin width 1s.\relax }{figure.caption.4}{}}
 \newlabel{sub@fig:long_bin_corr_matrix}{{b}{7}{Time bin width 1s.\relax }{figure.caption.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Mean inter-regional (main diagonal) and intra-regional (off diagonal) correlation coefficients. (a) Shows these measurements when spike times were binned using $5$ms time bins. (b) Shows the same, using $1$s time bins. Note that the matrices are ordered according to the main diagonal values, therefore the ordering is different in each subfigure.\relax }}{7}{figure.caption.4}\protected@file@percent }
 \newlabel{fig:corr_matrices}{{4}{7}{Mean inter-regional (main diagonal) and intra-regional (off diagonal) correlation coefficients. (a) Shows these measurements when spike times were binned using $5$ms time bins. (b) Shows the same, using $1$s time bins. Note that the matrices are ordered according to the main diagonal values, therefore the ordering is different in each subfigure.\relax }{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Detecting communities in correlation based networks}{7}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Functional communities resemble anatomical division at short timescales}{7}{subsection.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Conditional correlations \& signal correlations}{7}{subsection.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Discussion}{7}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{7}{subsection.2.4}\protected@file@percent }
+\newlabel{sec:dims_result}{{2.4}{7}{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{subsection.2.4}{}}
+\newlabel{fig:Krebs_rectified_total_structure_dims}{{\caption@xref {fig:Krebs_rectified_total_structure_dims}{ on input line 187}}{8}{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{figure.caption.5}{}}
+\newlabel{sub@fig:Krebs_rectified_total_structure_dims}{{}{8}{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{figure.caption.5}{}}
+\newlabel{fig:Waksman_rectified_total_structure_dims}{{\caption@xref {fig:Waksman_rectified_total_structure_dims}{ on input line 192}}{8}{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{figure.caption.5}{}}
+\newlabel{sub@fig:Waksman_rectified_total_structure_dims}{{}{8}{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{figure.caption.5}{}}
+\newlabel{fig:Robbins_rectified_total_structure_dims}{{\caption@xref {fig:Robbins_rectified_total_structure_dims}{ on input line 197}}{8}{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{figure.caption.5}{}}
+\newlabel{sub@fig:Robbins_rectified_total_structure_dims}{{}{8}{Connected and $k$-partite structure in correlation based networks reduces in dimension with increasing bin width}{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The number of dimensions in the $k$-partite and connected structure in the correlation based networks beyond the structure captured by a sparse weighted configuration null network model (see section \ref  {sec:sparse_weighted_configuration_model}), shown for different time bin widths. Note that the $k$-partite structure disappears for time bin width greater than $200$ms for all three subjects. The dimension of the connect structure reduces with increasing bin width for $2$ of the $3$ subjects (top row).\relax }}{8}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:structure_dims}{{5}{8}{The number of dimensions in the $k$-partite and connected structure in the correlation based networks beyond the structure captured by a sparse weighted configuration null network model (see section \ref {sec:sparse_weighted_configuration_model}), shown for different time bin widths. Note that the $k$-partite structure disappears for time bin width greater than $200$ms for all three subjects. The dimension of the connect structure reduces with increasing bin width for $2$ of the $3$ subjects (top row).\relax }{figure.caption.5}{}}
+\newlabel{fig:consensus_cluster_5ms}{{6a}{9}{5ms\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:consensus_cluster_5ms}{{a}{9}{5ms\relax }{figure.caption.6}{}}
+\newlabel{fig:regional_cluster_map_5ms}{{6b}{9}{5ms\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:regional_cluster_map_5ms}{{b}{9}{5ms\relax }{figure.caption.6}{}}
+\newlabel{fig:consensus_cluster_1s}{{6c}{9}{1s\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:consensus_cluster_1s}{{c}{9}{1s\relax }{figure.caption.6}{}}
+\newlabel{fig:regional_cluster_map_1s}{{6d}{9}{1s\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:regional_cluster_map_1s}{{d}{9}{1s\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Test caption\relax }}{9}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:consensus_clusterings_with_regions}{{6}{9}{Test caption\relax }{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Detecting communities in correlation based networks}{9}{subsection.2.5}\protected@file@percent }
+\citation{stringer}
 \citation{jun}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Functional communities resemble anatomical division at short timescales}{10}{subsection.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Conditional correlations \& signal correlations}{10}{subsection.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Discussion}{10}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Data}{10}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Brain regions}{10}{subsection.4.1}\protected@file@percent }
 \citation{stringer}
 \citation{stringer}
 \citation{stringer}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Data}{8}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Brain regions}{8}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Video recordings}{8}{subsection.4.2}\protected@file@percent }
-\newlabel{sec:video_recordings}{{4.2}{8}{Video recordings}{subsection.4.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textbf  {Probe Locations:} The locations of the probes in each of the three mouse brains\cite  {stringer}.\relax }}{9}{figure.caption.5}\protected@file@percent }
-\newlabel{fig:probe_locations}{{5}{9}{\textbf {Probe Locations:} The locations of the probes in each of the three mouse brains\cite {stringer}.\relax }{figure.caption.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Methods}{9}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Binning data}{9}{subsection.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Correlation coefficients}{9}{subsection.5.2}\protected@file@percent }
-\newlabel{eq:dist_pearsons_corr}{{1}{10}{Correlation coefficients}{equation.5.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Spike Count Correlation, $r_{SC}$}{10}{subsubsection.5.2.1}\protected@file@percent }
-\newlabel{sec:spike_count_correlation}{{5.2.1}{10}{Spike Count Correlation, $r_{SC}$}{subsubsection.5.2.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Shuffled spike count correlations}{10}{subsubsection.5.2.2}\protected@file@percent }
-\newlabel{sec:shuffled_correlations}{{5.2.2}{10}{Shuffled spike count correlations}{subsubsection.5.2.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.3}Separating Correlations \& Anti-correlations}{11}{subsubsection.5.2.3}\protected@file@percent }
-\newlabel{sec:corr_anti_corr}{{5.2.3}{11}{Separating Correlations \& Anti-correlations}{subsubsection.5.2.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Conditioning on behavioural data}{11}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Linear regression}{11}{subsubsection.5.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \textbf  {Probe Locations:} The locations of the probes in each of the three mouse brains\cite  {stringer}.\relax }}{11}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:probe_locations}{{7}{11}{\textbf {Probe Locations:} The locations of the probes in each of the three mouse brains\cite {stringer}.\relax }{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Video recordings}{11}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:video_recordings}{{4.2}{11}{Video recordings}{subsection.4.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Methods}{11}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Binning data}{11}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Correlation coefficients}{12}{subsection.5.2}\protected@file@percent }
+\newlabel{eq:dist_pearsons_corr}{{1}{12}{Correlation coefficients}{equation.5.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Spike Count Correlation, $r_{SC}$}{13}{subsubsection.5.2.1}\protected@file@percent }
+\newlabel{sec:spike_count_correlation}{{5.2.1}{13}{Spike Count Correlation, $r_{SC}$}{subsubsection.5.2.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Shuffled spike count correlations}{13}{subsubsection.5.2.2}\protected@file@percent }
+\newlabel{sec:shuffled_correlations}{{5.2.2}{13}{Shuffled spike count correlations}{subsubsection.5.2.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.3}Separating Correlations \& Anti-correlations}{13}{subsubsection.5.2.3}\protected@file@percent }
+\newlabel{sec:corr_anti_corr}{{5.2.3}{13}{Separating Correlations \& Anti-correlations}{subsubsection.5.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Conditioning on behavioural data}{13}{subsection.5.3}\protected@file@percent }
 \citation{zou}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Elastic net regularisation}{12}{subsubsection.5.3.2}\protected@file@percent }
-\newlabel{eq:elastic_net}{{6}{12}{Elastic net regularisation}{equation.5.6}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.3}Conditional covariance}{12}{subsubsection.5.3.3}\protected@file@percent }
-\newlabel{eq:law_of_total_covariance}{{10}{12}{Conditional covariance}{equation.5.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Linear regression}{14}{subsubsection.5.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Elastic net regularisation}{14}{subsubsection.5.3.2}\protected@file@percent }
+\newlabel{eq:elastic_net}{{6}{14}{Elastic net regularisation}{equation.5.6}{}}
 \citation{maugis}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.3}Conditional covariance}{15}{subsubsection.5.3.3}\protected@file@percent }
+\newlabel{eq:law_of_total_covariance}{{10}{15}{Conditional covariance}{equation.5.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.4}Measures of conditional correlation}{15}{subsubsection.5.3.4}\protected@file@percent }
+\newlabel{sec:cond_corr}{{5.3.4}{15}{Measures of conditional correlation}{subsubsection.5.3.4}{}}
+\newlabel{eq:event_conditional_correlation}{{13}{15}{Measures of conditional correlation}{equation.5.13}{}}
+\newlabel{eq:signal_correlation}{{14}{15}{Measures of conditional correlation}{equation.5.14}{}}
 \citation{shannon}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.4}Measures of conditional correlation}{13}{subsubsection.5.3.4}\protected@file@percent }
-\newlabel{sec:cond_corr}{{5.3.4}{13}{Measures of conditional correlation}{subsubsection.5.3.4}{}}
-\newlabel{eq:event_conditional_correlation}{{13}{13}{Measures of conditional correlation}{equation.5.13}{}}
-\newlabel{eq:signal_correlation}{{14}{13}{Measures of conditional correlation}{equation.5.14}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Information Theory}{13}{subsection.5.4}\protected@file@percent }
-\newlabel{sec:information_theory}{{5.4}{13}{Information Theory}{subsection.5.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.1}Entropy $H(X)$}{13}{subsubsection.5.4.1}\protected@file@percent }
-\newlabel{entropy}{{15}{13}{Entropy $H(X)$}{equation.5.15}{}}
-\newlabel{joint_entropy}{{16}{14}{Entropy $H(X)$}{equation.5.16}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.2}Maximum entropy limit}{14}{subsubsection.5.4.2}\protected@file@percent }
-\newlabel{sec:entropy_limit}{{5.4.2}{14}{Maximum entropy limit}{subsubsection.5.4.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {Entropy Limit:} The upper limit on entropy of binned spike count data as a function of the maximum observed spike count. The orange line is the analytical maximum. The blue line is the entropy of samples with $N=1000$ data points taken from the discrete uniform distribution.\relax }}{15}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:entropy_limit}{{6}{15}{\textbf {Entropy Limit:} The upper limit on entropy of binned spike count data as a function of the maximum observed spike count. The orange line is the analytical maximum. The blue line is the entropy of samples with $N=1000$ data points taken from the discrete uniform distribution.\relax }{figure.caption.6}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.3}Mutual Information $I(X;Y)$}{15}{subsubsection.5.4.3}\protected@file@percent }
-\newlabel{eq:mutual_info_intuitive}{{18}{15}{Mutual Information $I(X;Y)$}{equation.5.18}{}}
-\newlabel{eq:mutual_info_useful}{{20}{16}{Mutual Information $I(X;Y)$}{equation.5.20}{}}
-\newlabel{eq:mutual_info_log}{{21}{16}{Mutual Information $I(X;Y)$}{equation.5.21}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Information Theory}{16}{subsection.5.4}\protected@file@percent }
+\newlabel{sec:information_theory}{{5.4}{16}{Information Theory}{subsection.5.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.1}Entropy $H(X)$}{16}{subsubsection.5.4.1}\protected@file@percent }
+\newlabel{entropy}{{15}{16}{Entropy $H(X)$}{equation.5.15}{}}
+\newlabel{joint_entropy}{{16}{16}{Entropy $H(X)$}{equation.5.16}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.2}Maximum entropy limit}{17}{subsubsection.5.4.2}\protected@file@percent }
+\newlabel{sec:entropy_limit}{{5.4.2}{17}{Maximum entropy limit}{subsubsection.5.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces \textbf  {Entropy Limit:} The upper limit on entropy of binned spike count data as a function of the maximum observed spike count. The orange line is the analytical maximum. The blue line is the entropy of samples with $N=1000$ data points taken from the discrete uniform distribution.\relax }}{17}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:entropy_limit}{{8}{17}{\textbf {Entropy Limit:} The upper limit on entropy of binned spike count data as a function of the maximum observed spike count. The orange line is the analytical maximum. The blue line is the entropy of samples with $N=1000$ data points taken from the discrete uniform distribution.\relax }{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.3}Mutual Information $I(X;Y)$}{18}{subsubsection.5.4.3}\protected@file@percent }
+\newlabel{eq:mutual_info_intuitive}{{18}{18}{Mutual Information $I(X;Y)$}{equation.5.18}{}}
+\newlabel{eq:mutual_info_useful}{{20}{18}{Mutual Information $I(X;Y)$}{equation.5.20}{}}
+\newlabel{eq:mutual_info_log}{{21}{18}{Mutual Information $I(X;Y)$}{equation.5.21}{}}
 \citation{treves}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.4}Variation of Information $VI(X,Y)$}{17}{subsubsection.5.4.4}\protected@file@percent }
-\newlabel{sec:variation_of_information}{{5.4.4}{17}{Variation of Information $VI(X,Y)$}{subsubsection.5.4.4}{}}
-\newlabel{eq:variation_of_information}{{23}{17}{Variation of Information $VI(X,Y)$}{equation.5.23}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.5}Measuring entropies \& mutual information}{17}{subsubsection.5.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Network analysis}{17}{subsection.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.1}Correlation networks}{17}{subsubsection.5.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.4}Variation of Information $VI(X,Y)$}{19}{subsubsection.5.4.4}\protected@file@percent }
+\newlabel{sec:variation_of_information}{{5.4.4}{19}{Variation of Information $VI(X,Y)$}{subsubsection.5.4.4}{}}
+\newlabel{eq:variation_of_information}{{23}{19}{Variation of Information $VI(X,Y)$}{equation.5.23}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.5}Measuring entropies \& mutual information}{19}{subsubsection.5.4.5}\protected@file@percent }
 \citation{humphries}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Network analysis}{20}{subsection.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.1}Correlation networks}{20}{subsubsection.5.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.2}Rectified correlations}{20}{subsubsection.5.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.3}Sparsifying data networks}{20}{subsubsection.5.5.3}\protected@file@percent }
+\newlabel{sec:sparsifying_data_networks}{{5.5.3}{20}{Sparsifying data networks}{subsubsection.5.5.3}{}}
 \citation{fosdick}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.2}Rectified correlations}{18}{subsubsection.5.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.3}Sparsifying data networks}{18}{subsubsection.5.5.3}\protected@file@percent }
-\newlabel{sec:sparsifying_data_networks}{{5.5.3}{18}{Sparsifying data networks}{subsubsection.5.5.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.4}Communities}{18}{subsubsection.5.5.4}\protected@file@percent }
 \citation{fosdick}
 \citation{humphries}
 \citation{humphries}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.4}Communities}{21}{subsubsection.5.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.5}Weighted configuration model}{21}{subsubsection.5.5.5}\protected@file@percent }
+\newlabel{sec:weight_configuration_model}{{5.5.5}{21}{Weighted configuration model}{subsubsection.5.5.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.6}Sparse weighted configuration model}{21}{subsubsection.5.5.6}\protected@file@percent }
+\newlabel{sec:sparse_weighted_configuration_model}{{5.5.6}{21}{Sparse weighted configuration model}{subsubsection.5.5.6}{}}
 \citation{fosdick}
 \citation{humphries2}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.5}Weighted configuration model}{19}{subsubsection.5.5.5}\protected@file@percent }
-\newlabel{sec:weight_configuration_model}{{5.5.5}{19}{Weighted configuration model}{subsubsection.5.5.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.6}Sparse weighted configuration model}{19}{subsubsection.5.5.6}\protected@file@percent }
-\newlabel{sec:sparse_weighted_configuration_model}{{5.5.6}{19}{Sparse weighted configuration model}{subsubsection.5.5.6}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.7}Spectral rejection}{19}{subsubsection.5.5.7}\protected@file@percent }
-\newlabel{sec:spectral_rejection}{{5.5.7}{19}{Spectral rejection}{subsubsection.5.5.7}{}}
 \citation{humphries2}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.8}Node rejection}{20}{subsubsection.5.5.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.7}Spectral rejection}{22}{subsubsection.5.5.7}\protected@file@percent }
+\newlabel{sec:spectral_rejection}{{5.5.7}{22}{Spectral rejection}{subsubsection.5.5.7}{}}
 \citation{humphries}
 \citation{humphries2}
 \citation{humphries}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.9}Community detection}{21}{subsubsection.5.5.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Clustering Comparison}{21}{subsection.5.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.1}Adjusted Rand Index}{22}{subsubsection.5.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.2}Clusterings as random variables}{22}{subsubsection.5.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.8}Node rejection}{23}{subsubsection.5.5.8}\protected@file@percent }
+\newlabel{sec:node_rejection}{{5.5.8}{23}{Node rejection}{subsubsection.5.5.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.9}Community detection}{23}{subsubsection.5.5.9}\protected@file@percent }
+\newlabel{sec:community_detection}{{5.5.9}{23}{Community detection}{subsubsection.5.5.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Clustering Comparison}{24}{subsection.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.1}Adjusted Rand Index}{24}{subsubsection.5.6.1}\protected@file@percent }
 \citation{meila}
 \citation{vinh}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.2}Clusterings as random variables}{25}{subsubsection.5.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.3}Information based similarity measures}{25}{subsubsection.5.6.3}\protected@file@percent }
+\newlabel{sec:information_similarity_measures}{{5.6.3}{25}{Information based similarity measures}{subsubsection.5.6.3}{}}
 \citation{vinh}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.3}Information based similarity measures}{23}{subsubsection.5.6.3}\protected@file@percent }
-\newlabel{sec:information_similarity_measures}{{5.6.3}{23}{Information based similarity measures}{subsubsection.5.6.3}{}}
 \citation{meila}
 \citation{vinh}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.4}Information based metrics}{24}{subsubsection.5.6.4}\protected@file@percent }
-\newlabel{sec:information_metrics}{{5.6.4}{24}{Information based metrics}{subsubsection.5.6.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.5}Comparing detected communities and anatomical divisions}{24}{subsubsection.5.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.4}Information based metrics}{26}{subsubsection.5.6.4}\protected@file@percent }
+\newlabel{sec:information_metrics}{{5.6.4}{26}{Information based metrics}{subsubsection.5.6.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.5}Comparing detected communities and anatomical divisions}{27}{subsubsection.5.6.5}\protected@file@percent }
 \bibdata{eight_probe.bbl}
 \bibcite{cohen1}{1}
 \bibcite{cohen2}{2}

@@ -57,7 +57,7 @@ def buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, correction, c
     except FileNotFoundError:
         print(dt.datetime.now().isoformat() + ' WARN: ' + 'Could not load clustering...')
         is_loaded = False
-        return {}, is_loaded 
+        return {}, is_loaded
     signal_final_cell_info['regional_cluster'] = [list(ep.regions).index(r) for r in signal_final_cell_info['cell_region']] # replacing region strings with integers for the metric functions
     region_clustering_rv = signal_final_cell_info['cell_region'].value_counts(normalize=True)
     consensus_clustering_rv = signal_final_cell_info['consensus_cluster'].value_counts(normalize=True)
@@ -86,6 +86,27 @@ def plotClusteringCompMeasure(cluster_comp_frame, measure, correction, correlati
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
     plt.close()
 
+def plotAdditionalStructureDimensions(correction, correlation_type, use_title=False):
+    """
+    For plotting a bar plot of the dimensions of n-partite, and community structure across bin widths, one plot for each mouse.
+    Arguments:  correction, str, correction type
+                correlation_type, str,
+    Returns:    save_name, str
+    """
+    summary_frame = pd.read_csv(os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '_' + args.correlation_type + '.csv'))
+    for mouse_name in ep.mouse_names:
+        relevant_summary_frame = summary_frame.loc[summary_frame.mouse_name == mouse_name, ['bin_width','below_space_dims','exceeding_space_dims']]
+        relevant_summary_frame.columns = ['Time (s)',r'$k$-partite dim.', r'connected dim.']
+        relevant_summary_frame.plot.bar(x='Time (s)', figsize=(4,3))
+        plt.xlabel('Time bin width (s)', fontsize='x-large');plt.ylabel('Num. Dimensions', fontsize='x-large');
+        plt.xticks(rotation=0);plt.yticks(fontsize='large');
+        plt.legend(fontsize='large');
+        plt.title('Subject ' + str(list(ep.mouse_names).index(mouse_name)) + ', ' + correction + ', ' + correlation_type) if use_title else None
+        plt.tight_layout()
+        save_name = os.path.join(image_dir, 'bin_width_analysis', mouse_name + '_' + correction + '_' + correlation_type + '_structure_dims.png')
+        plt.savefig(save_name);plt.close('all');
+    return save_name
+
 if (not args.debug) & (__name__ == "__main__"):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
     cluster_comp_frame = pd.DataFrame(columns=['bin_width', 'mouse_name', 'correction', 'correlation_type', 'num_communities', 'regional_clustering_entropy', 'consensus_clustering_entropy', 'joint_entropy', 'mutual_information', 'adjusted_mutual_information', 'normalised_mutual_information', 'variation_of_information', 'normalised_variation_of_information', 'normalised_information_distance', 'adjusted_rand_index'])
@@ -101,5 +122,6 @@ if (not args.debug) & (__name__ == "__main__"):
     for measure in cluster_comp_frame.columns[4:]:
         plotClusteringCompMeasure(cluster_comp_frame, measure, args.correction, args.correlation_type)
     plotClusteringCompMeasure(pd.read_csv(os.path.join(csv_dir, 'community_detection_summary', 'community_detection_summary_' + args.correction + '_' + args.correlation_type + '.csv')), 'max_modularity', args.correction, args.correlation_type)
+    save_name = plotAdditionalStructureDimensions(args.correction, args.correlation_type, use_title=False)
+    print(dt.datetime.now().isoformat() + ' INFO: ' + save_name + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')
-
