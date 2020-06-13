@@ -74,12 +74,13 @@ def buildClusteringCompMeasureDict(mouse_name, bin_width, npy_dir, correction, c
 
 def plotClusteringCompMeasure(cluster_comp_frame, measure, correction, correlation_type):
     measure_to_ylabel = {'num_communities':'Num. Communities', 'regional_clustering_entropy':r'Regional clustering $H$ (bits)', 'consensus_clustering_entropy':r'Consensus clustering $H$ (bits)', 'joint_entropy':r'Joint $H$ (bits)', 'mutual_information':'Mutual Info. (bits)', 'adjusted_mutual_information':'Adj. Mutual Info.', 'normalised_mutual_information':'Norm. Mutual Info.', 'variation_of_information':'Var. of Info. (bits)', 'normalised_variation_of_information':'Norm. Var. of Info.', 'normalised_information_distance':'Norm. Info. Distance', 'adjusted_rand_index':'Adj. Rand Index', 'max_modularity':'Modularity'}
+    plt.figure(figsize=(4,3))
     for mouse_name in ep.mouse_names:
         relevant_cluster_comp_frame = cluster_comp_frame.loc[cluster_comp_frame.mouse_name == mouse_name, ['bin_width', measure]]
-        plt.plot(relevant_cluster_comp_frame.bin_width, relevant_cluster_comp_frame[measure], label=mouse_name)
+        plt.plot(relevant_cluster_comp_frame.bin_width, relevant_cluster_comp_frame[measure], label='Mouse ' + str(list(ep.mouse_names).index(mouse_name)))
     plt.legend(fontsize='large')
-    plt.xlabel('Bin width (s)', fontsize='x-large')
-    plt.ylabel(measure_to_ylabel[measure], fontsize='x-large')
+    plt.xlabel('Bin width (s)', fontsize='x-large'); plt.xticks(fontsize='large')
+    plt.ylabel(measure_to_ylabel[measure], fontsize='x-large'); plt.yticks(fontsize='large')
     plt.tight_layout()
     file_name = os.path.join(image_dir, 'clustering_comparison', measure + '_' + correction + '_' + correlation_type + '.png')
     plt.savefig(file_name)

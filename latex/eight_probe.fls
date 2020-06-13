@@ -263,6 +263,12 @@ INPUT ./figures/Krebs_1p0_rectified_cons_cluster_map.png
 INPUT figures/Krebs_1p0_regional_cluster_map.png
 INPUT ./figures/Krebs_1p0_regional_cluster_map.png
 INPUT ./figures/Krebs_1p0_regional_cluster_map.png
+INPUT figures/variation_of_information_rectified_total.png
+INPUT ./figures/variation_of_information_rectified_total.png
+INPUT ./figures/variation_of_information_rectified_total.png
+INPUT figures/adjusted_rand_index_rectified_total.png
+INPUT ./figures/adjusted_rand_index_rectified_total.png
+INPUT ./figures/adjusted_rand_index_rectified_total.png
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 INPUT figures/probe_locations_stringer.png

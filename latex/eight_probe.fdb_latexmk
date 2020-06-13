@@ -1,11 +1,11 @@
 # Fdb version 3
-["bibtex eight_probe"] 1591994698 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1591994728
-  "eight_probe.aux" 1591994727 21063 f5762cff3283c673cf091c5ea9114e7f "pdflatex"
+["bibtex eight_probe"] 1592077731 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1592077733
+  "eight_probe.aux" 1592077733 23125 4343246660dc503c3273935474fef4dd "pdflatex"
   "eight_probe.bbl.bib" 0 -1 0 ""
   (generated)
-  "eight_probe.bbl"
   "eight_probe.blg"
-["pdflatex"] 1591994726 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1591994728
+  "eight_probe.bbl"
+["pdflatex"] 1592077731 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1592077733
   "/home/thomas/.texlive2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1589722506 3704429 0303ff8f3ada1c5655ff4477b651b125 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1580927601 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
@@ -139,10 +139,10 @@
   "/usr/share/texlive/texmf-dist/tex/latex/ucs/utf8x.def" 1368571634 8036 21f7ac37aafb6cfeddbb196b8bfd6280 ""
   "/usr/share/texlive/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1580927610 35594 9aef19174c178978f61d14961262af5d ""
-  "eight_probe.aux" 1591994727 21063 f5762cff3283c673cf091c5ea9114e7f "pdflatex"
+  "eight_probe.aux" 1592077733 23125 4343246660dc503c3273935474fef4dd "pdflatex"
   "eight_probe.bbl" 1586453880 2510 647ec1eeb01363104c6c596d2d7b17a7 "bibtex eight_probe"
-  "eight_probe.out" 1591994727 3910 6735a86b4b99eca4bf2de9e403011c2e "pdflatex"
-  "eight_probe.tex" 1591994725 57497 1138ebb18e739f27a5de0dcaf0bdb46b ""
+  "eight_probe.out" 1592077733 3910 6735a86b4b99eca4bf2de9e403011c2e "pdflatex"
+  "eight_probe.tex" 1592077727 58572 26270023715f732117b2365e21a0568e ""
   "figures/Krebs_0p005_corr_comp.png" 1591796985 33652 a09ff4cd8717cf01cafc61601276a16a ""
   "figures/Krebs_0p005_corr_matrix.png" 1591796983 38432 0a6a95ad65f2e4c0314ac84860d3ad5a ""
   "figures/Krebs_0p005_rectified_cons_cluster_map.png" 1586027489 108610 5dc288b380f19bd8644ff513f44ea754 ""
@@ -159,10 +159,12 @@
   "figures/Krebs_stats_by_bin_width.png" 1591650873 46327 efce92ce51732686dbc5191556470226 ""
   "figures/Robbins_rectified_total_structure_dims.png" 1591978204 16822 59bcf140cfcf63d10ca09bf2f08dbbac ""
   "figures/Waksman_rectified_total_structure_dims.png" 1591978204 18546 01437acd148b4118ef49813e2e754250 ""
+  "figures/adjusted_rand_index_rectified_total.png" 1592075180 25541 6b0fc7d8d81a889387f63c27232c9c1e ""
   "figures/entropy_limit.png" 1575299183 21103 b4604124c027707bd072226d40a0ddad ""
   "figures/probe_locations_stringer.png" 1588365316 122597 324d3f57635ea509be7fbf6aabcfeeed ""
+  "figures/variation_of_information_rectified_total.png" 1592075179 24739 42349c5ba846e676eaf0ed6e11ff00b5 ""
   (generated)
+  "eight_probe.out"
   "eight_probe.pdf"
   "eight_probe.aux"
   "eight_probe.log"
-  "eight_probe.out"

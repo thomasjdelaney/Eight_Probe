@@ -85,9 +85,9 @@ In this work, we measured spike count correlations between neurons from nine dif
     These results were observed in each of the three mouse subjects from which we had data.
 
     \subsection{Goodness-of-fit for Poisson and Gaussian distributions across increasing time bin widths}
-    We wanted to investigate if the width of the time bin used to bin spike times into spike counts had an effect on the distributon of spike counts.  We used the $\chi^2$ statistic as a goodness-of-fit measure for Poisson and Gaussian (normal) distributons to the spike count of $100$ randomly chosen neurons for a number of bin widths ranging from $0.01$s to $4$s. For the $\chi^2$ statistic, the higher the value, the worse the fit. As you might expect, we found that that a Poisson distributon is the best fit for shorter time bins less than $0.7$s in length. Then a Gaussian distribution is a better fit for time bins greater than $0.7$s in length (see figure \ref{fig:chi_squared_fits}).
+    We wanted to investigate if the width of the time bin used to bin spike times into spike counts had an effect on the distribution of spike counts.  We used the $\chi^2$ statistic as a goodness-of-fit measure for Poisson and Gaussian (normal) distributions to the spike count of $100$ randomly chosen neurons for a number of bin widths ranging from $0.01$s to $4$s. For the $\chi^2$ statistic, the higher the value, the worse the fit. As you might expect, we found that that a Poisson distribution is the best fit for shorter time bins less than $0.7$s in length. Then a Gaussian distribution is a better fit for time bins greater than $0.7$s in length (see figure \ref{fig:chi_squared_fits}).
 
-    A Poisson distributon was very likely to be a better fit for shorter time bin widths because spike counts must be non-negative, therefore any distributon of spike counts with mass distributed at or close to $0$ will be skewed.
+    A Poisson distribution was very likely to be a better fit for shorter time bin widths because spike counts must be non-negative, therefore any distribution of spike counts with mass distributed at or close to $0$ will be skewed.
 
     \begin{figure}[h]
         \begin{subfigure}[h]{0.5\linewidth}
@@ -117,12 +117,6 @@ In this work, we measured spike count correlations between neurons from nine dif
 % Fig 1. Correlations increase with bin width
 % - 2 time series plots of a pair of neurons, one small bin width one big bin widt
 %
-% Figure 4: Conditional correlations
-% - Covariance matrices = conditional cov + signal cov
-% - Bar plot or similar comparing mean correlations for all three: total, conditional and signal.
-% - Corresponding plots for communities, one for conditional, one for signal, for both a short and long time bin
-% - VI measure vs time bins size for both types of correlation
-
   \subsection{Differences between and inter- and intra- regional correlations decrease with increasing bin width}
   We investigated the differences in distribution between inter-regional correlations, i.e. correlations between neurons in different brain regions, and intra-regional correlations, i.e. correlations between neurons in the same brain region.
 
@@ -205,8 +199,6 @@ In this work, we measured spike count correlations between neurons from nine dif
   We applied the spectral rejection method to our networks based on spike count correlations using different values for the time bin width. We observed that for smaller time bin widths, our data networks had both $k$-partite structure, and community structure. As the width of the time bin increased, we found that the $k$-partite structure disappeared from our data networks, and the dimension of the community strcuture reduced in two of the three mice from which we had data (see figure \ref{fig:structure_dims}).
 
   \subsection{Detecting communities in correlation based networks}
-  We applied the community detection procedure described in section \ref{sec:community_detection} to our signal networks for our various time bin widths. As might be expected from the results described above in section \ref{sec:dims_result}, we detected a greater number of smaller communities at shorter time bin widths, and a smaller number of larger communities for longer time bin widths (see figure \ref{fig:consensus_clusterings_with_regions}).
-
   \begin{figure}
     \begin{subfigure}[h]{0.5\linewidth}
       \includegraphics[width=\linewidth]{figures/Krebs_0p005_rectified_cons_cluster_map.png}
@@ -228,23 +220,38 @@ In this work, we measured spike count correlations between neurons from nine dif
       \caption{1s}
       \label{fig:regional_cluster_map_1s}
     \end{subfigure}
-    \caption{Test caption}
+    \caption{(a) and (c) Correlation matrices with detected communities indicated by white lines. Each off main diagonal entry in the matrix represents a pair of neurons. Those entries within a white square indicate that both of neurons are in the same community as detected by our community detection procedure. Matrices shown are for $5$ms and $1$s time bin widths respectively. (b) and (d) Matrices showing the anatomical distribution of pairs along with their community membership. Entries where both cells are in the same reigon are given a colour indicated on the colour bar. Entries where cells are in different regions are given the grey colour also indicated on the colour bar.}
     \label{fig:consensus_clusterings_with_regions}
   \end{figure}
 
+  We applied the community detection procedure described in section \ref{sec:community_detection} to our signal networks for our various time bin widths. As might be expected from the results described above in section \ref{sec:dims_result}, we detected a greater number of smaller communities at shorter time bin widths, and a smaller number of larger communities for longer time bin widths (see figure \ref{fig:consensus_clusterings_with_regions}).
+
   We also noticed that at short time bin widths the communities detected tended to be dominated by cells from one region. Whereas communities existing in networks created using wider time bin widths tended to contain cells from many different brain regions. More on this in the next section.
-
-
-  % Fig 3. Community detection, main results
-  % - Schematic diagram of community detection algorithm steps.
-  % - Matrices sorted by communities, region, correlations, one for short and one for long time bins.
-  % - Plot of Variation of Information vs time bin size.
-  %
-
 
   \subsection{Functional communities resemble anatomical division at short timescales}
 
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/variation_of_information_rectified_total.png}
+      \caption{variation of information}
+      \label{fig:variation_of_information_rectified_total}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/adjusted_rand_index_rectified_total.png}
+      \caption{Adjusted Rand index}
+      \label{fig:adjusted_rand_index_rectified_total}
+    \end{subfigure}
+    \caption{distance measures between clusterings}
+    \label{fig:distance_measures}
+  \end{figure}
+  % - Plot of Variation of Information vs time bin size.
+
   \subsection{Conditional correlations \& signal correlations}
+  % Figure 4: Conditional correlations
+  % - Covariance matrices = conditional cov + signal cov
+  % - Bar plot or similar comparing mean correlations for all three: total, conditional and signal.
+  % - Corresponding plots for communities, one for conditional, one for signal, for both a short and long time bin
+  % - VI measure vs time bins size for both types of correlation
 
 \section{Discussion}
 To be added.
@@ -487,7 +494,7 @@ To be added.
         The \textit{weighted configuration model} is a canonical null network model for weighted networks. Given some data network, the weighted configuration model null network will preserve the degree sequence and weight sequence of each node in the data network. But the edges will be distributed randomly \cite{fosdick}. Any structure in the data network beyond its degree sequence and weight sequence will not be captured in the weighted configuration model. So, this model can be used in testing the hypothesis that this extra structure exists.
 
         \subsubsection{Sparse weighted configuration model}\label{sec:sparse_weighted_configuration_model}
-        The \textit{sparse weighted configuration model} is another null network model. Similar in nature to the weighted configuration model (see section \ref{sec:weight_configuration_model}), but the sparsity of the data network is preserved in the null network. This is achieved by sampling from a probability distributon for the creation or non-creation of each possible connection, then distributing the weight of the data network randomly in this sparse network \cite{humphries}. This is the null network that we used when searching for additional strcuture in our data networks.
+        The \textit{sparse weighted configuration model} is another null network model. Similar in nature to the weighted configuration model (see section \ref{sec:weight_configuration_model}), but the sparsity of the data network is preserved in the null network. This is achieved by sampling from a probability distribution for the creation or non-creation of each possible connection, then distributing the weight of the data network randomly in this sparse network \cite{humphries}. This is the null network that we used when searching for additional strcuture in our data networks.
 
         \subsubsection{Spectral rejection}\label{sec:spectral_rejection}
         We made use of the spectral rejection algorithm as outlined in \cite{humphries}. The spectral rejection algorithm is a method for finding structure in a network not captured by a supposed null model, if such structure exists.
