@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.5.17)  13 JUN 2020 20:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.5.17)  14 JUN 2020 19:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -580,169 +580,169 @@ Overfull \hbox (2.28003pt too wide) in paragraph at lines 178--193
 <figures/Krebs_0p005_rectified_cons_cluster_map.png, id=293, 462.528pt x 346.896pt>
 File: figures/Krebs_0p005_rectified_cons_cluster_map.png Graphic file (type png)
 <use figures/Krebs_0p005_rectified_cons_cluster_map.png>
-Package pdftex.def Info: figures/Krebs_0p005_rectified_cons_cluster_map.png  used on input line 204.
+Package pdftex.def Info: figures/Krebs_0p005_rectified_cons_cluster_map.png  used on input line 205.
 (pdftex.def)             Requested size: 213.39568pt x 160.05048pt.
 <figures/Krebs_0p005_regional_cluster_map.png, id=294, 476.982pt x 346.896pt>
 File: figures/Krebs_0p005_regional_cluster_map.png Graphic file (type png)
 <use figures/Krebs_0p005_regional_cluster_map.png>
-Package pdftex.def Info: figures/Krebs_0p005_regional_cluster_map.png  used on input line 209.
+Package pdftex.def Info: figures/Krebs_0p005_regional_cluster_map.png  used on input line 210.
 (pdftex.def)             Requested size: 213.39568pt x 155.19661pt.
 <figures/Krebs_1p0_rectified_cons_cluster_map.png, id=295, 462.528pt x 346.896pt>
 File: figures/Krebs_1p0_rectified_cons_cluster_map.png Graphic file (type png)
 <use figures/Krebs_1p0_rectified_cons_cluster_map.png>
-Package pdftex.def Info: figures/Krebs_1p0_rectified_cons_cluster_map.png  used on input line 214.
+Package pdftex.def Info: figures/Krebs_1p0_rectified_cons_cluster_map.png  used on input line 215.
 (pdftex.def)             Requested size: 213.39568pt x 160.05048pt.
 <figures/Krebs_1p0_regional_cluster_map.png, id=296, 476.982pt x 346.896pt>
 File: figures/Krebs_1p0_regional_cluster_map.png Graphic file (type png)
 <use figures/Krebs_1p0_regional_cluster_map.png>
-Package pdftex.def Info: figures/Krebs_1p0_regional_cluster_map.png  used on input line 219.
+Package pdftex.def Info: figures/Krebs_1p0_regional_cluster_map.png  used on input line 220.
 (pdftex.def)             Requested size: 213.39568pt x 155.19661pt.
 
-Overfull \hbox (2.28003pt too wide) in paragraph at lines 203--223
+Overfull \hbox (2.28003pt too wide) in paragraph at lines 204--224
 []$[]$ $[]$
  []
 
 
-Overfull \hbox (2.28003pt too wide) in paragraph at lines 203--223
+Overfull \hbox (2.28003pt too wide) in paragraph at lines 204--224
 []$ $[]$ 
  []
 
-<figures/variation_of_information_rectified_total.png, id=300, 289.08pt x 216.81pt>
+[9] [10 <./figures/Krebs_0p005_rectified_cons_cluster_map.png> <./figures/Krebs_0p005_regional_cluster_map.png> <./figures/Krebs_1p0_rectified_cons_cluster_map.png> <./figures/Krebs_1p0_regional_cluster_map.png>]
+<figures/variation_of_information_rectified_total.png, id=322, 289.08pt x 216.81pt>
 File: figures/variation_of_information_rectified_total.png Graphic file (type png)
 <use figures/variation_of_information_rectified_total.png>
-Package pdftex.def Info: figures/variation_of_information_rectified_total.png  used on input line 235.
+Package pdftex.def Info: figures/variation_of_information_rectified_total.png  used on input line 245.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/adjusted_rand_index_rectified_total.png, id=301, 289.08pt x 216.81pt>
+<figures/adjusted_rand_index_rectified_total.png, id=323, 289.08pt x 216.81pt>
 File: figures/adjusted_rand_index_rectified_total.png Graphic file (type png)
 <use figures/adjusted_rand_index_rectified_total.png>
-Package pdftex.def Info: figures/adjusted_rand_index_rectified_total.png  used on input line 240.
+Package pdftex.def Info: figures/adjusted_rand_index_rectified_total.png  used on input line 250.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 
-Overfull \hbox (2.28003pt too wide) in paragraph at lines 234--244
+Overfull \hbox (2.28003pt too wide) in paragraph at lines 244--254
 []$[]$ $[]$ 
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9] [10 <./figures/Krebs_0p005_rectified_cons_cluster_map.png> <./figures/Krebs_0p005_regional_cluster_map.png> <./figures/Krebs_1p0_rectified_cons_cluster_map.png> <./figures/Krebs_1p0_regional_cluster_map.png>]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 273.
+[11 <./figures/variation_of_information_rectified_total.png> <./figures/adjusted_rand_index_rectified_total.png>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 284.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 273.
- [11 <./figures/variation_of_information_rectified_total.png> <./figures/adjusted_rand_index_rectified_total.png>]
-<figures/probe_locations_stringer.png, id=329, 311.1625pt x 240.9pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 284.
+<figures/probe_locations_stringer.png, id=335, 311.1625pt x 240.9pt>
 File: figures/probe_locations_stringer.png Graphic file (type png)
 <use figures/probe_locations_stringer.png>
-Package pdftex.def Info: figures/probe_locations_stringer.png  used on input line 287.
+Package pdftex.def Info: figures/probe_locations_stringer.png  used on input line 298.
 (pdftex.def)             Requested size: 142.26286pt x 106.69472pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 288.
- [12 <./figures/probe_locations_stringer.png>]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 315.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 299.
+ [12 <./figures/probe_locations_stringer.png>] [13]
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 326.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 317.
+(hyperref)                removing `math shift' on input line 328.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 317.
+(hyperref)                removing `subscript' on input line 328.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 317.
+(hyperref)                removing `math shift' on input line 328.
 
-[13]
-Overfull \hbox (19.8585pt too wide) in paragraph at lines 331--333
+[14]
+Overfull \hbox (19.8585pt too wide) in paragraph at lines 342--344
 \OT1/ptm/m/n/10.95 Given the $\OT1/cmr/m/n/10.95 500$ \OT1/ptm/m/n/10.95 com-po-nents, a na[]^^Pve es-ti-ma-tion of $\OML/cmm/m/it/10.95 P\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Z[]; [] ; Z[]\OT1/cmr/m/n/10.95 )$ \OT1/ptm/m/n/10.95 or $\OML/cmm/m/it/10.95 P\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Z[]; [] ; Z[]\OT1/cmr/m/n/10.95 )$
  []
 
-[14] [15]
+[15] [16]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 388.
+(hyperref)                removing `math shift' on input line 399.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 388.
+(hyperref)                removing `math shift' on input line 399.
 
-[16]
-Overfull \hbox (0.48326pt too wide) in paragraph at lines 398--400
+
+Overfull \hbox (0.48326pt too wide) in paragraph at lines 409--411
 \OT1/ptm/m/n/10.95 If $\OML/cmm/m/it/10.95 X$ \OT1/ptm/m/n/10.95 and $\OML/cmm/m/it/10.95 Y$ \OT1/ptm/m/n/10.95 are in-de-pen-dent then $\OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Y\OT1/cmr/m/n/10.95 ) = \OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X\OT1/cmr/m/n/10.95 ) + \OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Y\OT1/cmr/m/n/10.95 )$\OT1/ptm/m/n/10.95 . Oth-er-wise $\OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Y\OT1/cmr/m/n/10.95 ) \OML/cmm/m/it/10.95 <
  []
 
 [17]
-Overfull \hbox (25.4952pt too wide) in paragraph at lines 416--418
+Overfull \hbox (25.4952pt too wide) in paragraph at lines 427--429
 \OT1/ptm/m/n/10.95 Therefore, the max-i-mum en-tropy of the binned spike counts of a neu-ron is $[][] []$.
  []
 
-<figures/entropy_limit.png, id=395, 289.08pt x 216.81pt>
+<figures/entropy_limit.png, id=403, 289.08pt x 216.81pt>
 File: figures/entropy_limit.png Graphic file (type png)
 <use figures/entropy_limit.png>
-Package pdftex.def Info: figures/entropy_limit.png  used on input line 421.
+Package pdftex.def Info: figures/entropy_limit.png  used on input line 432.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-[18 <./figures/entropy_limit.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[18]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 426.
+(hyperref)                removing `math shift' on input line 437.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 426.
+(hyperref)                removing `math shift' on input line 437.
 
-(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
+[19 <./figures/entropy_limit.png>] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-) [19]
+)
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 456.
+(hyperref)                removing `math shift' on input line 467.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 456.
+(hyperref)                removing `math shift' on input line 467.
 
-[20]
-Overfull \hbox (3.86003pt too wide) in paragraph at lines 485--486
+[20] [21]
+Overfull \hbox (3.86003pt too wide) in paragraph at lines 496--497
 \OT1/ptm/m/n/10.95 graph/network. By do-ing this, we hoped to iden-tify both cor-re-lated and anti-correlated
  []
 
-[21] [22] [23] [24] [25]
-Overfull \hbox (13.43813pt too wide) in paragraph at lines 572--573
+[22] [23] [24] [25] [26]
+Overfull \hbox (13.43813pt too wide) in paragraph at lines 583--584
 \OT1/ptm/m/n/10.95 The mu-tual in-for-ma-tion be-tween two clus-ter-ings is a sim-i-lar-ity mea-sure, with $\OML/cmm/m/it/10.95 I\OT1/cmr/m/n/10.95 (\OMS/cmsy/m/n/10.95 C\OT1/cmr/m/n/10.95 ; \OMS/cmsy/m/n/10.95 C[]\OT1/cmr/m/n/10.95 ) =
  []
 
-[26] [27] [28] (./eight_probe.bbl [29] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
+[27] [28] (./eight_probe.bbl [29] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 ))
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 615.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 626.
  [30]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 615.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 626.
  (./eight_probe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 615.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 615.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 626.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 626.
 Package rerunfilecheck Info: File `eight_probe.out' has not changed.
 (rerunfilecheck)             Checksum: 6735A86B4B99ECA4BF2DE9E403011C2E;3910.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 615.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 626.
  ) 
 Here is how much of TeX's memory you used:
- 10471 strings out of 492667
- 159025 string characters out of 6134097
- 265067 words of memory out of 5000000
- 14037 multiletter control sequences out of 15000+600000
+ 10473 strings out of 492667
+ 159077 string characters out of 6134097
+ 265176 words of memory out of 5000000
+ 14039 multiletter control sequences out of 15000+600000
  38747 words of font info for 96 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
  42i,13n,43p,1414b,612s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 sy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on eight_probe.pdf (30 pages, 968313 bytes).
+Output written on eight_probe.pdf (30 pages, 970061 bytes).
 PDF statistics:
- 615 PDF objects out of 1000 (max. 8388607)
- 516 compressed objects within 6 object streams
+ 623 PDF objects out of 1000 (max. 8388607)
+ 524 compressed objects within 6 object streams
  148 named destinations out of 1000 (max. 500000)
  469 words of extra memory for PDF output out of 10000 (max. 10000000)
 

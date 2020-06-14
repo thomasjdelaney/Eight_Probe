@@ -199,6 +199,7 @@ In this work, we measured spike count correlations between neurons from nine dif
   We applied the spectral rejection method to our networks based on spike count correlations using different values for the time bin width. We observed that for smaller time bin widths, our data networks had both $k$-partite structure, and community structure. As the width of the time bin increased, we found that the $k$-partite structure disappeared from our data networks, and the dimension of the community strcuture reduced in two of the three mice from which we had data (see figure \ref{fig:structure_dims}).
 
   \subsection{Detecting communities in correlation based networks}
+
   \begin{figure}
     \begin{subfigure}[h]{0.5\linewidth}
       \includegraphics[width=\linewidth]{figures/Krebs_0p005_rectified_cons_cluster_map.png}
@@ -228,7 +229,16 @@ In this work, we measured spike count correlations between neurons from nine dif
 
   We also noticed that at short time bin widths the communities detected tended to be dominated by cells from one region. Whereas communities existing in networks created using wider time bin widths tended to contain cells from many different brain regions. More on this in the next section.
 
+% TODO: Need to expand the section in Methods on Community Detection.
+
   \subsection{Functional communities resemble anatomical division at short timescales}
+  In order to quantify the similarity of the communities detected to the anatomical division of the cells. We treated both the anatomical division and the communities as clusterings of these cells. We then used measures for quantifying the difference or similarity between clusterings to quantify the difference or similarity between the detected communities and the anatomical division. Details of these measures can be found in section \ref{sec:clustering_comparison} or in \cite{vinh}.
+
+  We used two different types of measures for clustering comparison; information based measures (see section \ref{sec:information_similarity_measures}) and pair counting based measures (see section \ref{sec:adjusted_rand_index}). We include one example of each in figure \ref{fig:distance_measures}.
+
+  The variation of information is the information based measure included in figure \ref{fig:variation_of_information_rectified_total}. This measure forms a metric on the space of clusterings. The larger the value for the variation of information, the more different the clusterings.
+
+  The adjusted Rand index is the pair counting based measure included in figure \ref{fig:adjusted_rand_index_rectified_total}. In contrast with the variation of information, the adjusted Rand index is a normalised similarity measure. The adjusted Rand index takes value 1 when the clusterings are identical, and takes value 0 when the clusterings are no more similar than chance.
 
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
@@ -244,7 +254,8 @@ In this work, we measured spike count correlations between neurons from nine dif
     \caption{distance measures between clusterings}
     \label{fig:distance_measures}
   \end{figure}
-  % - Plot of Variation of Information vs time bin size.
+
+  Both measures indicated that the detected communities and the anatomical division of the cells were more similar at when we used shorter time bins widths (see figure \ref{fig:distance_measures}). This indicates that correlated behaviour in neuronal ensembles is more restricted to individual brain regions at short timescales (<$250$ms), and spreads out across brain regions at longer time scales.
 
   \subsection{Conditional correlations \& signal correlations}
   % Figure 4: Conditional correlations
@@ -521,7 +532,7 @@ To be added.
 
         In practice, the procedure is carried out $n$ times (we chose $n=100$ times), this returns $n$ clusterings. We resolve these $n$ clusterings to one final clustering using \textit{consensus clustering}. We used the consensus clustering method that uses an explicit null model for the consensus matrix, as outlined in \cite{humphries}.
 
-    \subsection{Clustering Comparison}
+    \subsection{Clustering Comparison}\label{sec:clustering_comparison}
     A clustering $\mathcal{C}$ is a partition of a set $D$ into sets $C_1, C_2, \dots, C_K$, called clusters, that satisfy the following for all $k,l \in \lbrace 1,\dots,K \rbrace$:
     \begin{align}
         C_k \cap C_l &= \emptyset \\
@@ -529,7 +540,7 @@ To be added.
     \end{align}
     If we consider two clusterings, $\mathcal{C}$ with clusters $C_1, C_2, \dots, C_K$ and $\mathcal{C}^{\prime}$ with clusters \\ $C_1^{\prime}, C_2^{\prime}, \dots, C_K^{\prime}$. There are a number of measurements we can use to compare $\mathcal{C}$ and $\mathcal{C}^{\prime}$. In the following, the number of elements in $D$ is denoted by $n$, and the number of elements in cluster $C_k$ is $n_k$.
 
-      \subsubsection{Adjusted Rand Index}
+      \subsubsection{Adjusted Rand Index}\label{sec:adjusted_rand_index}
       The \textit{adjusted Rand Index} is a normalised similarity measure for clusterings based on pair counting.
 
       If we consider the clusterings $\mathcal{C}$ and $\mathcal{C}^{\prime}$, and denote
