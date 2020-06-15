@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from scipy.io import loadmat
-from multiprocessing import Pool, cpu_count 
+from multiprocessing import Pool, cpu_count
 
 mouse_names = np.array(['Krebs', 'Waksman', 'Robbins'])
 spon_start_times = np.array([3811, 3633, 3323])
@@ -134,7 +134,7 @@ def loadFiringRateFrame(mouse_name, bin_width, npy_dir):
     """
     For loading one of the firing rate frames from file.
     Arguments:  mouse_name, string, the name of the mouse.
-                bin_width, float, the bin width   
+                bin_width, float, the bin width
     Returns:    firing_rate_frame, DataFrame, cell_id, spike_count_mean, spike_count_std, firing_rate, firing_std
     """
     file_name = os.path.join(npy_dir, 'firing_rate_frames', mouse_name + '_' + str(bin_width).replace('.', 'p') + '_firing.npy')
@@ -185,3 +185,22 @@ def loadLinearModelsFrame(mouse_name, bin_width, csv_dir):
     file_name = os.path.join(csv_dir, 'linear_model_frames', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'linear_models.csv')
     return pd.read_csv(file_name)
 
+def loadExpCondCovMatrix(mouse_name, bin_width, npy_dir):
+    """
+    For loading the matrix of expected conditional covariance.
+    Arguments:  mouse_name, str
+                bin_width, float,
+                npy_dir, str,
+    Returns:    numpy array
+    """
+    return np.load(os.path.join(npy_dir, 'exp_cond_cov', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'exp_cond_cov.npy'))
+
+def loadCovCondExpMatrix(mouse_name, bin_width, npy_dir):
+    """
+    For loading the matrix of covariances of conditional expectations.
+    Arguments:  mouse_name, str
+                bin_width, float,
+                npy_dir, str,
+    Returns:    numpy array
+    """
+    return np.load(os.path.join(npy_dir, 'exp_cond_cov', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'cov_cond_exp.npy'))

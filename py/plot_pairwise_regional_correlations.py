@@ -71,6 +71,16 @@ def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False, 
     plt.close()
     return file_name
 
+def plotCovariancesForMouseWidth(mouse_name, bin_width):
+    """
+    For plotting the total covariance, expected conditional covariance, and covariance of conditional expectations for a given mouse, and bin width.
+    Arguments:  mouse_name, str,
+                bin_width, float
+    Returns:    file_name
+    """
+    exp_cond_cov = ep.loadExpCondCovMatrix(mouse_name, bin_width, npy_dir)
+    cov_cond_exp = ep.loadCovCondExpMatrix(mouse_name, bin_width, npy_dir)
+
 if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Loading cell info...')
