@@ -99,6 +99,45 @@ def plotIntraInterCorr(cell_info, analysis_frame):
     plt.xlim([grouped_intra.index.values[0],grouped_intra.index.values[-1]])
     plt.tight_layout()
 
+def plotTwoMeasureCondComp(mouse_name, first_measure, second_measure, first_label, second_label, title=''):
+    """
+    For plotting the average expected condition correlation and the average correlation of conditional expectations over bin width.
+    Arguments:  mouse_name, string
+                first_measure, str, example:'exp_cond_corr'
+                second_measure, str, example:'signal_corr'
+                first_label, str, example:r'$\rho_{X,Y|Z}$'
+                second_label, str, example:r'$\rho_{signal}$'
+                title, str, example:'Mouse ' + str(list(ep.mouse_names).index(mouse_name)) + ', cond. corr. measures'
+    Returns:    Nothing
+    """
+    cond_analysis_frame = pd.concat([ep.loadConditionalAnalysisFrame(mouse_name, bin_width, csv_dir) for bin_width in ep.selected_bin_widths], ignore_index=True)
+    first_means = np.zeros(ep.selected_bin_widths.size)
+    first_std = np.zeros(ep.selected_bin_widths.size)
+    first_counts = np.zeros(ep.selected_bin_widths.size)
+    second_means = np.zeros(ep.selected_bin_widths.size)
+    second_std = np.zeros(ep.selected_bin_widths.size)
+    second_counts = np.zeros(ep.selected_bin_widths.size)
+    for i,bin_width in enumerate(ep.selected_bin_widths):
+        width_frame = cond_analysis_frame[cond_analysis_frame['bin_width'] == bin_width]
+        first_means[i] = np.nanmean(width_frame[first_measure])
+        first_std[i] = np.nanstd(width_frame[first_measure])
+        first_counts[i] = np.isfinite(width_frame[first_measure]).sum()
+        second_means[i] = np.nanmean(width_frame[second_measure])
+        second_std[i] = np.nanstd(width_frame[second_measure])
+        second_counts[i] = np.isfinite(width_frame[second_measure]).sum()
+    first_std_errs = first_std/np.sqrt(first_counts)
+    second_std_errs = second_std/np.sqrt(second_counts)
+    plt.plot(ep.selected_bin_widths, first_means, label=first_label, color='blue')
+    plt.fill_between(x=ep.selected_bin_widths, y1=first_means-first_std_errs, y2=first_means+first_std_errs, color='blue',alpha=0.25)
+    plt.plot(ep.selected_bin_widths, second_means, label=second_label, color='orange')
+    plt.fill_between(x=ep.selected_bin_widths, y1=second_means-second_std_errs, y2=second_means+second_std_errs, color='orange',alpha=0.25)
+    plt.xlabel('Time bin width (s)',fontsize='x-large');plt.xticks(fontsize='large')
+    plt.yticks(fontsize='large')
+    plt.xlim([ep.selected_bin_widths[0], ep.selected_bin_widths[-1]])
+    plt.title(title, fontsize='x-large') if title != '' else None
+    plt.legend(fontsize='large')
+    plt.tight_layout()
+
 def saveBinWidthAnalysisFigs(mouse_name):
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
     analysis_frame = pd.concat([ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir) for bin_width in ep.selected_bin_widths], ignore_index=True)
@@ -128,6 +167,16 @@ def saveBinWidthAnalysisFigs(mouse_name):
     plotIntraInterCorr(cell_info, analysis_frame)
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_inter_intra_regional_correlations.png')
     plt.savefig(file_name);plt.close();
+    print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+    plt.figure(figsize=(4,3))
+    plotTwoMeasureCondComp(mouse_name, 'exp_cond_corr', 'signal_corr', r'$\rho_{X,Y|Z}$', r'$\rho_{signal}$', title='Mouse ' + str(list(ep.mouse_names).index(mouse_name)) + ', cond. corr. measures')
+    file_name = os.path.join(bin_width_figures_dir, mouse_name + '_cond_corr_comparison.png')
+    plt.savefig(file_name);plt.close()
+    print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+    plt.figure(figsize=(4,3))
+    plotTwoMeasureCondComp(mouse_name, 'exp_cond_cov', 'cov_cond_exp', r'E[Cov($X,Y|Z$)]', r'Cov(E[$X|Z$], E[$Y|Z$])', title='Mouse ' + str(list(ep.mouse_names).index(mouse_name)) + ', cond. cov. measures')
+    file_name = os.path.join(bin_width_figures_dir, mouse_name + '_cond_cov_comparison.png')
+    plt.savefig(file_name);plt.close()
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
 
 if (not(args.debug)) & (__name__ == '__main__'):

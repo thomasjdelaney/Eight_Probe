@@ -172,7 +172,9 @@ def loadConditionalAnalysisFrame(mouse_name, bin_width, csv_dir):
     Returns:    pandas DataFrame
     """
     file_name = os.path.join(csv_dir, 'conditional_analysis_frames', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'conditional_analysis.csv')
-    return pd.read_csv(file_name)
+    cond_analysis_frame = pd.read_csv(file_name)
+    cond_analysis_frame['bin_width'] = bin_width
+    return cond_analysis_frame
 
 def loadLinearModelsFrame(mouse_name, bin_width, csv_dir):
     """
@@ -203,4 +205,4 @@ def loadCovCondExpMatrix(mouse_name, bin_width, npy_dir):
                 npy_dir, str,
     Returns:    numpy array
     """
-    return np.load(os.path.join(npy_dir, 'exp_cond_cov', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'cov_cond_exp.npy'))
+    return np.load(os.path.join(npy_dir, 'cov_cond_exp', mouse_name + '_' + str(bin_width).replace('.','p') + '_' + 'cov_cond_exp.npy'))

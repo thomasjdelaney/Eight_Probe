@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from itertools import product
 
 parser = argparse.ArgumentParser(description='For plotting matrices of the mean correlations and std correlations within and across regions.')
@@ -71,6 +73,27 @@ def plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, use_title=False, 
     plt.close()
     return file_name
 
+def plotCovarianceMatrix(cov_matrix, value_range=(None,None), title=''):
+    """
+    For plotting a covariance matrix. Remember colorbar input.
+    Arguments:  cov_matrix
+    Returns:    file_name,
+                value_range, (float, float)
+    """
+    plt.figure(figsize=(4,3))
+    ax = plt.gca()
+    if value_range == (None, None):
+        im = ax.matshow(cov_matrix, cmap=cm.Blues_r)
+    else:
+        im = ax.matshow(cov_matrix, cmap=cm.Blues_r, vmin=value_range[0], vmax=value_range[1])
+    plt.xticks([])
+    plt.title(title,fontsize='x-large') if title != '' else None
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    colorbar = plt.colorbar(im, cax=cax)
+    plt.yticks(fontsize='large')
+    return None
+
 def plotCovariancesForMouseWidth(mouse_name, bin_width):
     """
     For plotting the total covariance, expected conditional covariance, and covariance of conditional expectations for a given mouse, and bin width.
@@ -80,6 +103,19 @@ def plotCovariancesForMouseWidth(mouse_name, bin_width):
     """
     exp_cond_cov = ep.loadExpCondCovMatrix(mouse_name, bin_width, npy_dir)
     cov_cond_exp = ep.loadCovCondExpMatrix(mouse_name, bin_width, npy_dir)
+    np.fill_diagonal(exp_cond_cov,0)
+    np.fill_diagonal(cov_cond_exp,0)
+    total_cov = exp_cond_cov + cov_cond_exp
+    value_range = (total_cov.min(),total_cov.max())
+    dir_name = os.path.join(image_dir,'covariances',mouse_name,str(bin_width).replace('.','p'))
+    os.makedirs(dir_name) if not(os.path.isdir(dir_name)) else None
+    plotCovarianceMatrix(total_cov, title=r'Cov$(X,Y)$')
+    plt.savefig(os.path.join(dir_name,'total_cov_' + mouse_name + '_' + str(bin_width).replace('.','p') + '.png'))
+    plotCovarianceMatrix(exp_cond_cov, value_range=value_range, title=r'E[Cov$(X,Y|Z)$]')
+    plt.savefig(os.path.join(dir_name,'exp_cond_cov_' + mouse_name + '_' + str(bin_width).replace('.','p') + '.png'))
+    plotCovarianceMatrix(cov_cond_exp, value_range=value_range, title=r'Cov(E[$X|Z$],E[$Y|Z$])')
+    plt.savefig(os.path.join(dir_name,'cov_cond_exp_' + mouse_name + '_' + str(bin_width).replace('.','p') + '.png'))
+    return dir_name
 
 if (not args.debug) & (__name__ == '__main__'):
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Starting main function...')
@@ -108,4 +144,6 @@ if (not args.debug) & (__name__ == '__main__'):
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
             file_name = plotWithinAcrossCorr(measure_frame, mouse_name, bin_width, measure='mean_signal_corr', y_label='Signal Corr.', suffix='_signal_corr')
             print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+            dir_name = plotCovariancesForMouseWidth(mouse_name, bin_width)
+            print(dt.datetime.now().isoformat() + ' INFO: ' + dir_name + ' saved.')
     print(dt.datetime.now().isoformat() + ' INFO: ' + 'Done.')

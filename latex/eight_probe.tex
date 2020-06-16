@@ -258,6 +258,44 @@ In this work, we measured spike count correlations between neurons from nine dif
   Both measures indicated that the detected communities and the anatomical division of the cells were more similar at when we used shorter time bins widths (see figure \ref{fig:distance_measures}). This indicates that correlated behaviour in neuronal ensembles is more restricted to individual brain regions at short timescales (<$250$ms), and spreads out across brain regions at longer time scales.
 
   \subsection{Conditional correlations \& signal correlations}
+  Conditioned a video of the mouse's face.
+  Used the law of total covariance. Breakdown in components.
+  Similar analysis on conditional corrections and signal corrections.
+
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Krebs_cond_cov_comparison.png}
+      \label{fig:Krebs_cond_cov_comparison}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Waksman_cond_cov_comparison.png}
+      \label{fig:Waksman_cond_cov_comparison}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Robbins_cond_cov_comparison.png}
+      \label{fig:Robbins_cond_cov_comparison}
+    \end{subfigure}
+    \caption{Comparing the components of the total spike count covariance across different values for the time bin width. }
+    \label{fig:conditional_covariance_comparison}
+  \end{figure}
+
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Krebs_cond_corr_comparison.png}
+      \label{fig:Krebs_cond_corr_comparison}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Waksman_cond_corr_comparison.png}
+      \label{fig:Waksman_cond_corr_comparison}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/Robbins_cond_corr_comparison.png}
+      \label{fig:Robbins_cond_corr_comparison}
+    \end{subfigure}
+    \caption{Comparing the components of the total spike count covariance across different values for the time bin width. }
+    \label{fig:conditional_correlation_comparison}
+  \end{figure}
+
   % Figure 4: Conditional correlations
   % - Covariance matrices = conditional cov + signal cov
   % - Bar plot or similar comparing mean correlations for all three: total, conditional and signal.
