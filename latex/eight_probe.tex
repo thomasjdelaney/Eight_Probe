@@ -258,9 +258,11 @@ In this work, we measured spike count correlations between neurons from nine dif
   Both measures indicated that the detected communities and the anatomical division of the cells were more similar at when we used shorter time bins widths (see figure \ref{fig:distance_measures}). This indicates that correlated behaviour in neuronal ensembles is more restricted to individual brain regions at short timescales (<$250$ms), and spreads out across brain regions at longer time scales.
 
   \subsection{Conditional correlations \& signal correlations}
-  Conditioned a video of the mouse's face.
-  Used the law of total covariance. Breakdown in components.
-  Similar analysis on conditional corrections and signal corrections.
+  In light of Stringer et al (2019) showing that spontaneous behaviors can drive activity in neuronal ensembles across the visual cortex and midbrain\cite{stringer}, we decided to control for the mouse's behaviour when performing our analyses. My second supervisor, Dr Michael Ashby, suggested that our community detection process may be detecting communities across multiple brain regions at longer time scales due to aggregating neuronal activity driven by several spontaneous behaviours occuring during the time interval covered by a given time bin. A time bin of $1$s, for example, could contain a spike count where those spikes were driven by different spontaneous behaviours. We aimed to investigate this possibility by applying our community detection analysis to conditional correlation measures.
+
+  We used the top $500$ principal components of a video of the mouse's face as a measure of the mouse's behaviour (see section \ref{sec:video_recordings}). We modelled the spike counts as a linear combination of the principal components using linear regression with ElasticNet regularisation (see section \ref{sec:conditioning_on_behavioural_data}). Using this model, we quantified the expected spike count given the mouse's behaviour $E[X|Z_1, \dots ,Z_{500}]$.
+
+  We used these expected values to measure $\cov (E[X|Z], E[Y|Z])$, and we used that value, the covariance $\cov (X,Y)$, and the \textit{law of total covariance} (see section \ref{sec:conditional_covariance}) to measure $E[\cov (X,Y|Z)]$. Here $X$ and $Y$ represent spike counts from individual cells, and $Z$ is shorthand for the $500$ principal components mentioned above.
 
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
@@ -278,6 +280,14 @@ In this work, we measured spike count correlations between neurons from nine dif
     \caption{Comparing the components of the total spike count covariance across different values for the time bin width. }
     \label{fig:conditional_covariance_comparison}
   \end{figure}
+
+  We examined the means of these components for different values of the time bin width (see figure \ref{fig:conditional_covariance_comparison}). We observed a consistent increase in $E[\cov (X,Y|Z)]$ as the time bin width increased. But we saw different trends for $\cov (E[X|Z], E[Y|Z])$ for each mouse.
+
+  Using $\cov (E[X|Z], E[Y|Z])$ we measured the signal covariance, and using $E[\cov (X,Y|Z)]$ we measured the event conditional correlation (see section \ref{sec:cond_corr} for more details).
+
+  Conditioned a video of the mouse's face.
+  Used the law of total covariance. Breakdown in components.
+  Similar analysis on conditional corrections and signal corrections.
 
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
@@ -372,7 +382,7 @@ To be added.
         \subsubsection{Separating Correlations \& Anti-correlations}\label{sec:corr_anti_corr}
         In order to compare the effect of bin width on measures of negative $r_{SC}$ (anti-correlation) and positive $r_{SC}$ separately, we had to separate correlated and anti-correlated pairs. To do this, we simply measured the mean $r_{SC}$, taking the mean across all the bin widths. If this quantity was positive or zero we regarded the pair as positively correlated. If this quantity was negative we regarded the pair as anti-correlated.
 
-    \subsection{Conditioning on behavioural data}
+    \subsection{Conditioning on behavioural data}\label{sec:conditioning_on_behavioural_data}
     Our behavioural data consisted of the top $500$ principal components (PCs) of a processed video recording of the mouse's face (see section \ref{sec:video_recordings}). Denoting the spike count of a given cell by $X$, and the PCs by $Z_1,\dots,Z_{500}$, we wanted to model $X$ as a function of $Z_1,\dots,Z_{500}$ in order to estimate
     \begin{align}
       E[X|Z_1,\dots,Z_{500}] &= \int_{x \in X} x P(X=x | Z_1,\dots,Z_{500}) dx \\
@@ -407,7 +417,7 @@ To be added.
 
         As well as using the PCs, we also tried fitting the models using the raw video data reconstructed from the PCs and eigenvectors. These models performed worse than those using the PCs. We expected this because each representation contains the same amount of information, but the raw video representation spreads this information across many more components. This requires more parameter fitting, but given the same information.
 
-        \subsubsection{Conditional covariance}
+        \subsubsection{Conditional covariance}\label{sec:conditional_covariance}
         We calculated the expected value of the conditional covariance using the law of total covariance.
         \begin{align}\label{eq:law_of_total_covariance}
             \cov (X,Y) = E[ \cov(X,Y|Z)] + \cov(E[X|Z], E[Y|Z])

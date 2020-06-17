@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.5.17)  16 JUN 2020 21:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.5.17)  17 JUN 2020 23:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -623,175 +623,173 @@ Overfull \hbox (2.28003pt too wide) in paragraph at lines 244--254
 []$[]$ $[]$ 
  []
 
-<figures/Krebs_cond_cov_comparison.png, id=325, 289.08pt x 216.81pt>
+[11 <./figures/variation_of_information_rectified_total.png> <./figures/adjusted_rand_index_rectified_total.png>]
+<figures/Krebs_cond_cov_comparison.png, id=335, 289.08pt x 216.81pt>
 File: figures/Krebs_cond_cov_comparison.png Graphic file (type png)
 <use figures/Krebs_cond_cov_comparison.png>
-Package pdftex.def Info: figures/Krebs_cond_cov_comparison.png  used on input line 267.
+Package pdftex.def Info: figures/Krebs_cond_cov_comparison.png  used on input line 269.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Waksman_cond_cov_comparison.png, id=326, 289.08pt x 216.81pt>
+<figures/Waksman_cond_cov_comparison.png, id=336, 289.08pt x 216.81pt>
 File: figures/Waksman_cond_cov_comparison.png Graphic file (type png)
 <use figures/Waksman_cond_cov_comparison.png>
-Package pdftex.def Info: figures/Waksman_cond_cov_comparison.png  used on input line 271.
+Package pdftex.def Info: figures/Waksman_cond_cov_comparison.png  used on input line 273.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Robbins_cond_cov_comparison.png, id=327, 289.08pt x 216.81pt>
+<figures/Robbins_cond_cov_comparison.png, id=337, 289.08pt x 216.81pt>
 File: figures/Robbins_cond_cov_comparison.png Graphic file (type png)
 <use figures/Robbins_cond_cov_comparison.png>
-Package pdftex.def Info: figures/Robbins_cond_cov_comparison.png  used on input line 275.
+Package pdftex.def Info: figures/Robbins_cond_cov_comparison.png  used on input line 277.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 
-Overfull \hbox (2.28003pt too wide) in paragraph at lines 266--278
+Overfull \hbox (2.28003pt too wide) in paragraph at lines 268--280
 []$[]$ $[]$
  []
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Overfull \hbox (50.11792pt too wide) in paragraph at lines 286--287
+[]\OT1/ptm/m/n/10.95 Using $[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 X\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 ]\OML/cmm/m/it/10.95 ; E\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 Y\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 ])$ \OT1/ptm/m/n/10.95 we mea-sured the sig-nal co-vari-ance, and us-ing $\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [[](\OML/cmm/m/it/10.95 X; Y\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 )]$
+ []
 
-<figures/Krebs_cond_corr_comparison.png, id=328, 289.08pt x 216.81pt>
+[12 <./figures/Krebs_cond_cov_comparison.png> <./figures/Waksman_cond_cov_comparison.png> <./figures/Robbins_cond_cov_comparison.png>]
+<figures/Krebs_cond_corr_comparison.png, id=348, 289.08pt x 216.81pt>
 File: figures/Krebs_cond_corr_comparison.png Graphic file (type png)
 <use figures/Krebs_cond_corr_comparison.png>
-Package pdftex.def Info: figures/Krebs_cond_corr_comparison.png  used on input line 284.
+Package pdftex.def Info: figures/Krebs_cond_corr_comparison.png  used on input line 294.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Waksman_cond_corr_comparison.png, id=329, 289.08pt x 216.81pt>
+<figures/Waksman_cond_corr_comparison.png, id=349, 289.08pt x 216.81pt>
 File: figures/Waksman_cond_corr_comparison.png Graphic file (type png)
 <use figures/Waksman_cond_corr_comparison.png>
-Package pdftex.def Info: figures/Waksman_cond_corr_comparison.png  used on input line 288.
+Package pdftex.def Info: figures/Waksman_cond_corr_comparison.png  used on input line 298.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Robbins_cond_corr_comparison.png, id=330, 289.08pt x 216.81pt>
+<figures/Robbins_cond_corr_comparison.png, id=350, 289.08pt x 216.81pt>
 File: figures/Robbins_cond_corr_comparison.png Graphic file (type png)
 <use figures/Robbins_cond_corr_comparison.png>
-Package pdftex.def Info: figures/Robbins_cond_corr_comparison.png  used on input line 292.
+Package pdftex.def Info: figures/Robbins_cond_corr_comparison.png  used on input line 302.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 
-Overfull \hbox (2.28003pt too wide) in paragraph at lines 283--295
+Overfull \hbox (2.28003pt too wide) in paragraph at lines 293--305
 []$[]$ $[]$
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[11 <./figures/variation_of_information_rectified_total.png> <./figures/adjusted_rand_index_rectified_total.png>]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 322.
+[13 <./figures/Krebs_cond_corr_comparison.png> <./figures/Waksman_cond_corr_comparison.png> <./figures/Robbins_cond_corr_comparison.png>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 332.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 322.
- [12 <./figures/Krebs_cond_cov_comparison.png> <./figures/Waksman_cond_cov_comparison.png> <./figures/Robbins_cond_cov_comparison.png>]
-<figures/probe_locations_stringer.png, id=352, 311.1625pt x 240.9pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 332.
+<figures/probe_locations_stringer.png, id=364, 311.1625pt x 240.9pt>
 File: figures/probe_locations_stringer.png Graphic file (type png)
 <use figures/probe_locations_stringer.png>
-Package pdftex.def Info: figures/probe_locations_stringer.png  used on input line 336.
+Package pdftex.def Info: figures/probe_locations_stringer.png  used on input line 346.
 (pdftex.def)             Requested size: 142.26286pt x 106.69472pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 337.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[13 <./figures/Krebs_cond_corr_comparison.png> <./figures/Waksman_cond_corr_comparison.png> <./figures/Robbins_cond_corr_comparison.png>] [14 <./figures/probe_locations_stringer.png>]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 364.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 347.
+ [14 <./figures/probe_locations_stringer.png>] [15]
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 374.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 366.
+(hyperref)                removing `math shift' on input line 376.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 366.
+(hyperref)                removing `subscript' on input line 376.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 366.
+(hyperref)                removing `math shift' on input line 376.
 
-[15]
-Overfull \hbox (19.8585pt too wide) in paragraph at lines 380--382
+[16]
+Overfull \hbox (19.8585pt too wide) in paragraph at lines 390--392
 \OT1/ptm/m/n/10.95 Given the $\OT1/cmr/m/n/10.95 500$ \OT1/ptm/m/n/10.95 com-po-nents, a na[]^^Pve es-ti-ma-tion of $\OML/cmm/m/it/10.95 P\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Z[]; [] ; Z[]\OT1/cmr/m/n/10.95 )$ \OT1/ptm/m/n/10.95 or $\OML/cmm/m/it/10.95 P\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Z[]; [] ; Z[]\OT1/cmr/m/n/10.95 )$
  []
 
-[16] [17]
+[17] [18]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 437.
+(hyperref)                removing `math shift' on input line 447.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 437.
+(hyperref)                removing `math shift' on input line 447.
 
-[18]
-Overfull \hbox (0.48326pt too wide) in paragraph at lines 447--449
+
+Overfull \hbox (0.48326pt too wide) in paragraph at lines 457--459
 \OT1/ptm/m/n/10.95 If $\OML/cmm/m/it/10.95 X$ \OT1/ptm/m/n/10.95 and $\OML/cmm/m/it/10.95 Y$ \OT1/ptm/m/n/10.95 are in-de-pen-dent then $\OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Y\OT1/cmr/m/n/10.95 ) = \OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X\OT1/cmr/m/n/10.95 ) + \OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Y\OT1/cmr/m/n/10.95 )$\OT1/ptm/m/n/10.95 . Oth-er-wise $\OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Y\OT1/cmr/m/n/10.95 ) \OML/cmm/m/it/10.95 <
  []
 
-
-Overfull \hbox (25.4952pt too wide) in paragraph at lines 465--467
+[19]
+Overfull \hbox (25.4952pt too wide) in paragraph at lines 475--477
 \OT1/ptm/m/n/10.95 Therefore, the max-i-mum en-tropy of the binned spike counts of a neu-ron is $[][] []$.
  []
 
-[19]
-<figures/entropy_limit.png, id=428, 289.08pt x 216.81pt>
+<figures/entropy_limit.png, id=432, 289.08pt x 216.81pt>
 File: figures/entropy_limit.png Graphic file (type png)
 <use figures/entropy_limit.png>
-Package pdftex.def Info: figures/entropy_limit.png  used on input line 470.
+Package pdftex.def Info: figures/entropy_limit.png  used on input line 480.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[20]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 475.
+(hyperref)                removing `math shift' on input line 485.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 475.
+(hyperref)                removing `math shift' on input line 485.
 
-[20 <./figures/entropy_limit.png>] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
+[21 <./figures/entropy_limit.png>] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 505.
+(hyperref)                removing `math shift' on input line 515.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 505.
+(hyperref)                removing `math shift' on input line 515.
 
-[21] [22]
-Overfull \hbox (3.86003pt too wide) in paragraph at lines 534--535
+[22] [23]
+Overfull \hbox (3.86003pt too wide) in paragraph at lines 544--545
 \OT1/ptm/m/n/10.95 graph/network. By do-ing this, we hoped to iden-tify both cor-re-lated and anti-correlated
  []
 
-[23] [24] [25] [26] [27]
-Overfull \hbox (13.43813pt too wide) in paragraph at lines 621--622
+[24] [25] [26] [27] [28]
+Overfull \hbox (13.43813pt too wide) in paragraph at lines 631--632
 \OT1/ptm/m/n/10.95 The mu-tual in-for-ma-tion be-tween two clus-ter-ings is a sim-i-lar-ity mea-sure, with $\OML/cmm/m/it/10.95 I\OT1/cmr/m/n/10.95 (\OMS/cmsy/m/n/10.95 C\OT1/cmr/m/n/10.95 ; \OMS/cmsy/m/n/10.95 C[]\OT1/cmr/m/n/10.95 ) =
  []
 
-[28] [29] (./eight_probe.bbl [30] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
+[29] [30] (./eight_probe.bbl [31] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 ))
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 664.
- [31]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 664.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 674.
+ [32]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 674.
  (./eight_probe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 664.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 664.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 674.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 674.
 Package rerunfilecheck Info: File `eight_probe.out' has not changed.
 (rerunfilecheck)             Checksum: 6735A86B4B99ECA4BF2DE9E403011C2E;3910.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 664.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 674.
  ) 
 Here is how much of TeX's memory you used:
- 10520 strings out of 492667
- 160846 string characters out of 6134097
- 266697 words of memory out of 5000000
- 14077 multiletter control sequences out of 15000+600000
+ 10523 strings out of 492667
+ 160919 string characters out of 6134097
+ 266820 words of memory out of 5000000
+ 14079 multiletter control sequences out of 15000+600000
  38747 words of font info for 96 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
  42i,13n,43p,1414b,612s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 sy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on eight_probe.pdf (31 pages, 1092710 bytes).
+Output written on eight_probe.pdf (32 pages, 1095244 bytes).
 PDF statistics:
- 643 PDF objects out of 1000 (max. 8388607)
- 531 compressed objects within 6 object streams
- 151 named destinations out of 1000 (max. 500000)
+ 653 PDF objects out of 1000 (max. 8388607)
+ 540 compressed objects within 6 object streams
+ 152 named destinations out of 1000 (max. 500000)
  499 words of extra memory for PDF output out of 10000 (max. 10000000)
 
