@@ -1,11 +1,11 @@
 # Fdb version 3
-["bibtex eight_probe"] 1592433613 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1592433615
-  "eight_probe.aux" 1592433615 26290 8f2ed3d189f1ea0c61563f774073bb09 "pdflatex"
+["bibtex eight_probe"] 1592517115 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1592517117
+  "eight_probe.aux" 1592517117 26664 6923c164bfefaf97385271580dd52228 "pdflatex"
   "eight_probe.bbl.bib" 0 -1 0 ""
   (generated)
-  "eight_probe.blg"
   "eight_probe.bbl"
-["pdflatex"] 1592433613 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1592433615
+  "eight_probe.blg"
+["pdflatex"] 1592517115 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1592517117
   "/home/thomas/.texlive2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1589722506 3704429 0303ff8f3ada1c5655ff4477b651b125 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1580927601 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
@@ -139,10 +139,10 @@
   "/usr/share/texlive/texmf-dist/tex/latex/ucs/utf8x.def" 1368571634 8036 21f7ac37aafb6cfeddbb196b8bfd6280 ""
   "/usr/share/texlive/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1580927610 35594 9aef19174c178978f61d14961262af5d ""
-  "eight_probe.aux" 1592433615 26290 8f2ed3d189f1ea0c61563f774073bb09 "pdflatex"
+  "eight_probe.aux" 1592517117 26664 6923c164bfefaf97385271580dd52228 "pdflatex"
   "eight_probe.bbl" 1586453880 2510 647ec1eeb01363104c6c596d2d7b17a7 "bibtex eight_probe"
-  "eight_probe.out" 1592433615 3910 6735a86b4b99eca4bf2de9e403011c2e "pdflatex"
-  "eight_probe.tex" 1592433609 64453 5f35f7dc3ba723efda3928bcb10d55c4 ""
+  "eight_probe.out" 1592517117 3910 6735a86b4b99eca4bf2de9e403011c2e "pdflatex"
+  "eight_probe.tex" 1592517111 65861 e0cd9fe06683fdc66fcacd22bb4ff326 ""
   "figures/Krebs_0p005_corr_comp.png" 1591796985 33652 a09ff4cd8717cf01cafc61601276a16a ""
   "figures/Krebs_0p005_corr_matrix.png" 1591796983 38432 0a6a95ad65f2e4c0314ac84860d3ad5a ""
   "figures/Krebs_0p005_rectified_cons_cluster_map.png" 1586027489 108610 5dc288b380f19bd8644ff513f44ea754 ""
@@ -171,6 +171,6 @@
   "figures/variation_of_information_rectified_total.png" 1592075179 24739 42349c5ba846e676eaf0ed6e11ff00b5 ""
   (generated)
   "eight_probe.pdf"
+  "eight_probe.out"
   "eight_probe.aux"
   "eight_probe.log"
-  "eight_probe.out"

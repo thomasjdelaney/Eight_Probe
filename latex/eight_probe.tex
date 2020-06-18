@@ -76,7 +76,7 @@ In this work, we measured spike count correlations between neurons from nine dif
 \section{Results}
 
     \subsection{Average correlation size increases with increasing time bin width}
-    First we inspected the affect of time bin width on spike count correlations. We know that using short time bins results in artificially small correlation measurements\cite{cohen1}, so we expected to see an increase in correlation amplitude with increasing time bin width. That is exactly what we observed. Taking $50$ cells at random, we calculated the spike count correlation between every possible pair of these cells, using different time bin widths ranging from $0.005$s to $3$s. We found that the longer the time bin width, the greater the correlations (see figure \ref{fig:correlations_all_pairs}).
+    First we inspected the affect of time bin width on spike count correlations. We know that using short time bins results in artificially small correlation measurements\cite{cohen2}, so we expected to see an increase in correlation amplitude with increasing time bin width. That is exactly what we observed. Taking $50$ cells at random, we calculated the spike count correlation between every possible pair of these cells, using different time bin widths ranging from $0.005$s to $3$s. We found that the longer the time bin width, the greater the correlations (see figure \ref{fig:correlations_all_pairs}).
 
     We also separated the positively correlated pairs from the negatively correlated pairs using the mean correlation of each pair across all bin widths (see section \ref{sec:corr_anti_corr}). We found that the positively correlated pairs become more positively correlated with increasing time bin width, and the negatively correlated pairs become more negatively correlated with increasing time bin width (see figures \ref{fig:correlations_pos_pairs} and \ref{fig:correlations_neg_pairs}).
 
@@ -262,8 +262,6 @@ In this work, we measured spike count correlations between neurons from nine dif
 
   We used the top $500$ principal components of a video of the mouse's face as a measure of the mouse's behaviour (see section \ref{sec:video_recordings}). We modelled the spike counts as a linear combination of the principal components using linear regression with ElasticNet regularisation (see section \ref{sec:conditioning_on_behavioural_data}). Using this model, we quantified the expected spike count given the mouse's behaviour $E[X|Z_1, \dots ,Z_{500}]$.
 
-  We used these expected values to measure $\cov (E[X|Z], E[Y|Z])$, and we used that value, the covariance $\cov (X,Y)$, and the \textit{law of total covariance} (see section \ref{sec:conditional_covariance}) to measure $E[\cov (X,Y|Z)]$. Here $X$ and $Y$ represent spike counts from individual cells, and $Z$ is shorthand for the $500$ principal components mentioned above.
-
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
       \includegraphics[width=\linewidth]{figures/Krebs_cond_cov_comparison.png}
@@ -277,17 +275,15 @@ In this work, we measured spike count correlations between neurons from nine dif
       \includegraphics[width=\linewidth]{figures/Robbins_cond_cov_comparison.png}
       \label{fig:Robbins_cond_cov_comparison}
     \end{subfigure}
-    \caption{Comparing the components of the total spike count covariance across different values for the time bin width. }
+    \caption{Comparing the components of the spike count covariance across different values for the time bin width. We observed a consistent increase in $E[\cov (X,Y|Z)]$ as the time bin width increased. But we saw different trends for $\cov (E[X|Z], E[Y|Z])$ for each mouse.}
     \label{fig:conditional_covariance_comparison}
   \end{figure}
 
+  We used these expected values to measure $\cov (E[X|Z], E[Y|Z])$, and we used that value, the covariance $\cov (X,Y)$, and the \textit{law of total covariance} (see section \ref{sec:conditional_covariance}) to measure $E[\cov (X,Y|Z)]$. Here $X$ and $Y$ represent spike counts from individual cells, and $Z$ is shorthand for the $500$ principal components mentioned above. The two components of the covariance, $\cov (E[X|Z], E[Y|Z])$ and $E[\cov (X,Y|Z)]$, represent a `signal covariance' and expected value of a `spike count covariance' respectively, analagous to the signal correlation and spike count correlation\cite{cohen2}.
+
   We examined the means of these components for different values of the time bin width (see figure \ref{fig:conditional_covariance_comparison}). We observed a consistent increase in $E[\cov (X,Y|Z)]$ as the time bin width increased. But we saw different trends for $\cov (E[X|Z], E[Y|Z])$ for each mouse.
 
-  Using $\cov (E[X|Z], E[Y|Z])$ we measured the signal covariance, and using $E[\cov (X,Y|Z)]$ we measured the event conditional correlation (see section \ref{sec:cond_corr} for more details).
-
-  Conditioned a video of the mouse's face.
-  Used the law of total covariance. Breakdown in components.
-  Similar analysis on conditional corrections and signal corrections.
+  Using $\cov (E[X|Z], E[Y|Z])$ we measured the signal correlation, and using $E[\cov (X,Y|Z)]$ we measured the event conditional correlation (see section \ref{sec:cond_corr} for more details). We saw a consistent increase in $\rho_{X,Y|Z}$ as the time bin width increased, this corresponds to the result for $E[\cov(X,Y|Z)]$. We observed different trends for $\rho_{\text{signal}}$ for each mouse, this corresponds to the result for $\cov(E[X|Z],E[Y|Z])$.
 
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
@@ -305,6 +301,34 @@ In this work, we measured spike count correlations between neurons from nine dif
     \caption{Comparing the components of the total spike count covariance across different values for the time bin width. }
     \label{fig:conditional_correlation_comparison}
   \end{figure}
+
+  We applied our network noise rejection and community detection process to networks based on the spike count correlations $\rho_{X,Y|Z}$ and the signal correlations $\rho_{\text{signal}}$.
+
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/}
+      \label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/}
+      \label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/}
+      \label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/}
+      \label{fig:}
+    \end{subfigure}
+    \caption{ }
+    \label{fig:}
+  \end{figure}
+
+
+  Conditioned a video of the mouse's face.
+  Used the law of total covariance. Breakdown in components.
+  Similar analysis on conditional corrections and signal corrections.
 
   % Figure 4: Conditional correlations
   % - Covariance matrices = conditional cov + signal cov
@@ -423,6 +447,10 @@ To be added.
             \cov (X,Y) = E[ \cov(X,Y|Z)] + \cov(E[X|Z], E[Y|Z])
         \end{align}
         where these expected values are calculated with respect to the distribution of $Z$ as a random variable.
+
+        The law of total covariance breaks the covariance into two components. The first component $E[\cov(X,Y|Z)]$ is the expected value, under the distribution of $Z$, of the conditional covariance $\cov(X,Y|Z)$. This covariance could be interpreted as the unnormalised version of what Cohn et al. (2011) call the spike count correlation\cite{cohen2}, aka. the noise correlation. In particular, this is the covariance of the spike counts in response to repeated presentation of identical stimului.
+
+        The second component is analogous to what Cohn et al. (2011) call the \textit{signal correlation}\cite{cohen2}. In particular, $\cov(E[X|Z], E[Y|Z])$ is the covariance between spike counts in response to different stimuli.
 
         Using our linear model, we calculated $E[X|Z_1,\dots, Z_{500}]$ for each cell $X$. Then we proceeded to calculate
         \begin{align}

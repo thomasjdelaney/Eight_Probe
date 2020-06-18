@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.5.17)  17 JUN 2020 23:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.5.17)  18 JUN 2020 22:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -476,22 +476,22 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 78.
  [3]
-<figures/Krebs_corr_all_pairs.png, id=224, 361.35pt x 289.08pt>
+<figures/Krebs_corr_all_pairs.png, id=225, 361.35pt x 289.08pt>
 File: figures/Krebs_corr_all_pairs.png Graphic file (type png)
 <use figures/Krebs_corr_all_pairs.png>
 Package pdftex.def Info: figures/Krebs_corr_all_pairs.png  used on input line 94.
 (pdftex.def)             Requested size: 213.39568pt x 170.71892pt.
-<figures/Krebs_corr_pos_pairs.png, id=226, 361.35pt x 289.08pt>
+<figures/Krebs_corr_pos_pairs.png, id=227, 361.35pt x 289.08pt>
 File: figures/Krebs_corr_pos_pairs.png Graphic file (type png)
 <use figures/Krebs_corr_pos_pairs.png>
 Package pdftex.def Info: figures/Krebs_corr_pos_pairs.png  used on input line 99.
 (pdftex.def)             Requested size: 213.39568pt x 170.71892pt.
-<figures/Krebs_corr_neg_pairs.png, id=227, 361.35pt x 289.08pt>
+<figures/Krebs_corr_neg_pairs.png, id=228, 361.35pt x 289.08pt>
 File: figures/Krebs_corr_neg_pairs.png Graphic file (type png)
 <use figures/Krebs_corr_neg_pairs.png>
 Package pdftex.def Info: figures/Krebs_corr_neg_pairs.png  used on input line 104.
 (pdftex.def)             Requested size: 213.39568pt x 170.71892pt.
-<figures/Krebs_stats_by_bin_width.png, id=228, 361.35pt x 289.08pt>
+<figures/Krebs_stats_by_bin_width.png, id=229, 361.35pt x 289.08pt>
 File: figures/Krebs_stats_by_bin_width.png Graphic file (type png)
 <use figures/Krebs_stats_by_bin_width.png>
 Package pdftex.def Info: figures/Krebs_stats_by_bin_width.png  used on input line 109.
@@ -507,28 +507,28 @@ Overfull \hbox (2.28003pt too wide) in paragraph at lines 93--113
  []
 
 [4 <./figures/Krebs_corr_all_pairs.png> <./figures/Krebs_corr_pos_pairs.png> <./figures/Krebs_corr_neg_pairs.png> <./figures/Krebs_stats_by_bin_width.png>]
-<figures/Krebs_inter_intra_regional_correlations.png, id=241, 361.35pt x 289.08pt>
+<figures/Krebs_inter_intra_regional_correlations.png, id=242, 361.35pt x 289.08pt>
 File: figures/Krebs_inter_intra_regional_correlations.png Graphic file (type png)
 <use figures/Krebs_inter_intra_regional_correlations.png>
 Package pdftex.def Info: figures/Krebs_inter_intra_regional_correlations.png  used on input line 127.
 (pdftex.def)             Requested size: 213.39568pt x 170.71892pt.
  [5 <./figures/Krebs_inter_intra_regional_correlations.png>]
-<figures/Krebs_0p005_corr_comp.png, id=252, 505.89pt x 289.08pt>
+<figures/Krebs_0p005_corr_comp.png, id=253, 505.89pt x 289.08pt>
 File: figures/Krebs_0p005_corr_comp.png Graphic file (type png)
 <use figures/Krebs_0p005_corr_comp.png>
 Package pdftex.def Info: figures/Krebs_0p005_corr_comp.png  used on input line 139.
 (pdftex.def)             Requested size: 298.75264pt x 170.71892pt.
-<figures/Krebs_1p0_corr_comp.png, id=253, 505.89pt x 289.08pt>
+<figures/Krebs_1p0_corr_comp.png, id=254, 505.89pt x 289.08pt>
 File: figures/Krebs_1p0_corr_comp.png Graphic file (type png)
 <use figures/Krebs_1p0_corr_comp.png>
 Package pdftex.def Info: figures/Krebs_1p0_corr_comp.png  used on input line 145.
 (pdftex.def)             Requested size: 298.75264pt x 170.71892pt.
-<figures/Krebs_0p005_corr_matrix.png, id=257, 462.528pt x 346.896pt>
+<figures/Krebs_0p005_corr_matrix.png, id=258, 462.528pt x 346.896pt>
 File: figures/Krebs_0p005_corr_matrix.png Graphic file (type png)
 <use figures/Krebs_0p005_corr_matrix.png>
 Package pdftex.def Info: figures/Krebs_0p005_corr_matrix.png  used on input line 158.
 (pdftex.def)             Requested size: 213.39568pt x 160.05048pt.
-<figures/Krebs_1p0_corr_matrix.png, id=258, 462.528pt x 346.896pt>
+<figures/Krebs_1p0_corr_matrix.png, id=259, 462.528pt x 346.896pt>
 File: figures/Krebs_1p0_corr_matrix.png Graphic file (type png)
 <use figures/Krebs_1p0_corr_matrix.png>
 Package pdftex.def Info: figures/Krebs_1p0_corr_matrix.png  used on input line 164.
@@ -556,17 +556,17 @@ Overfull \hbox (1.82274pt too wide) in paragraph at lines 175--176
  []
 
 [7 <./figures/Krebs_0p005_corr_matrix.png> <./figures/Krebs_1p0_corr_matrix.png>]
-<figures/Krebs_rectified_total_structure_dims.png, id=278, 289.08pt x 216.81pt>
+<figures/Krebs_rectified_total_structure_dims.png, id=279, 289.08pt x 216.81pt>
 File: figures/Krebs_rectified_total_structure_dims.png Graphic file (type png)
 <use figures/Krebs_rectified_total_structure_dims.png>
 Package pdftex.def Info: figures/Krebs_rectified_total_structure_dims.png  used on input line 180.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Waksman_rectified_total_structure_dims.png, id=279, 289.08pt x 216.81pt>
+<figures/Waksman_rectified_total_structure_dims.png, id=280, 289.08pt x 216.81pt>
 File: figures/Waksman_rectified_total_structure_dims.png Graphic file (type png)
 <use figures/Waksman_rectified_total_structure_dims.png>
 Package pdftex.def Info: figures/Waksman_rectified_total_structure_dims.png  used on input line 185.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Robbins_rectified_total_structure_dims.png, id=280, 289.08pt x 216.81pt>
+<figures/Robbins_rectified_total_structure_dims.png, id=281, 289.08pt x 216.81pt>
 File: figures/Robbins_rectified_total_structure_dims.png Graphic file (type png)
 <use figures/Robbins_rectified_total_structure_dims.png>
 Package pdftex.def Info: figures/Robbins_rectified_total_structure_dims.png  used on input line 190.
@@ -577,22 +577,22 @@ Overfull \hbox (2.28003pt too wide) in paragraph at lines 178--193
  []
 
 [8 <./figures/Krebs_rectified_total_structure_dims.png> <./figures/Waksman_rectified_total_structure_dims.png> <./figures/Robbins_rectified_total_structure_dims.png>]
-<figures/Krebs_0p005_rectified_cons_cluster_map.png, id=293, 462.528pt x 346.896pt>
+<figures/Krebs_0p005_rectified_cons_cluster_map.png, id=294, 462.528pt x 346.896pt>
 File: figures/Krebs_0p005_rectified_cons_cluster_map.png Graphic file (type png)
 <use figures/Krebs_0p005_rectified_cons_cluster_map.png>
 Package pdftex.def Info: figures/Krebs_0p005_rectified_cons_cluster_map.png  used on input line 205.
 (pdftex.def)             Requested size: 213.39568pt x 160.05048pt.
-<figures/Krebs_0p005_regional_cluster_map.png, id=294, 476.982pt x 346.896pt>
+<figures/Krebs_0p005_regional_cluster_map.png, id=295, 476.982pt x 346.896pt>
 File: figures/Krebs_0p005_regional_cluster_map.png Graphic file (type png)
 <use figures/Krebs_0p005_regional_cluster_map.png>
 Package pdftex.def Info: figures/Krebs_0p005_regional_cluster_map.png  used on input line 210.
 (pdftex.def)             Requested size: 213.39568pt x 155.19661pt.
-<figures/Krebs_1p0_rectified_cons_cluster_map.png, id=295, 462.528pt x 346.896pt>
+<figures/Krebs_1p0_rectified_cons_cluster_map.png, id=296, 462.528pt x 346.896pt>
 File: figures/Krebs_1p0_rectified_cons_cluster_map.png Graphic file (type png)
 <use figures/Krebs_1p0_rectified_cons_cluster_map.png>
 Package pdftex.def Info: figures/Krebs_1p0_rectified_cons_cluster_map.png  used on input line 215.
 (pdftex.def)             Requested size: 213.39568pt x 160.05048pt.
-<figures/Krebs_1p0_regional_cluster_map.png, id=296, 476.982pt x 346.896pt>
+<figures/Krebs_1p0_regional_cluster_map.png, id=297, 476.982pt x 346.896pt>
 File: figures/Krebs_1p0_regional_cluster_map.png Graphic file (type png)
 <use figures/Krebs_1p0_regional_cluster_map.png>
 Package pdftex.def Info: figures/Krebs_1p0_regional_cluster_map.png  used on input line 220.
@@ -608,12 +608,12 @@ Overfull \hbox (2.28003pt too wide) in paragraph at lines 204--224
  []
 
 [9] [10 <./figures/Krebs_0p005_rectified_cons_cluster_map.png> <./figures/Krebs_0p005_regional_cluster_map.png> <./figures/Krebs_1p0_rectified_cons_cluster_map.png> <./figures/Krebs_1p0_regional_cluster_map.png>]
-<figures/variation_of_information_rectified_total.png, id=322, 289.08pt x 216.81pt>
+<figures/variation_of_information_rectified_total.png, id=323, 289.08pt x 216.81pt>
 File: figures/variation_of_information_rectified_total.png Graphic file (type png)
 <use figures/variation_of_information_rectified_total.png>
 Package pdftex.def Info: figures/variation_of_information_rectified_total.png  used on input line 245.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/adjusted_rand_index_rectified_total.png, id=323, 289.08pt x 216.81pt>
+<figures/adjusted_rand_index_rectified_total.png, id=324, 289.08pt x 216.81pt>
 File: figures/adjusted_rand_index_rectified_total.png Graphic file (type png)
 <use figures/adjusted_rand_index_rectified_total.png>
 Package pdftex.def Info: figures/adjusted_rand_index_rectified_total.png  used on input line 250.
@@ -627,46 +627,45 @@ Overfull \hbox (2.28003pt too wide) in paragraph at lines 244--254
 <figures/Krebs_cond_cov_comparison.png, id=335, 289.08pt x 216.81pt>
 File: figures/Krebs_cond_cov_comparison.png Graphic file (type png)
 <use figures/Krebs_cond_cov_comparison.png>
-Package pdftex.def Info: figures/Krebs_cond_cov_comparison.png  used on input line 269.
+Package pdftex.def Info: figures/Krebs_cond_cov_comparison.png  used on input line 267.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 <figures/Waksman_cond_cov_comparison.png, id=336, 289.08pt x 216.81pt>
 File: figures/Waksman_cond_cov_comparison.png Graphic file (type png)
 <use figures/Waksman_cond_cov_comparison.png>
-Package pdftex.def Info: figures/Waksman_cond_cov_comparison.png  used on input line 273.
+Package pdftex.def Info: figures/Waksman_cond_cov_comparison.png  used on input line 271.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 <figures/Robbins_cond_cov_comparison.png, id=337, 289.08pt x 216.81pt>
 File: figures/Robbins_cond_cov_comparison.png Graphic file (type png)
 <use figures/Robbins_cond_cov_comparison.png>
-Package pdftex.def Info: figures/Robbins_cond_cov_comparison.png  used on input line 277.
+Package pdftex.def Info: figures/Robbins_cond_cov_comparison.png  used on input line 275.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 
-Overfull \hbox (2.28003pt too wide) in paragraph at lines 268--280
+Overfull \hbox (2.28003pt too wide) in paragraph at lines 266--278
 []$[]$ $[]$
  []
 
-
-Overfull \hbox (50.11792pt too wide) in paragraph at lines 286--287
-[]\OT1/ptm/m/n/10.95 Using $[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 X\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 ]\OML/cmm/m/it/10.95 ; E\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 Y\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 ])$ \OT1/ptm/m/n/10.95 we mea-sured the sig-nal co-vari-ance, and us-ing $\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [[](\OML/cmm/m/it/10.95 X; Y\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 )]$
+[12 <./figures/Krebs_cond_cov_comparison.png> <./figures/Waksman_cond_cov_comparison.png> <./figures/Robbins_cond_cov_comparison.png>]
+Overfull \hbox (50.56667pt too wide) in paragraph at lines 286--287
+[]\OT1/ptm/m/n/10.95 Using $[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 X\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 ]\OML/cmm/m/it/10.95 ; E\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 Y\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 ])$ \OT1/ptm/m/n/10.95 we mea-sured the sig-nal cor-re-la-tion, and us-ing $\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [[](\OML/cmm/m/it/10.95 X; Y\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 Z\OT1/cmr/m/n/10.95 )]$
  []
 
-[12 <./figures/Krebs_cond_cov_comparison.png> <./figures/Waksman_cond_cov_comparison.png> <./figures/Robbins_cond_cov_comparison.png>]
-<figures/Krebs_cond_corr_comparison.png, id=348, 289.08pt x 216.81pt>
+<figures/Krebs_cond_corr_comparison.png, id=350, 289.08pt x 216.81pt>
 File: figures/Krebs_cond_corr_comparison.png Graphic file (type png)
 <use figures/Krebs_cond_corr_comparison.png>
-Package pdftex.def Info: figures/Krebs_cond_corr_comparison.png  used on input line 294.
+Package pdftex.def Info: figures/Krebs_cond_corr_comparison.png  used on input line 290.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Waksman_cond_corr_comparison.png, id=349, 289.08pt x 216.81pt>
+<figures/Waksman_cond_corr_comparison.png, id=351, 289.08pt x 216.81pt>
 File: figures/Waksman_cond_corr_comparison.png Graphic file (type png)
 <use figures/Waksman_cond_corr_comparison.png>
-Package pdftex.def Info: figures/Waksman_cond_corr_comparison.png  used on input line 298.
+Package pdftex.def Info: figures/Waksman_cond_corr_comparison.png  used on input line 294.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-<figures/Robbins_cond_corr_comparison.png, id=350, 289.08pt x 216.81pt>
+<figures/Robbins_cond_corr_comparison.png, id=352, 289.08pt x 216.81pt>
 File: figures/Robbins_cond_corr_comparison.png Graphic file (type png)
 <use figures/Robbins_cond_corr_comparison.png>
-Package pdftex.def Info: figures/Robbins_cond_corr_comparison.png  used on input line 302.
+Package pdftex.def Info: figures/Robbins_cond_corr_comparison.png  used on input line 298.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
 
-Overfull \hbox (2.28003pt too wide) in paragraph at lines 293--305
+Overfull \hbox (2.28003pt too wide) in paragraph at lines 289--301
 []$[]$ $[]$
  []
 
@@ -677,14 +676,18 @@ File: omsptm.fd
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 332.
-<figures/probe_locations_stringer.png, id=364, 311.1625pt x 240.9pt>
+<figures/probe_locations_stringer.png, id=367, 311.1625pt x 240.9pt>
 File: figures/probe_locations_stringer.png Graphic file (type png)
 <use figures/probe_locations_stringer.png>
 Package pdftex.def Info: figures/probe_locations_stringer.png  used on input line 346.
 (pdftex.def)             Requested size: 142.26286pt x 106.69472pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 347.
- [14 <./figures/probe_locations_stringer.png>] [15]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[14] [15 <./figures/probe_locations_stringer.png>]
 LaTeX Font Info:    Try loading font information for OT1+pcr on input line 374.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
@@ -709,87 +712,84 @@ Overfull \hbox (19.8585pt too wide) in paragraph at lines 390--392
 [17] [18]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 447.
+(hyperref)                removing `math shift' on input line 451.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 447.
+(hyperref)                removing `math shift' on input line 451.
 
-
-Overfull \hbox (0.48326pt too wide) in paragraph at lines 457--459
+[19]
+Overfull \hbox (0.48326pt too wide) in paragraph at lines 461--463
 \OT1/ptm/m/n/10.95 If $\OML/cmm/m/it/10.95 X$ \OT1/ptm/m/n/10.95 and $\OML/cmm/m/it/10.95 Y$ \OT1/ptm/m/n/10.95 are in-de-pen-dent then $\OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Y\OT1/cmr/m/n/10.95 ) = \OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X\OT1/cmr/m/n/10.95 ) + \OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Y\OT1/cmr/m/n/10.95 )$\OT1/ptm/m/n/10.95 . Oth-er-wise $\OML/cmm/m/it/10.95 H\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X; Y\OT1/cmr/m/n/10.95 ) \OML/cmm/m/it/10.95 <
  []
 
-[19]
-Overfull \hbox (25.4952pt too wide) in paragraph at lines 475--477
+[20]
+Overfull \hbox (25.4952pt too wide) in paragraph at lines 479--481
 \OT1/ptm/m/n/10.95 Therefore, the max-i-mum en-tropy of the binned spike counts of a neu-ron is $[][] []$.
  []
 
-<figures/entropy_limit.png, id=432, 289.08pt x 216.81pt>
+<figures/entropy_limit.png, id=441, 289.08pt x 216.81pt>
 File: figures/entropy_limit.png Graphic file (type png)
 <use figures/entropy_limit.png>
-Package pdftex.def Info: figures/entropy_limit.png  used on input line 480.
+Package pdftex.def Info: figures/entropy_limit.png  used on input line 484.
 (pdftex.def)             Requested size: 213.39568pt x 160.04651pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[20]
+[21 <./figures/entropy_limit.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 485.
+(hyperref)                removing `math shift' on input line 489.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 485.
+(hyperref)                removing `math shift' on input line 489.
 
-[21 <./figures/entropy_limit.png>] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-)
+) [22]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 515.
+(hyperref)                removing `math shift' on input line 519.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 515.
+(hyperref)                removing `math shift' on input line 519.
 
-[22] [23]
-Overfull \hbox (3.86003pt too wide) in paragraph at lines 544--545
+[23]
+Overfull \hbox (3.86003pt too wide) in paragraph at lines 548--549
 \OT1/ptm/m/n/10.95 graph/network. By do-ing this, we hoped to iden-tify both cor-re-lated and anti-correlated
  []
 
 [24] [25] [26] [27] [28]
-Overfull \hbox (13.43813pt too wide) in paragraph at lines 631--632
+Overfull \hbox (13.43813pt too wide) in paragraph at lines 635--636
 \OT1/ptm/m/n/10.95 The mu-tual in-for-ma-tion be-tween two clus-ter-ings is a sim-i-lar-ity mea-sure, with $\OML/cmm/m/it/10.95 I\OT1/cmr/m/n/10.95 (\OMS/cmsy/m/n/10.95 C\OT1/cmr/m/n/10.95 ; \OMS/cmsy/m/n/10.95 C[]\OT1/cmr/m/n/10.95 ) =
  []
 
-[29] [30] (./eight_probe.bbl [31] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
+[29] [30] [31] (./eight_probe.bbl [32] (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 ))
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 674.
- [32]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 674.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 678.
+ [33]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 678.
  (./eight_probe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 674.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 674.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 678.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 678.
 Package rerunfilecheck Info: File `eight_probe.out' has not changed.
 (rerunfilecheck)             Checksum: 6735A86B4B99ECA4BF2DE9E403011C2E;3910.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 674.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 678.
  ) 
 Here is how much of TeX's memory you used:
- 10523 strings out of 492667
- 160919 string characters out of 6134097
- 266820 words of memory out of 5000000
+ 10524 strings out of 492667
+ 160926 string characters out of 6134097
+ 266965 words of memory out of 5000000
  14079 multiletter control sequences out of 15000+600000
  38747 words of font info for 96 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
  42i,13n,43p,1414b,612s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 sy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on eight_probe.pdf (32 pages, 1095244 bytes).
+Output written on eight_probe.pdf (33 pages, 1097931 bytes).
 PDF statistics:
- 653 PDF objects out of 1000 (max. 8388607)
- 540 compressed objects within 6 object streams
- 152 named destinations out of 1000 (max. 500000)
+ 660 PDF objects out of 1000 (max. 8388607)
+ 546 compressed objects within 6 object streams
+ 153 named destinations out of 1000 (max. 500000)
  499 words of extra memory for PDF output out of 10000 (max. 10000000)
 
