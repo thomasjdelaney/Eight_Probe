@@ -302,33 +302,64 @@ In this work, we measured spike count correlations between neurons from nine dif
     \label{fig:conditional_correlation_comparison}
   \end{figure}
 
-  We applied our network noise rejection and community detection process to networks based on the spike count correlations $\rho_{X,Y|Z}$ and the signal correlations $\rho_{\text{signal}}$.
+  We applied our network noise rejection and community detection process to networks based on the spike count correlations $\rho_{X,Y|Z}$ and the signal correlations $\rho_{\text{signal}}$. We noted that the community detection on $\rho_{X,Y|Z}$ behaved similarly to the community detection on the total spike count correlation. We can see this  in figures \ref{fig:short_time_conditional_rectified_regional_clusters} and \ref{fig:long_time_conditional_rectified_regional_clusters}. At very short time bin widths, we detect more communities, and those communities often contain cells from one brain region only. At longer time bin widths, we detect fewer communities, and those communities tend to contain cells from multiple brain regions. When we examine the distance between (or similarity between) the anatomical division of the cells, and the detected communities we notice that the two clusterings are more similar at shorter time bin widths (see figure \ref{fig:conditional_clustering_distance_measures}).
 
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
-      \includegraphics[width=\linewidth]{figures/}
-      \label{fig:}
+      \includegraphics[width=\linewidth]{figures/Krebs_0p005_conditional_rectified_regional_cluster_map.png}
+      \caption{$\rho_{X,Y|Z}$}
+      \label{fig:short_time_conditional_rectified_regional_clusters}
     \end{subfigure}
     \begin{subfigure}[h]{0.5\linewidth}
-      \includegraphics[width=\linewidth]{figures/}
-      \label{fig:}
+      \includegraphics[width=\linewidth]{figures/Krebs_1p0_conditional_rectified_regional_cluster_map.png}
+      \caption{$\rho_{X,Y|Z}$}
+      \label{fig:long_time_conditional_rectified_regional_clusters}
     \end{subfigure}
     \begin{subfigure}[h]{0.5\linewidth}
-      \includegraphics[width=\linewidth]{figures/}
-      \label{fig:}
+      \includegraphics[width=\linewidth]{figures/Krebs_0p005_signal_rectified_regional_cluster_map.png}
+      \caption{$\rho_{\text{signal}}$}
+      \label{fig:short_time_signal_rectified_regional_clusters}
     \end{subfigure}
     \begin{subfigure}[h]{0.5\linewidth}
-      \includegraphics[width=\linewidth]{figures/}
-      \label{fig:}
+      \includegraphics[width=\linewidth]{figures/Krebs_1p0_signal_rectified_regional_cluster_map.png}
+      \caption{$\rho_{\text{signal}}$}
+      \label{fig:long_time_signal_rectified_regional_clusters}
     \end{subfigure}
-    \caption{ }
-    \label{fig:}
+    \caption{Matrices showing the regional membership of pairs by colour, and the communities in which those pairs lie. (a-b) Detected communities and regional membership matrix for network based on rectified spike count correlation $\rho_{X,Y|Z}$, using time bin widths of $0.005$s and $1$s respectively. (c-d) Detected communities and regional membership matrix for network based on rectified signal correlation $\rho_{\text{signal}}$, using time bin widths of $0.005$s and $1$s respectively.}
+    \label{fig:rectified_signal_regional_clusters}
   \end{figure}
 
+  When we applied the network noise rejection and community detection process to the networks based on the signal correlations $\rho_{\text{signal}}$ we found the number of communities we detected reduced with increasing time bin width. But the number of communities detected was less than that for the total correalations or the spike count correlations. The communities detected always tended to contain cells from multiple regions at both short and long timescales (see figures \ref{fig:short_time_signal_rectified_regional_clusters} and \ref{fig:long_time_signal_rectified_regional_clusters}). The communities detected bore very little relation to the anatomical division of the cells. The adjusted Rand index between the community clustering and the anatomical `clustering' is close to zero for every time bin width (see figure \ref{fig:adjusted_rand_index_rectified_signal}). This indicates that the similarity between the clusterings is close to chance. We did observe a slight downward trend in the variation of information with increasing bin width (see figure \ref{fig:variation_of_information_rectified_signal}), but this is more likely due to a decrease in the number of communities detected rather than any relationship with anatomy.
 
-  Conditioned a video of the mouse's face.
-  Used the law of total covariance. Breakdown in components.
-  Similar analysis on conditional corrections and signal corrections.
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/variation_of_information_rectified_conditional.png}
+      \caption{$\rho_{X,Y|Z}$ Variation of information.}
+      \label{fig:variation_of_information_rectified_conditional}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/adjusted_rand_index_rectified_conditional.png}
+      \caption{$\rho_{X,Y|Z}$ Adjusted Rand Index.}
+      \label{fig:adjusted_rand_index_rectified_conditional}
+    \end{subfigure}
+    \caption{Distance and similarity measures between the anatomical division of the neurons, and the communities detected in the network based on the spike count correlations $\rho_{X,Y|Z}$. (a) The variation of information is a `distance' measure between clusterings. The distance between the anatomical `clustering' and the community clustering increases as the time bin width increases. (b) The adjusted Rand index is a similarity measure between clusterings. The detected communities become less similar to the anatomical division of the cells as the time bin width increases.}
+    \label{fig:conditional_clustering_distance_measures}
+  \end{figure}
+
+  \begin{figure}[h]
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/variation_of_information_rectified_signal.png}
+      \caption{$\rho_{\text{signal}}$ Variation of information.}
+      \label{fig:variation_of_information_rectified_signal}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\linewidth}
+      \includegraphics[width=\linewidth]{figures/adjusted_rand_index_rectified_signal.png}
+      \caption{$\rho_{\text{signal}}$ Adjusted Rand Index.}
+      \label{fig:adjusted_rand_index_rectified_signal}
+    \end{subfigure}
+    \caption{Distance and similarity measures between the anatomical division of the neurons, and the communities detected in the network based on the signal correlations $\rho_{\text{signal}}$. (a) The variation of information is a `distance' measure between clusterings. The distance between the anatomical `clustering' and the community clustering increases as the time bin width increases. (b) The adjusted Rand index is a similarity measure between clusterings. The detected communities become less similar to the anatomical division of the cells as the time bin width increases.}
+    \label{fig:signal_clustering_distance_measures}
+  \end{figure}
 
   % Figure 4: Conditional correlations
   % - Covariance matrices = conditional cov + signal cov
@@ -336,8 +367,22 @@ In this work, we measured spike count correlations between neurons from nine dif
   % - Corresponding plots for communities, one for conditional, one for signal, for both a short and long time bin
   % - VI measure vs time bins size for both types of correlation
 
+  \subsection{Absolute correlations and negative rectified correlations}
+  At the moment, the network noise rejection protocol can only be applied to weighted undirected graphs with non-negative weights. This meant that we had to rectify our correlated networks before applying the network noise rejection and community detection process. We wanted to investigate what would happen if instead of rectifying the correlations, we used the absolute value, or reversed the signs of the correlations and then rectified.
+
+  When we used the absolute value of the correlations, we found very similar results to those shown above for the rectified correlations. The only exception being that we detected more communities. This could indicate that we detected both positively and negatively correlated communities, but we haven't done any further investigation so we cannot say for sure.
+
+  When we used the sign reversed rectified correlated networks, we tended to find fewer communities and often found no signal network after applying network noise rejection. This indicates that there was not much structure in the negatively correlated networks beyond that captured by the sparse weighted configuration model.
+
 \section{Discussion}
-To be added.
+
+Bigger datasets, more neurons, current analysis methods lacking, correlations important, network science, other studies only look at correalations in one region, only one timescale,
+
+No negative correlations,
+
+responses to stimuli,
+
+data from somatosensory cortex,
 
 \section{Data}
 
