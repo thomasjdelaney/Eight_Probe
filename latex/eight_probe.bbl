@@ -1,29 +1,36 @@
-\begin{thebibliography}{9} 
+\begin{thebibliography}{9}
 
   \bibitem{cohen1}
-  Marlene R Cohen, John H R Maunsell, 
+  Marlene R Cohen, John H R Maunsell,
   \emph{Attention improves performance primarily by reducing interneuronal correlations}.
-  Nature Neuroscience 12,  
+  Nature Neuroscience 12,
   1594–1600,
   (2009)
 
+  \bibitem{decharms}
+  R. Christopher deCharms, Michael M. Merzenich,
+  \emph{Primary cortical representation of sounds by the coordination of action-potential timing}.
+  Nature 381,
+  610-613,
+  (1996)
+
   \bibitem{cohen2}
-  Marlene R Cohen, Adam Kohn, 
+  Marlene R Cohen, Adam Kohn,
   \emph{Measuring and interpreting neuronal correlations}.
-  Nature Neuroscience 14,  
+  Nature Neuroscience 14,
   811-819,
   (2011)
 
-  \bibitem{humphries} 
+  \bibitem{humphries}
   Mark D. Humphries, Javier A. Caballero, Mat Evans, Silvia Maggi, Abhinav Singh,
   \emph{Spectral rejection for testing hypotheses of structure in networks}.
   arXiv:1901.04747,
   (2019)
 
-  \bibitem{stringer}       
-  Carsen Stringer, Marius Pachitariu, Nicholas Steinmetz, Charu Bai Reddy, Matteo Carandini, Kenneth D. Harris, 
+  \bibitem{stringer}
+  Carsen Stringer, Marius Pachitariu, Nicholas Steinmetz, Charu Bai Reddy, Matteo Carandini, Kenneth D. Harris,
   \emph{Spontaneous behaviors drive multidimensional, brainwide activity}.
-  Science 364, 
+  Science 364,
   (2019)
 
   \bibitem{shannon}
@@ -33,10 +40,10 @@
   (1948)
 
   \bibitem{jun}
-  J. J. Jun et al., 
-  \emph{Fully integrated silicon probes for high-density recording of neural activity}. 
-  Nature 551, 
-  232–236, 
+  J. J. Jun et al.,
+  \emph{Fully integrated silicon probes for high-density recording of neural activity}.
+  Nature 551,
+  232–236,
   (2017)
 
   \bibitem{treves}
@@ -53,30 +60,30 @@
   (2017)
 
   \bibitem{humphries2}
-  Mark D. Humphries, 
+  Mark D. Humphries,
   \emph{Spike-train communities: finding groups of similar spike trains}.
-  Journal of Neuroscience 31, 
+  Journal of Neuroscience 31,
   2321–2336,
   (2011)
 
   \bibitem{meila}
   Marina Meila,
   \emph{Comparing clusterings — an information based distance}.
-  Journal of Multivariate Analysis 98, 
-  873 - 895, 
+  Journal of Multivariate Analysis 98,
+  873 - 895,
   (2007)
 
   \bibitem{vinh}
   Nguyen Xuan Vinh, Julien Epps, James Bailey,
   \emph{Information Theoretic Measures for Clusterings Comparison: Variants, Properties, Normalization and Correction for Chance}.
-  Journal of Machine Learning Research 11, 
-  2837-2854, 
+  Journal of Machine Learning Research 11,
+  2837-2854,
   (2010)
 
   \bibitem{zou}
   Hui Zou, Trevor Hastie,
   \emph{Regularization and variable selection via the elastic net}.
-  Journal of the Royal Statistical Society: Series B (Statistical Methodology) 67, 
+  Journal of the Royal Statistical Society: Series B (Statistical Methodology) 67,
   301-320,
   (2005)
 
@@ -85,5 +92,18 @@
   \emph{Event conditional correlation: Or how non-linear linear dependance can be}.
   arXiv:1401.1130,
   (2014)
+
+  \bibitem{litwinkumar}
+  Ashok Litwin-Kumar, Maurice J. Chacron, Brent Doiron,
+  \emph{The Spatial Structure of Stimuli Shapes the Timescale of Correlations in Population Spiking Activity}.
+  PLOS Computational Biology 8,
+  (2012)
+
+  \bibitem{baadel}
+  S. Baadel, F. Thabtah, J. Lu,
+  \emph{Overlapping clustering: A review}.
+  SAI Computing Conference (SAI), London,
+  233-237,
+  (2016)
 
 \end{thebibliography}
