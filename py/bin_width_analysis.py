@@ -138,6 +138,89 @@ def plotTwoMeasureCondComp(mouse_name, first_measure, second_measure, first_labe
     plt.legend(fontsize='large')
     plt.tight_layout()
 
+def getGoodPair(analysis_frame, mouse_name, cell_info, is_inter=False):
+    """
+    For getting a nice pair for an example.
+    Arguments:  analysis_frame, pandas DataFrame,
+                is_inter, boolean, do we want an inter-regional pair?
+    Returns: pair, 2 ints
+    """
+    if is_inter:
+        pairs = analysis_frame.loc[(analysis_frame.first_cell_region != analysis_frame.second_cell_region)&(analysis_frame.bin_width == 0.005), ['first_cell_id','second_cell_id']].values
+    else:
+        pairs = analysis_frame.loc[(analysis_frame.first_cell_region == analysis_frame.second_cell_region)&(analysis_frame.bin_width == 0.005), ['first_cell_id','second_cell_id']].values
+    num_pairs = pairs.shape[0]
+    have_pair = False
+    while not have_pair:
+        pair = pairs[np.random.choice(range(num_pairs))]
+        pair_frame = analysis_frame[(analysis_frame.first_cell_id == pair[0])&(analysis_frame.second_cell_id == pair[1])]
+        spike_time_dict = ep.loadSpikeTimeDict(mouse_name, pair, cell_info, mat_dir)
+        ok_num_spikes = (100 < spike_time_dict.get(pair[0]).size) & (spike_time_dict.get(pair[0]).size < 1000) & (100 < spike_time_dict.get(pair[1]).size) & (spike_time_dict.get(pair[1]).size < 1000)
+        has_all_bins = np.all(pair_frame.bin_width.unique() == ep.selected_bin_widths)
+        is_increasing = np.all(pair_frame.corr_coef.diff()[1:]>0)
+        have_pair = has_all_bins & is_increasing & ok_num_spikes
+    return pair
+
+def plotPairsRaster(spike_time_dict, good_intra_pair, good_inter_pair):
+    """
+    For plotting a raster plot of the 4 cells in the inter and intra pairs. Colour accordingly.
+    Arguments:  spike_time_dict, dict, cell_id => spike times
+                good_intra_pair, 2 ints
+                good_inter_pair, 2 ints
+    Returns:    nothing
+    """
+    plt.figure(figsize=(5,4))
+    plt.vlines(x=spike_time_dict.get(good_inter_pair[0]), ymin=0.05, ymax=0.95, color='orange')
+    plt.vlines(x=spike_time_dict.get(good_inter_pair[1]), ymin=1+0.05, ymax=1+0.95, color='orange')
+    plt.vlines(x=spike_time_dict.get(good_intra_pair[0]), ymin=2+0.05, ymax=2+0.95, color='blue')
+    plt.vlines(x=spike_time_dict.get(good_intra_pair[1]), ymin=3+0.05, ymax=3+0.95, color='blue')
+    spike_times = np.concatenate(list(spike_time_dict.values()))
+    plt.xlim([spike_times.min(), spike_times.max()])
+    plt.yticks([])
+    plt.xticks(fontsize='large')
+    plt.xlabel('Time (s)', fontsize='x-large')
+    plt.tight_layout()
+
+def plotPairsCorrs(intra_pair_frame, inter_pair_frame):
+    """
+    For plotting the correlations of the inter pair and the intra pair.
+    Arguments:  intra_pair_frame,
+                inter_pair_frame,
+    Returns:    nothing
+    """
+    plt.figure(figsize=(5,4))
+    plt.plot(inter_pair_frame.bin_width, inter_pair_frame.corr_coef, color='orange',label='Inter reg. pair')
+    plt.plot(intra_pair_frame.bin_width, intra_pair_frame.corr_coef, color='blue',label='Intra reg. pair')
+    plt.xlim([ep.selected_bin_widths[0], ep.selected_bin_widths[-1]])
+    plt.xlabel('Time bin width (s)', fontsize='x-large')
+    plt.ylabel('Corr. Coef.', fontsize='x-large')
+    plt.xticks(fontsize='large');plt.yticks(fontsize='large')
+    plt.legend(fontsize='large')
+    plt.tight_layout()
+
+def plotExamplePairs(mouse_name, cell_info, analysis_frame):
+    """
+    For plotting the correlations between a pair of neurons across bin widths, for a within and a between pair.
+    Maybe also plot the spike counts, or some info on the firing rate.
+    """
+    analysis_frame = ep.joinCellAnalysis(cell_info, analysis_frame)
+    good_intra_pair = getGoodPair(analysis_frame, mouse_name, cell_info)
+    good_inter_pair = getGoodPair(analysis_frame, mouse_name, cell_info, is_inter=True)
+    intra_pair_frame = analysis_frame[(analysis_frame.first_cell_id == good_intra_pair[0])&(analysis_frame.second_cell_id == good_intra_pair[1])]
+    inter_pair_frame = analysis_frame[(analysis_frame.first_cell_id == good_inter_pair[0])&(analysis_frame.second_cell_id == good_inter_pair[1])]
+    spike_time_dict = ep.loadSpikeTimeDict(mouse_name, np.concatenate([good_intra_pair, good_inter_pair]), cell_info, mat_dir)
+    plotPairsRaster(spike_time_dict, good_intra_pair, good_inter_pair)
+    save_name = os.path.join(image_dir, 'pair_analysis', mouse_name, 'pairs_raster.png')
+    dir_name = os.path.dirname(save_name)
+    os.makedirs(dir_name) if not(os.path.isdir(dir_name)) else None
+    plt.savefig(save_name);plt.close('all');
+    plotPairsCorrs(intra_pair_frame, inter_pair_frame)
+    save_name = os.path.join(image_dir, 'pair_analysis', mouse_name, 'pairs_correlation.png')
+    dir_name = os.path.dirname(save_name)
+    os.makedirs(dir_name) if not(os.path.isdir(dir_name)) else None
+    plt.savefig(save_name);plt.close('all');
+    return dir_name
+
 def saveBinWidthAnalysisFigs(mouse_name):
     cell_info = pd.read_csv(os.path.join(csv_dir, 'cell_info.csv'), index_col=0)
     analysis_frame = pd.concat([ep.loadAnalysisFrame(mouse_name, bin_width, csv_dir) for bin_width in ep.selected_bin_widths], ignore_index=True)
@@ -178,6 +261,8 @@ def saveBinWidthAnalysisFigs(mouse_name):
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_cond_cov_comparison.png')
     plt.savefig(file_name);plt.close()
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
+    dir_name = plotExamplePairs(mouse_name, cell_info, pos_frame)
+    print(dt.datetime.now().isoformat() + ' INFO: ' + dir_name + ' saved.')
 
 if (not(args.debug)) & (__name__ == '__main__'):
     [saveBinWidthAnalysisFigs(mouse_name) for mouse_name in ep.mouse_names]
