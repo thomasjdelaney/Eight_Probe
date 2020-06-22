@@ -155,7 +155,7 @@ def getGoodPair(analysis_frame, mouse_name, cell_info, is_inter=False):
         pair = pairs[np.random.choice(range(num_pairs))]
         pair_frame = analysis_frame[(analysis_frame.first_cell_id == pair[0])&(analysis_frame.second_cell_id == pair[1])]
         spike_time_dict = ep.loadSpikeTimeDict(mouse_name, pair, cell_info, mat_dir)
-        ok_num_spikes = (100 < spike_time_dict.get(pair[0]).size) & (spike_time_dict.get(pair[0]).size < 1000) & (100 < spike_time_dict.get(pair[1]).size) & (spike_time_dict.get(pair[1]).size < 1000)
+        ok_num_spikes = (100 < spike_time_dict.get(pair[0]).size) & (spike_time_dict.get(pair[0]).size < 800) & (100 < spike_time_dict.get(pair[1]).size) & (spike_time_dict.get(pair[1]).size < 800)
         has_all_bins = np.all(pair_frame.bin_width.unique() == ep.selected_bin_widths)
         is_increasing = np.all(pair_frame.corr_coef.diff()[1:]>0)
         have_pair = has_all_bins & is_increasing & ok_num_spikes
@@ -189,8 +189,8 @@ def plotPairsCorrs(intra_pair_frame, inter_pair_frame):
     Returns:    nothing
     """
     plt.figure(figsize=(5,4))
-    plt.plot(inter_pair_frame.bin_width, inter_pair_frame.corr_coef, color='orange',label='Inter reg. pair')
-    plt.plot(intra_pair_frame.bin_width, intra_pair_frame.corr_coef, color='blue',label='Intra reg. pair')
+    plt.plot(inter_pair_frame.bin_width, inter_pair_frame.corr_coef, color='orange',label='Inter-reg. pair')
+    plt.plot(intra_pair_frame.bin_width, intra_pair_frame.corr_coef, color='blue',label='Intra-reg. pair')
     plt.xlim([ep.selected_bin_widths[0], ep.selected_bin_widths[-1]])
     plt.xlabel('Time bin width (s)', fontsize='x-large')
     plt.ylabel('Corr. Coef.', fontsize='x-large')
@@ -261,8 +261,9 @@ def saveBinWidthAnalysisFigs(mouse_name):
     file_name = os.path.join(bin_width_figures_dir, mouse_name + '_cond_cov_comparison.png')
     plt.savefig(file_name);plt.close()
     print(dt.datetime.now().isoformat() + ' INFO: ' + file_name + ' saved.')
-    dir_name = plotExamplePairs(mouse_name, cell_info, pos_frame)
-    print(dt.datetime.now().isoformat() + ' INFO: ' + dir_name + ' saved.')
+    if mouse_name == 'Krebs':
+        dir_name = plotExamplePairs(mouse_name, cell_info, pos_frame)
+        print(dt.datetime.now().isoformat() + ' INFO: ' + dir_name + ' saved.')
 
 if (not(args.debug)) & (__name__ == '__main__'):
     [saveBinWidthAnalysisFigs(mouse_name) for mouse_name in ep.mouse_names]

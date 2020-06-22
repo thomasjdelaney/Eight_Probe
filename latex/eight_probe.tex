@@ -80,16 +80,31 @@ In this work, we measured spike count correlations between neurons from nine dif
     \subsection{Average correlation size increases with increasing time bin width}
     First we inspected the affect of time bin width on spike count correlations. We know that using short time bins results in artificially small correlation measurements\cite{cohen2}, so we expected to see an increase in correlation amplitude with increasing time bin width. That is exactly what we observed. Taking $50$ cells at random, we calculated the spike count correlation between every possible pair of these cells, using different time bin widths ranging from $0.005$s to $3$s. We found that the longer the time bin width, the greater the correlations (see figure \ref{fig:correlations_all_pairs}).
 
+    \begin{figure}[h]
+      \begin{subfigure}[h]{0.5\linewidth}
+        \includegraphics[width=\linewidth]{figures/pairs_correlation.png}
+        \label{fig:pair_example_correlations}
+      \end{subfigure}
+      \begin{subfigure}[h]{0.5\linewidth}
+        \includegraphics[width=\linewidth]{figures/pairs_raster.png}
+        \label{fig:pair_example_raster}
+      \end{subfigure}
+      \caption{(left) An examples of the correlation coefficients between two different pairs of cells, one where both cells are in the same brain region (intra-regional pair), and one where both cells are in different brain regions (inter-regional pair). The correlation coefficients have been measured using different time bin widths, ranging from $5$ms to $3$s. Note the increasing amplitude of the correlations with increasing bin width. (right) A raster plot showing the spike times of each pair of cells.}
+      \label{fig:pair_example}
+    \end{figure}
+
     We also separated the positively correlated pairs from the negatively correlated pairs using the mean correlation of each pair across all bin widths (see section \ref{sec:corr_anti_corr}). We found that the positively correlated pairs become more positively correlated with increasing time bin width, and the negatively correlated pairs become more negatively correlated with increasing time bin width (see figures \ref{fig:correlations_pos_pairs} and \ref{fig:correlations_neg_pairs}).
 
     When taking the mean across all pairs, the positively correlated pairs dominate in terms of both number of pairs, and amplitude of correlations. Therefore the mean across all pairs is positive.
 
     These results were observed in each of the three mouse subjects from which we had data.
 
+    For the sake of illustration, I have included two figures showing the correlation coefficients of two pairs of neurons, and a raster plot of the spikes of those cells (see figure \ref{fig:pair_example}).
+
     \subsection{Goodness-of-fit for Poisson and Gaussian distributions across increasing time bin widths}
     We wanted to investigate if the width of the time bin used to bin spike times into spike counts had an effect on the distribution of spike counts.  We used the $\chi^2$ statistic as a goodness-of-fit measure for Poisson and Gaussian (normal) distributions to the spike count of $100$ randomly chosen neurons for a number of bin widths ranging from $0.01$s to $4$s. For the $\chi^2$ statistic, the higher the value, the worse the fit. As you might expect, we found that that a Poisson distribution is the best fit for shorter time bins less than $0.7$s in length. Then a Gaussian distribution is a better fit for time bins greater than $0.7$s in length (see figure \ref{fig:chi_squared_fits}).
 
-    A Poisson distribution was very likely to be a better fit for shorter time bin widths because spike counts must be non-negative, therefore any distribution of spike counts with mass distributed at or close to $0$ will be skewed.
+    We expected a Poisson distribution to be a better fit for shorter time bin widths because spike counts must be non-negative, therefore any distribution of spike counts with mass distributed at or close to $0$ will be skewed. The distribution of spike counts is more likely to be distributed close to $0$ when the time bin widths used to bin spike times into spikes counts are small relative to the amount of time it takes for a neuron to fire an action potential ($\sim 1$ms in the case of non-burst firing neurons).
 
     \begin{figure}[h]
         \begin{subfigure}[h]{0.5\linewidth}
@@ -122,7 +137,7 @@ In this work, we measured spike count correlations between neurons from nine dif
   \subsection{Differences between and inter- and intra- regional correlations decrease with increasing bin width}
   We investigated the differences in distribution between inter-regional correlations, i.e. correlations between neurons in different brain regions, and intra-regional correlations, i.e. correlations between neurons in the same brain region.
 
-  Firstly, we investigated these quantities for all possible pairs of $\sim 500$ neurons taken from across all the $9$ brain regions from which we had data. We distributed these neurons as evenly as possible across all of the regions, so that cell from one region would not dominate our data. We observed that the mean intra-regional correlations were always higher than the mean inter-regional correlations for every value of time bin width used. We also observed that as the time bin width increased these mean correlations increased and the difference between the mean inter-regional and intra-regional correlations grew (see figure \ref{fig:all_pairs_inter_intra_corr}). Stringer et al. (2019) had a similar finding using the same data. They used only one value for the time bin width, $1.2$s. Using this time bin width to bin spike times and measure spike count correlations, they found that the mean `within-region' correlations were always greater than the `out-of-region' correlations \cite{stringer}.
+  Firstly, we investigated these quantities for all possible pairs of $\sim 500$ neurons taken from across all the $9$ brain regions from which we had data. We distributed these neurons as evenly as possible across all of the regions, so that cells from one region would not dominate our data. We observed that the mean intra-regional correlations were always higher than the mean inter-regional correlations for every value of time bin width used. We also observed that as the time bin width increased these mean correlations increased and the difference between the mean inter-regional and intra-regional correlations grew (see figure \ref{fig:all_pairs_inter_intra_corr}). Stringer et al. (2019) had a similar finding using the same data. They used only one value for the time bin width, $1.2$s. Using this time bin width to bin spike times and measure spike count correlations, they found that the mean `within-region' correlations were always greater than the `out-of-region' correlations \cite{stringer}.
 
   \begin{figure}[h]
     \centering
@@ -131,7 +146,9 @@ In this work, we measured spike count correlations between neurons from nine dif
     \label{fig:all_pairs_inter_intra_corr}
   \end{figure}
 
-  Secondly, we separated those pairs into theire respective pairs, be they intra-regional, or inter-regional.  We noted that the mean intra-regional correlations for a given region tended to be higher than the mean inter-regional correlations involving cells from that region. However, in contrast with our previous result, we noted that the difference between the mean intra-regional correlations and most mean inter-regional correlations of the most correlated regional pairs reduced as we increased the time bin width (see figures \ref{fig:short_bin_corr_comp} and \ref{fig:long_bin_corr_comp}).
+  Examples of the correlations of one intra-regional pair and one inter-regional pair can be seen in figure \ref{fig:pair_example}.
+
+  Secondly, we separated those pairs into intra-regional and inter-regional groups. We noted that the mean intra-regional correlations for a given region tended to be higher than the mean inter-regional correlations involving cells from that region. However, in contrast with our previous result, we noted that the difference between the mean intra-regional correlations and most highly correlated inter-regional correlations reduced as we increased the time bin width (see figures \ref{fig:short_bin_corr_comp} and \ref{fig:long_bin_corr_comp}).
 
   \newpage
 
@@ -152,7 +169,7 @@ In this work, we measured spike count correlations between neurons from nine dif
     \label{fig:corr_comps}
   \end{figure}
 
-  Finally, to see these regional mean correlations in a bit more detail, we displayed these data using mean correlation matrix figures (see figure \ref{fig:corr_matrices}), showing the mean intra-regional correlations on the main diagonal, and the mean inter-regional correlations off diagonal. Comparing a version of this figure created using a short time bin width of $5$ms (figure \ref{fig:short_bin_corr_matrix}) and a version using a longer time bin width of $1$s (figure \ref{fig:long_bin_corr_matrix}) we observed that the mean intra-regional correlations are the highest for both bin widths, but the mean correlations in some inter-regional pairs is relatively much higher when using the longer time bin width.
+  Finally, to see these regional mean correlations in a bit more detail, we displayed these data in a matrix of mean correlations (see figure \ref{fig:corr_matrices}), showing the mean intra-regional correlations on the main diagonal, and the mean inter-regional correlations off diagonal. Comparing a version of this figure created using a short time bin width of $5$ms (figure \ref{fig:short_bin_corr_matrix}) and a version using a longer time bin width of $1$s (figure \ref{fig:long_bin_corr_matrix}) we observed that the mean intra-regional correlations are always relatively high in comparison to the mean inter-regional correlations, but the mean correlations in some inter-regional pairs are relatively much higher when using the longer time bin width.
 
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
@@ -192,7 +209,7 @@ In this work, we measured spike count correlations between neurons from nine dif
       \includegraphics[width=\linewidth]{figures/Robbins_rectified_total_structure_dims.png}
       \label{fig:Robbins_rectified_total_structure_dims}
     \end{subfigure}
-    \caption{The number of dimensions in the $k$-partite and connected structure in the correlation based networks beyond the structure captured by a sparse weighted configuration null network model (see section \ref{sec:sparse_weighted_configuration_model}), shown for different time bin widths. Note that the $k$-partite structure disappears for time bin width greater than $200$ms for all three subjects. The dimension of the connect structure reduces with increasing bin width for $2$ of the $3$ subjects (top row).}
+    \caption{The number of dimensions in the $k$-partite and connected structure in the correlation based networks beyond the structure captured by a sparse weighted configuration null network model (see section \ref{sec:sparse_weighted_configuration_model}), shown for different time bin widths. Note that the $k$-partite structure disappears for time bin width greater than $200$ms for all three subjects. The dimension of the connected structure reduces with increasing bin width for $2$ of the $3$ subjects (top row).}
     \label{fig:structure_dims}
   \end{figure}
 
@@ -245,7 +262,7 @@ In this work, we measured spike count correlations between neurons from nine dif
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
       \includegraphics[width=\linewidth]{figures/variation_of_information_rectified_total.png}
-      \caption{variation of information}
+      \caption{Variation of information}
       \label{fig:variation_of_information_rectified_total}
     \end{subfigure}
     \begin{subfigure}[h]{0.5\linewidth}
@@ -253,14 +270,14 @@ In this work, we measured spike count correlations between neurons from nine dif
       \caption{Adjusted Rand index}
       \label{fig:adjusted_rand_index_rectified_total}
     \end{subfigure}
-    \caption{distance measures between clusterings}
+    \caption{(a) The variation of information is a measure of distance between clusterings. The distance between the anatomical `clustering' and community detection `clustering' increases with increasing time bin width. (b) The adjusted Rand index is a normalised similarity measure between clusterings. The anatomical and community detection clusterings become less similar as the time bin width increases. }
     \label{fig:distance_measures}
   \end{figure}
 
-  Both measures indicated that the detected communities and the anatomical division of the cells were more similar at when we used shorter time bins widths (see figure \ref{fig:distance_measures}). This indicates that correlated behaviour in neuronal ensembles is more restricted to individual brain regions at short timescales (<$250$ms), and spreads out across brain regions at longer time scales.
+  Both measures indicated that the detected communities and the anatomical division of the cells were more similar when we used shorter time bins widths (see figure \ref{fig:distance_measures}). This indicates that correlated behaviour in neuronal ensembles is more restricted to individual brain regions at short timescales ($<250$ms), and the correlated activty spreads out across brain regions over longer time scales.
 
   \subsection{Conditional correlations \& signal correlations}
-  In light of Stringer et al (2019) showing that spontaneous behaviours can drive activity in neuronal ensembles across the visual cortex and midbrain\cite{stringer}, we decided to control for the mouse's behaviour when performing our analyses. My second supervisor, Dr Michael Ashby, suggested that our community detection process may be detecting communities across multiple brain regions at longer time scales due to aggregating neuronal activity driven by several spontaneous behaviours occuring during the time interval covered by a given time bin. A time bin of $1$s, for example, could contain a spike count where those spikes were driven by different spontaneous behaviours. We aimed to investigate this possibility by applying our community detection analysis to conditional correlation measures.
+  In light of the excellent research of Stringer et al (2019) showing that spontaneous behaviours can drive activity in neuronal ensembles across the visual cortex and midbrain\cite{stringer}, we decided to control for the mouse's behaviour when performing our analyses. My second supervisor, Dr Michael Ashby, suggested that our community detection process may be detecting communities across multiple brain regions at longer time scales due to aggregating neuronal activity driven by several spontaneous behaviours occuring during the time interval covered by a given time bin. A time bin of $1$s, for example, could contain a spike count where those spikes were driven by different spontaneous behaviours. We aimed to investigate this possibility by applying our community detection analysis to conditional correlation measures.
 
   We used the top $500$ principal components of a video of the mouse's face as a measure of the mouse's behaviour (see section \ref{sec:video_recordings}). We modelled the spike counts as a linear combination of the principal components using linear regression with ElasticNet regularisation (see section \ref{sec:conditioning_on_behavioural_data}). Using this model, we quantified the expected spike count given the mouse's behaviour $E[X|Z_1, \dots ,Z_{500}]$.
 
@@ -283,10 +300,6 @@ In this work, we measured spike count correlations between neurons from nine dif
 
   We used these expected values to measure $\cov (E[X|Z], E[Y|Z])$, and we used that value, the covariance $\cov (X,Y)$, and the \textit{law of total covariance} (see section \ref{sec:conditional_covariance}) to measure $E[\cov (X,Y|Z)]$. Here $X$ and $Y$ represent spike counts from individual cells, and $Z$ is shorthand for the $500$ principal components mentioned above. The two components of the covariance, $\cov (E[X|Z], E[Y|Z])$ and $E[\cov (X,Y|Z)]$, represent a `signal covariance' and expected value of a `spike count covariance' respectively, analagous to the signal correlation and spike count correlation\cite{cohen2}.
 
-  We examined the means of these components for different values of the time bin width (see figure \ref{fig:conditional_covariance_comparison}). We observed a consistent increase in $E[\cov (X,Y|Z)]$ as the time bin width increased. But we saw different trends for $\cov (E[X|Z], E[Y|Z])$ for each mouse.
-
-  Using $\cov (E[X|Z], E[Y|Z])$ we measured the signal correlation, and using $E[\cov (X,Y|Z)]$ we measured the event conditional correlation (see section \ref{sec:cond_corr} for more details). We saw a consistent increase in $\rho_{X,Y|Z}$ as the time bin width increased, this corresponds to the result for $E[\cov(X,Y|Z)]$. We observed different trends for $\rho_{\text{signal}}$ for each mouse, this corresponds to the result for $\cov(E[X|Z],E[Y|Z])$.
-
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
       \includegraphics[width=\linewidth]{figures/Krebs_cond_corr_comparison.png}
@@ -300,11 +313,13 @@ In this work, we measured spike count correlations between neurons from nine dif
       \includegraphics[width=\linewidth]{figures/Robbins_cond_corr_comparison.png}
       \label{fig:Robbins_cond_corr_comparison}
     \end{subfigure}
-    \caption{Comparing the components of the total spike count covariance across different values for the time bin width. }
+    \caption{Comparing the components of the total spike count covariance across different values for the time bin width. We saw a consistent increase in $\rho_{X,Y|Z}$ as the time bin width increased in all three subjects. But we saw different trends for in $\rho_{\text{signal}}$ for each of the subjects.}
     \label{fig:conditional_correlation_comparison}
   \end{figure}
 
-  We applied our network noise rejection and community detection process to networks based on the spike count correlations $\rho_{X,Y|Z}$ and the signal correlations $\rho_{\text{signal}}$. We noted that the community detection on $\rho_{X,Y|Z}$ behaved similarly to the community detection on the total spike count correlation. We can see this  in figures \ref{fig:short_time_conditional_rectified_regional_clusters} and \ref{fig:long_time_conditional_rectified_regional_clusters}. At very short time bin widths, we detect more communities, and those communities often contain cells from one brain region only. At longer time bin widths, we detect fewer communities, and those communities tend to contain cells from multiple brain regions. When we examine the distance between (or similarity between) the anatomical division of the cells, and the detected communities we notice that the two clusterings are more similar at shorter time bin widths (see figure \ref{fig:conditional_clustering_distance_measures}).
+  We examined the means of these components for different values of the time bin width (see figure \ref{fig:conditional_covariance_comparison}). We observed a consistent increase in $E[\cov (X,Y|Z)]$ as the time bin width increased. But we saw different trends for $\cov (E[X|Z], E[Y|Z])$ for each mouse.
+
+  Using $\cov (E[X|Z], E[Y|Z])$ we measured the signal correlation, $\rho_{\text{signal}}$, and using $E[\cov (X,Y|Z)]$ we measured the event conditional correlation, $\rho_{X,Y|Z}$ (see section \ref{sec:cond_corr} for more details). We saw a consistent increase in $\rho_{X,Y|Z}$ as the time bin width increased, this corresponds to the result for $E[\cov(X,Y|Z)]$. We observed different trends for $\rho_{\text{signal}}$ for each mouse, this corresponds to the result for $\cov(E[X|Z],E[Y|Z])$.
 
   \begin{figure}[h]
     \begin{subfigure}[h]{0.5\linewidth}
@@ -330,6 +345,8 @@ In this work, we measured spike count correlations between neurons from nine dif
     \caption{Matrices showing the regional membership of pairs by colour, and the communities in which those pairs lie. (a-b) Detected communities and regional membership matrix for network based on rectified spike count correlation $\rho_{X,Y|Z}$, using time bin widths of $0.005$s and $1$s respectively. (c-d) Detected communities and regional membership matrix for network based on rectified signal correlation $\rho_{\text{signal}}$, using time bin widths of $0.005$s and $1$s respectively.}
     \label{fig:rectified_signal_regional_clusters}
   \end{figure}
+
+  We applied our network noise rejection and community detection process to networks based on the spike count correlations $\rho_{X,Y|Z}$ and the signal correlations $\rho_{\text{signal}}$. We noted that the community detection on $\rho_{X,Y|Z}$ behaved similarly to the community detection on the total spike count correlation. We can see this  in figures \ref{fig:short_time_conditional_rectified_regional_clusters} and \ref{fig:long_time_conditional_rectified_regional_clusters}. At very short time bin widths, we detect more communities, and those communities often contain cells from one brain region only. At longer time bin widths, we detect fewer communities, and those communities tend to contain cells from multiple brain regions. When we examine the distance between (or similarity between) the anatomical division of the cells, and the detected communities we notice that the two clusterings are more similar at shorter time bin widths (see figure \ref{fig:conditional_clustering_distance_measures}).
 
   When we applied the network noise rejection and community detection process to the networks based on the signal correlations $\rho_{\text{signal}}$ we found the number of communities we detected reduced with increasing time bin width. But the number of communities detected was less than that for the total correalations or the spike count correlations. The communities detected always tended to contain cells from multiple regions at both short and long timescales (see figures \ref{fig:short_time_signal_rectified_regional_clusters} and \ref{fig:long_time_signal_rectified_regional_clusters}). The communities detected bore very little relation to the anatomical division of the cells. The adjusted Rand index between the community clustering and the anatomical `clustering' is close to zero for every time bin width (see figure \ref{fig:adjusted_rand_index_rectified_signal}). This indicates that the similarity between the clusterings is close to chance. We did observe a slight downward trend in the variation of information with increasing bin width (see figure \ref{fig:variation_of_information_rectified_signal}), but this is more likely due to a decrease in the number of communities detected rather than any relationship with anatomy.
 
