@@ -1,11 +1,11 @@
 # Fdb version 3
-["bibtex eight_probe"] 1592860724 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1592860727
-  "eight_probe.aux" 1592860727 36096 02ec49b95c4dd2e1068e5cf80cdaa770 "pdflatex"
+["bibtex eight_probe"] 1592933897 "eight_probe.aux" "eight_probe.bbl" "eight_probe" 1592933901
+  "eight_probe.aux" 1592933900 36092 f295273ed70c8c2db58fed73ef3b23f5 "pdflatex"
   "eight_probe.bbl.bib" 0 -1 0 ""
   (generated)
-  "eight_probe.blg"
   "eight_probe.bbl"
-["pdflatex"] 1592860724 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1592860727
+  "eight_probe.blg"
+["pdflatex"] 1592933897 "eight_probe.tex" "eight_probe.pdf" "eight_probe" 1592933901
   "/home/thomas/.texlive2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1589722506 3704429 0303ff8f3ada1c5655ff4477b651b125 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1580927601 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
@@ -139,10 +139,10 @@
   "/usr/share/texlive/texmf-dist/tex/latex/ucs/utf8x.def" 1368571634 8036 21f7ac37aafb6cfeddbb196b8bfd6280 ""
   "/usr/share/texlive/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1580927610 35594 9aef19174c178978f61d14961262af5d ""
-  "eight_probe.aux" 1592860727 36096 02ec49b95c4dd2e1068e5cf80cdaa770 "pdflatex"
+  "eight_probe.aux" 1592933900 36092 f295273ed70c8c2db58fed73ef3b23f5 "pdflatex"
   "eight_probe.bbl" 1592679018 3076 66184c10a527a8090c89e7412bcf5e75 "bibtex eight_probe"
-  "eight_probe.out" 1592860727 4017 3ed01c7fa679d30d424ddacd0055646c "pdflatex"
-  "eight_probe.tex" 1592860720 81093 b69d7bed47611a3de9aec9f0b71e3bf4 ""
+  "eight_probe.out" 1592933900 4006 6a221ef1007af9dbda47c4a402572451 "pdflatex"
+  "eight_probe.tex" 1592933889 82059 4cbe30f129d3864f6ce3e1f26e79e6ae ""
   "figures/Krebs_0p005_conditional_rectified_regional_cluster_map.png" 1592571209 25381 acb1df189fd73b94181710f3b3b19146 ""
   "figures/Krebs_0p005_corr_comp.png" 1591796985 33652 a09ff4cd8717cf01cafc61601276a16a ""
   "figures/Krebs_0p005_corr_matrix.png" 1591796983 38432 0a6a95ad65f2e4c0314ac84860d3ad5a ""
@@ -180,7 +180,7 @@
   "figures/variation_of_information_rectified_signal.png" 1592075481 31237 4284f7a26397ddb07463e9ae4bee0fc3 ""
   "figures/variation_of_information_rectified_total.png" 1592075179 24739 42349c5ba846e676eaf0ed6e11ff00b5 ""
   (generated)
-  "eight_probe.pdf"
-  "eight_probe.out"
   "eight_probe.aux"
+  "eight_probe.pdf"
   "eight_probe.log"
+  "eight_probe.out"
