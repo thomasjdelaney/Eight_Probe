@@ -10,6 +10,21 @@ num_probes = 8
 probe_ids = np.arange(num_probes)
 
 regions = np.array(['FrCtx','FrMoCtx','SomMoCtx','SSCtx','V1','V2','RSP','CP','LS','LH','HPF','TH','SC','MB'])
+full_regions = np.array(['Frontal Cortex', 'Frontal Motor Cortex', 'Somatomotor Cortex', 'Somatosensory Cortex', 'Primary Visual Cortex', 'V2', 'Retrosplenial Area', 'Caudate Putamen', 'Lateral Septum', 'Lateral Hypothalamus', 'Hippocampal Formation', 'Thalamus', 'Superior Colliculus', 'Midbrain'])
+Caudate Putamen
+Frontal Cortex
+Frontal Motor Cortex
+Hippocampal Formation
+Lateral Hypothalamus
+Lateral Septum
+Midbrain
+Retrosplenial Area
+Superior Colliculus
+Somatomotor Cortex
+Somatosensory Cortex
+Thalamus
+Primary Visual Cortex
+V2
 
 def loadSpikesForMouse(mouse_name, mat_dir):
     """
